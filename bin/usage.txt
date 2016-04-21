@@ -1,0 +1,12 @@
+core-validate-commit - Validate the commit message for a particular commit in node core
+
+  usage: core-validate-commit [options] [sha[, sha]]
+
+  options:
+    -h, --help                    show help and usage
+    -v, --version                 show version
+
+  examples:
+    core-validate-commit 64c87e2cf4bdac6cdea302d5a5ead36c56f81c65
+
+    git rev-list 287bdab..HEAD | xargs core-validate-commit
