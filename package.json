@@ -4,6 +4,7 @@
   "description": "Validate the commit message for a particular commit in node core",
   "main": "commit.js",
   "scripts": {
+    "pretest": "lintit",
     "test": "tap test.js --cov"
   },
   "dependencies": {
@@ -11,6 +12,7 @@
     "help": "~2.1.2"
   },
   "devDependencies": {
+    "lintit": "~1.0.1",
     "tap": "~5.7.0"
   },
   "license": "MIT",
