@@ -35,6 +35,7 @@ Date:   Tue Mar 29 08:09:37 2016 -0500
     Reviewed-By: Colin Ihrig <cjihrig@gmail.com>
 `
 
+/* eslint-disable */
 const str3 = `commit 75487f0db80e70a3e27fabfe323a33258dfbbea8
 Author: Michaël Zasso <targos@protonmail.com>
 Date:   Fri Apr 15 13:32:36 2016 +0200
@@ -50,6 +51,7 @@ Date:   Fri Apr 15 13:32:36 2016 +0200
     PR-URL: https://github.com/nodejs/node/pull/6215
     Reviewed-By: James M Snell <jasnell@gmail.com>
     Reviewed-By: Brian White <mscdex@mscdex.net>`
+/* eslint-enable */
 
 test('commit', (t) => {
   let c = new Commit(str)

@@ -119,7 +119,6 @@ Commit.prototype.parse = function parse() {
   }
 
   const revert = this.isRevert()
-  const working = this.isWorkingCommit()
   const release = this.isReleaseCommit()
 
   if (!revert) {
