@@ -7,6 +7,7 @@ const chalk = require('chalk')
 const args = process.argv.splice(2)
 const help = require('help')()
 const Commit = require('../commit')
+const format = require('../format')
 
 if (!args.length) return help()
 for (const arg of args) {
@@ -31,9 +32,17 @@ function getCommitCommand(sha) {
     if (err) throw err
     const c = new Commit(stdout)
 
-    console.log(chalk.cyan('Commit'), sha)
+    if (c.errors.length) {
+      console.log()
+      console.log(format.header(c))
+    }
+
     c.errors.forEach((m) => {
-      console.error('  ', chalk.red(m.code), chalk.grey(m.str))
+      if (format[m.code]) {
+        console.error(format[m.code](m, c))
+      } else {
+        console.error(format.default(m, c))
+      }
       process.exitCode = 1
     })
 
@@ -41,9 +50,6 @@ function getCommitCommand(sha) {
       console.error('  ', chalk.yellow(m.code), chalk.grey(m.str))
     })
 
-    if (!c.errors.length && !c.warnings.length) {
-      console.log('  ', chalk.green('OK'))
-    }
     run()
   })
 })()

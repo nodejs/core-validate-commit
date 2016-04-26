@@ -111,9 +111,7 @@ Commit.prototype.parse = function parse() {
   lineNum++
 
   if (this.title.length > 50) {
-    if (this.isRevert()) {
-      this.warn('ETITLETOOLONG', this.title, lineNum)
-    } else {
+    if (!this.isRevert()) {
       this.error('ETITLETOOLONG', this.title, lineNum)
     }
   }
@@ -154,6 +152,9 @@ Commit.prototype.parse = function parse() {
 
     const reviewedBy = line.match(reviewedByRE)
     if (reviewedBy) {
+      if (!this.pr) {
+        this.error('EMETAORDER', 'PR-URL should come before reviewers', lineNum)
+      }
       this.reviewers.push(reviewedBy[1])
       continue
     }
@@ -162,7 +163,7 @@ Commit.prototype.parse = function parse() {
     if (fixes) {
       const f = fixes[1]
       if (f[0] === '#') {
-        this.warn('EINVALIDFIXESURL', 'Fixes should be a url', lineNum)
+        this.error('EINVALIDFIXESURL', line, lineNum)
       }
       this.fixes.push(f)
       continue
@@ -172,7 +173,7 @@ Commit.prototype.parse = function parse() {
     if (prUrl) {
       this.pr = prUrl[1]
       if (this.pr[0] === '#') {
-        this.warn('EINVALIDPRURL', 'PR-URL is not a url', lineNum)
+        this.error('EINVALIDPRURL', line, lineNum)
       }
       continue
     }
