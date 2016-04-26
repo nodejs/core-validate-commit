@@ -68,8 +68,7 @@ test('commit', (t) => {
   t.equal(c.date, 'Tue Mar 29 08:09:37 2016 -0500', 'date')
   t.deepEqual(c.subsystems, [], 'subsystems')
   t.equal(c.pr, 'https://github.com/nodejs/node/pull/5947', 'pr')
-  t.equal(c.warnings.length, 1, 'warnings.length')
-  t.equal(c.warnings[0].code, 'ETITLETOOLONG', 'code')
+  t.equal(c.warnings.length, 0, 'warnings.length')
   t.equal(c.revert, true, 'revert')
 
   c = new Commit(str3)
