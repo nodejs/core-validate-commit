@@ -147,7 +147,7 @@ Commit.prototype.parse = function parse() {
   for (let i = 0; i < body.length; i++) {
     const line = body[i]
     lineNum++
-    if (line.length > 72) {
+    if (line.length > 72 && !release) {
       this.error('ELINETOOLONG', line, lineNum)
     }
 
