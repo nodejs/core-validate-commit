@@ -188,7 +188,7 @@ Commit.prototype.parse = function parse() {
     this.error('EMISSINGDATE', 'Date not found', null)
   }
 
-  if (!this.pr) {
+  if (!this.pr && !release) {
     this.error('EMISSINGPRURL', 'PR-URL Not found', null)
   }
 
