@@ -110,13 +110,14 @@ Commit.prototype.parse = function parse() {
   this.title = body.shift()
   lineNum++
 
+  const revert = this.isRevert()
+
   if (this.title.length > 50) {
-    if (!this.isRevert()) {
+    if (!revert) {
       this.error('ETITLETOOLONG', this.title, lineNum)
     }
   }
 
-  const revert = this.isRevert()
   const release = this.isReleaseCommit()
 
   if (!revert) {
