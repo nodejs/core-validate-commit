@@ -4,8 +4,10 @@ const test = require('tap').test
 const Commit = require('./commit')
 
 const str = `commit e7c077c610afa371430180fbd447bfef60ebc5ea
-Author: Calvin Metcalf <cmetcalf@appgeo.com>
-Date:   Tue Apr 12 15:42:23 2016 -0400
+Author:     Calvin Metcalf <cmetcalf@appgeo.com>
+AuthorDate: Tue Apr 12 15:42:23 2016 -0400
+Commit:     James M Snell <jasnell@gmail.com>
+CommitDate: Wed Apr 20 13:28:35 2016 -0700
 
     stream: make null an invalid chunk to write in object mode
 

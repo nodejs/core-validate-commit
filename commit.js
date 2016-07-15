@@ -94,7 +94,7 @@ Commit.prototype.parse = function parse() {
     if (matches) {
       const key = matches[1].toLowerCase()
       const val = matches[3]
-      if (key === 'date') {
+      if (key === 'date' || key === 'authordate') {
         this.date = val
       } else if (key === 'author') {
         this.author = val
