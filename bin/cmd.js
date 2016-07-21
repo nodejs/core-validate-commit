@@ -3,53 +3,95 @@
 'use strict'
 
 const exec = require('child_process').exec
-const chalk = require('chalk')
-const args = process.argv.splice(2)
-const help = require('help')()
-const Commit = require('../commit')
-const format = require('../format')
+const http = require('http')
+const https = require('https')
+const url = require('url')
+const nopt = require('nopt')
 
-if (!args.length) return help()
-for (const arg of args) {
-  if (arg === 'help' || arg === '--help' || arg === '-h') {
-    return help()
-  }
+const pretty = require('../lib/format-pretty')
+const Validator = require('../lib')
 
-  if (arg === 'version' || arg === '--version' || arg === '-v') {
-    console.log('core-validate-commit', 'v' + require('../package').version)
-    return
-  }
+const knownOpts = { help: Boolean
+                  , version: Boolean
+                  , 'validate-metadata': Boolean
+                  }
+const shortHand = { h: ['--help']
+                  , v: ['--version']
+                  , V: ['--validate-metadata']
+                  }
+
+const parsed = nopt(knownOpts, shortHand)
+const usage = require('help')()
+
+if (parsed.help) {
+  return usage()
 }
+
+if (parsed.version) {
+  console.log('core-validate-commit', 'v' + require('../package').version)
+  return
+}
+
+const args = parsed.argv.remain
 
 function getCommitCommand(sha) {
   return `git show --quiet ${sha}`
 }
 
-;(function run() {
-  if (!args.length) return
-  const sha = args.shift()
-  exec(getCommitCommand(sha), (err, stdout, stderr) => {
-    if (err) throw err
-    const c = new Commit(stdout)
+function load(sha, cb) {
+  const parsed = url.parse(sha)
+  if (parsed.protocol) {
+    return loadPatch(parsed, cb)
+  }
 
-    if (c.errors.length) {
-      console.log()
-      console.log(format.header(c))
-    }
-
-    c.errors.forEach((m) => {
-      if (format[m.code]) {
-        console.error(format[m.code](m, c))
-      } else {
-        console.error(format.default(m, c))
-      }
-      process.exitCode = 1
-    })
-
-    c.warnings.forEach((m) => {
-      console.error('  ', chalk.yellow(m.code), chalk.grey(m.str))
-    })
-
-    run()
+  exec(`git show --quiet ${sha}`, (err, stdout, stderr) => {
+    if (err) return cb(err)
+    cb(null, stdout.trim())
   })
-})()
+}
+
+function loadPatch(uri, cb) {
+  var h = http
+  if (~uri.protocol.indexOf('https')) {
+    h = https
+  }
+  uri.headers = {
+    'user-agent': 'core-validate-commit'
+  }
+  h.get(uri, (res) => {
+    var buf = ''
+    res.on('data', (chunk) => {
+      buf += chunk
+    })
+
+    res.on('end', () => {
+      try {
+        const out = JSON.parse(buf)
+        cb(null, out)
+      } catch (err) {
+        cb(err)
+      }
+    })
+  }).on('error', cb)
+}
+
+const v = new Validator(parsed)
+
+v.on('commit', (c) => {
+  pretty(c.commit, c.messages, v)
+  run()
+})
+
+function run() {
+  if (!args.length) {
+    process.exitCode = v.errors
+    return
+  }
+  const sha = args.shift()
+  load(sha, (err, data) => {
+    if (err) throw err
+    v.lint(data)
+  })
+}
+
+run()
