@@ -10,6 +10,7 @@
   "dependencies": {
     "chalk": "~1.1.1",
     "help": "~2.1.2"
+    "gitlint-parser-node": "^1.0.1",
   },
   "devDependencies": {
     "lintit": "~1.0.1",
