@@ -1,0 +1,72 @@
+[
+  {
+    "sha": "e7c077c610afa371430180fbd447bfef60ebc5ea",
+    "commit": {
+      "author": {
+        "name": "Calvin Metcalf",
+        "email": "cmetcalf@appgeo.com",
+        "date": "2016-04-12T19:42:23Z"
+      },
+      "committer": {
+        "name": "Calvin Metcalf",
+        "email": "cmetcalf@appgeo.com",
+        "date": "2016-04-13T16:33:55Z"
+      },
+      "message": "stream: make null an invalid chunk to write in object mode\n\nthis harmonizes behavior between readable, writable, and transform\nstreams so that they all handle nulls in object mode the same way by\nconsidering them invalid chunks.\n\nPR-URL: https://github.com/nodejs/node/pull/6170\nReviewed-By: James M Snell <jasnell@gmail.com>\nReviewed-By: Matteo Collina <matteo.collina@gmail.com>",
+      "tree": {
+        "sha": "e4f9381fdd77d1fd38fe27a80dc43486ac732d48",
+        "url": "https://api.github.com/repos/nodejs/node/git/trees/e4f9381fdd77d1fd38fe27a80dc43486ac732d48"
+      },
+      "url": "https://api.github.com/repos/nodejs/node/git/commits/401ff75945d39b28b26c4e54863f312b19c0a2dd",
+      "comment_count": 0
+    },
+    "url": "https://api.github.com/repos/nodejs/node/commits/401ff75945d39b28b26c4e54863f312b19c0a2dd",
+    "html_url": "https://github.com/nodejs/node/commit/401ff75945d39b28b26c4e54863f312b19c0a2dd",
+    "comments_url": "https://api.github.com/repos/nodejs/node/commits/401ff75945d39b28b26c4e54863f312b19c0a2dd/comments",
+    "author": {
+      "login": "calvinmetcalf",
+      "id": 1128607,
+      "avatar_url": "https://avatars.githubusercontent.com/u/1128607?v=3",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/calvinmetcalf",
+      "html_url": "https://github.com/calvinmetcalf",
+      "followers_url": "https://api.github.com/users/calvinmetcalf/followers",
+      "following_url": "https://api.github.com/users/calvinmetcalf/following{/other_user}",
+      "gists_url": "https://api.github.com/users/calvinmetcalf/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/calvinmetcalf/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/calvinmetcalf/subscriptions",
+      "organizations_url": "https://api.github.com/users/calvinmetcalf/orgs",
+      "repos_url": "https://api.github.com/users/calvinmetcalf/repos",
+      "events_url": "https://api.github.com/users/calvinmetcalf/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/calvinmetcalf/received_events",
+      "type": "User",
+      "site_admin": false
+    },
+    "committer": {
+      "login": "calvinmetcalf",
+      "id": 1128607,
+      "avatar_url": "https://avatars.githubusercontent.com/u/1128607?v=3",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/calvinmetcalf",
+      "html_url": "https://github.com/calvinmetcalf",
+      "followers_url": "https://api.github.com/users/calvinmetcalf/followers",
+      "following_url": "https://api.github.com/users/calvinmetcalf/following{/other_user}",
+      "gists_url": "https://api.github.com/users/calvinmetcalf/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/calvinmetcalf/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/calvinmetcalf/subscriptions",
+      "organizations_url": "https://api.github.com/users/calvinmetcalf/orgs",
+      "repos_url": "https://api.github.com/users/calvinmetcalf/repos",
+      "events_url": "https://api.github.com/users/calvinmetcalf/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/calvinmetcalf/received_events",
+      "type": "User",
+      "site_admin": false
+    },
+    "parents": [
+      {
+        "sha": "aba035fb27b14fe561c45540818be6a2bbb9dc9e",
+        "url": "https://api.github.com/repos/nodejs/node/commits/aba035fb27b14fe561c45540818be6a2bbb9dc9e",
+        "html_url": "https://github.com/nodejs/node/commit/aba035fb27b14fe561c45540818be6a2bbb9dc9e"
+      }
+    ]
+  }
+]

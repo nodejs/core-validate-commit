@@ -1,0 +1,27 @@
+{
+  "sha": "e7c077c610afa371430180fbd447bfef60ebc5ea",
+  "url": "https://api.github.com/repos/nodejs/node/git/commits/e7c077c610afa371430180fbd447bfef60ebc5ea",
+  "html_url": "https://github.com/nodejs/node/commit/e7c077c610afa371430180fbd447bfef60ebc5ea",
+  "author": {
+    "name": "Calvin Metcalf",
+    "email": "cmetcalf@appgeo.com",
+    "date": "2016-04-12T19:42:23Z"
+  },
+  "committer": {
+    "name": "James M Snell",
+    "email": "jasnell@gmail.com",
+    "date": "2016-04-20T20:28:35Z"
+  },
+  "tree": {
+    "sha": "d3f20ccfaa7b0919a7c5a472e344b7de8829b30c",
+    "url": "https://api.github.com/repos/nodejs/node/git/trees/d3f20ccfaa7b0919a7c5a472e344b7de8829b30c"
+  },
+  "message": "stream: make null an invalid chunk to write in object mode\n\nthis harmonizes behavior between readable, writable, and transform\nstreams so that they all handle nulls in object mode the same way by\nconsidering them invalid chunks.\n\nPR-URL: https://github.com/nodejs/node/pull/6170\nReviewed-By: James M Snell <jasnell@gmail.com>\nReviewed-By: Matteo Collina <matteo.collina@gmail.com>",
+  "parents": [
+    {
+      "sha": "ec2822adaad76b126b5cccdeaa1addf2376c9aa6",
+      "url": "https://api.github.com/repos/nodejs/node/git/commits/ec2822adaad76b126b5cccdeaa1addf2376c9aa6",
+      "html_url": "https://github.com/nodejs/node/commit/ec2822adaad76b126b5cccdeaa1addf2376c9aa6"
+    }
+  ]
+}
