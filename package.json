@@ -5,7 +5,7 @@
   "main": "commit.js",
   "scripts": {
     "pretest": "lintit",
-    "test": "tap test.js --cov"
+    "test": "tap test --cov"
   },
   "dependencies": {
     "chalk": "~1.1.1",
