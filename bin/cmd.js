@@ -34,10 +34,6 @@ if (parsed.version) {
 
 const args = parsed.argv.remain
 
-function getCommitCommand(sha) {
-  return `git show --quiet ${sha}`
-}
-
 function load(sha, cb) {
   const parsed = url.parse(sha)
   if (parsed.protocol) {
