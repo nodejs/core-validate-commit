@@ -29,7 +29,7 @@ This is a test`
       tt.equal(opts.string, null, 'string')
       tt.equal(opts.line, 0, 'line')
       tt.equal(opts.column, 0, 'column')
-      tt.equal(opts.level, 'error', 'level')
+      tt.equal(opts.level, 'fail', 'level')
     }
 
     Rule.validate(context)

@@ -9,15 +9,18 @@ const url = require('url')
 const nopt = require('nopt')
 
 const pretty = require('../lib/format-pretty')
+const tap = require('../lib/format-tap')
 const Validator = require('../lib')
 
 const knownOpts = { help: Boolean
                   , version: Boolean
                   , 'validate-metadata': Boolean
+                  , tap: Boolean
                   }
 const shortHand = { h: ['--help']
                   , v: ['--version']
                   , V: ['--validate-metadata']
+                  , t: ['--tap']
                   }
 
 const parsed = nopt(knownOpts, shortHand)
@@ -73,21 +76,44 @@ function loadPatch(uri, cb) {
 
 const v = new Validator(parsed)
 
-v.on('commit', (c) => {
-  pretty(c.commit, c.messages, v)
-  run()
-})
-
-function run() {
-  if (!args.length) {
-    process.exitCode = v.errors
-    return
-  }
-  const sha = args.shift()
-  load(sha, (err, data) => {
-    if (err) throw err
-    v.lint(data)
+if (parsed.tap) {
+  var errCount = 0
+  v.on('commit', (c) => {
+    errCount += c.commit.errors
+    tap(c.commit, c.messages, v)
   })
-}
 
-run()
+  function run() {
+    if (!args.length) {
+      return
+    }
+    const sha = args.shift()
+    load(sha, (err, data) => {
+      if (err) throw err
+      v.lint(data)
+      run()
+    })
+  }
+
+  run()
+
+} else {
+  v.on('commit', (c) => {
+    pretty(c.commit, c.messages, v)
+    run()
+  })
+
+  function run() {
+    if (!args.length) {
+      process.exitCode = v.errors
+      return
+    }
+    const sha = args.shift()
+    load(sha, (err, data) => {
+      if (err) throw err
+      v.lint(data)
+    })
+  }
+
+  run()
+}

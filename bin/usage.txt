@@ -5,8 +5,22 @@ core-validate-commit - Validate the commit message for a particular commit in no
   options:
     -h, --help                    show help and usage
     -v, --version                 show version
+    -V, --validate-metadata       validate PR-URL and revieweres (on by default)
+    -t, --tap                     output in tap format
 
   examples:
-    core-validate-commit 64c87e2cf4bdac6cdea302d5a5ead36c56f81c65
+    Validate a single sha:
 
-    git rev-list 287bdab..HEAD | xargs core-validate-commit
+    $ core-validate-commit 64c87e2cf4bdac6cdea302d5a5ead36c56f81c65
+
+    Validate from a specific sha to HEAD:
+
+    $ git rev-list 287bdab..HEAD | xargs core-validate-commit
+
+    Passing a url to Github's PR commit list API:
+
+    $ core-validate-commit https://api.github.com/repos/nodejs/node/pulls/7957/commits
+
+    Passing a url to a specific sha on github:
+
+    $ core-validate-commit https://api.github.com/repos/nodejs/node/git/commits/9e9d499b8be8ffc6050db25129b042507d7b4b02

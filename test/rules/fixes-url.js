@@ -29,7 +29,7 @@ Fixes: #1234`
       tt.equal(opts.string, '#1234', 'string')
       tt.equal(opts.line, 1, 'line')
       tt.equal(opts.column, 7, 'column')
-      tt.equal(opts.level, 'error', 'level')
+      tt.equal(opts.level, 'fail', 'level')
     }
 
     Rule.validate(context)

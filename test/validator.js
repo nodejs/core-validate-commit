@@ -107,9 +107,12 @@ test('Validator - real commits', (t) => {
       tt.deepEqual(c.subsystems, ['stream'], 'subsystems')
       tt.equal(c.prUrl, 'https://github.com/nodejs/node/pull/6170', 'pr')
       const msgs = data.messages
-      tt.equal(msgs.length, 3, 'messages.length')
-      tt.equal(msgs[0].level, 'error')
-      tt.equal(msgs[0].id, 'title-length')
+      const filtered = msgs.filter((item) => {
+        return item.level === 'fail'
+      })
+      tt.equal(filtered.length, 3, 'messages.length')
+      tt.equal(filtered[0].level, 'fail')
+      tt.equal(filtered[0].id, 'title-length')
     })
   })
 
@@ -124,9 +127,12 @@ test('Validator - real commits', (t) => {
       tt.equal(c.prUrl, 'https://github.com/nodejs/node/pull/5947', 'pr')
       tt.equal(c.revert, true, 'revert')
       const msgs = data.messages
-      tt.equal(msgs.length, 1, 'messages.length')
-      tt.equal(msgs[0].level, 'error')
-      tt.equal(msgs[0].id, 'title-length')
+      const filtered = msgs.filter((item) => {
+        return item.level === 'fail'
+      })
+      tt.equal(filtered.length, 1, 'messages.length')
+      tt.equal(filtered[0].level, 'fail')
+      tt.equal(filtered[0].id, 'title-length')
       tt.end()
     })
   })
@@ -142,8 +148,11 @@ test('Validator - real commits', (t) => {
       tt.equal(c.prUrl, 'https://github.com/nodejs/node/pull/6215', 'pr')
       tt.equal(c.revert, false, 'revert')
       const msgs = data.messages
-      tt.equal(msgs.length, 3, 'messages.length')
-      const ids = msgs.map((item) => {
+      const filtered = msgs.filter((item) => {
+        return item.level === 'fail'
+      })
+      tt.equal(filtered.length, 3, 'messages.length')
+      const ids = filtered.map((item) => {
         return item.id
       })
       const exp = ['line-length', 'line-length', 'title-length']
@@ -170,12 +179,15 @@ test('Validator - real commits', (t) => {
           ? 1
           : 0
       })
-      tt.equal(msgs.length, 2, 'messages.length')
-      tt.equal(msgs[0].id, 'pr-url', 'message id')
-      tt.equal(msgs[0].string, '#5546', 'message string')
-      tt.equal(msgs[1].id, 'subsystem', 'message id')
-      tt.equal(msgs[1].line, 0, 'line')
-      tt.equal(msgs[1].column, 0, 'column')
+      const filtered = msgs.filter((item) => {
+        return item.level === 'fail'
+      })
+      tt.equal(filtered.length, 2, 'messages.length')
+      tt.equal(filtered[0].id, 'pr-url', 'message id')
+      tt.equal(filtered[0].string, '#5546', 'message string')
+      tt.equal(filtered[1].id, 'subsystem', 'message id')
+      tt.equal(filtered[1].line, 0, 'line')
+      tt.equal(filtered[1].column, 0, 'column')
       tt.end()
     })
   })
@@ -193,7 +205,10 @@ test('Validator - real commits', (t) => {
       tt.equal(c.prUrl, null, 'pr')
       tt.equal(c.revert, false, 'revert')
       const msgs = data.messages
-      tt.equal(msgs.length, 0, 'messages.length')
+      const filtered = msgs.filter((item) => {
+        return item.level === 'fail'
+      })
+      tt.equal(filtered.length, 0, 'messages.length')
       tt.end()
     })
   })

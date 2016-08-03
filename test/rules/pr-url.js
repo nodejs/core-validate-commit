@@ -17,7 +17,7 @@ test('rule: pr-url', (t) => {
         tt.equal(opts.string, null, 'string')
         tt.equal(opts.line, 0, 'line')
         tt.equal(opts.column, 0, 'column')
-        tt.equal(opts.level, 'error', 'level')
+        tt.equal(opts.level, 'fail', 'level')
       }
     }
 
@@ -39,7 +39,7 @@ test('rule: pr-url', (t) => {
         tt.equal(opts.string, '#1234', 'string')
         tt.equal(opts.line, 1, 'line')
         tt.equal(opts.column, 8, 'column')
-        tt.equal(opts.level, 'error', 'level')
+        tt.equal(opts.level, 'fail', 'level')
       }
     }
 

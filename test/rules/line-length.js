@@ -28,7 +28,7 @@ ${'aaa'.repeat(30)}`
       tt.equal(opts.string, 'aaa'.repeat(30), 'string')
       tt.equal(opts.line, 1, 'line')
       tt.equal(opts.column, 72, 'column')
-      tt.equal(opts.level, 'error', 'level')
+      tt.equal(opts.level, 'fail', 'level')
     }
 
     Rule.validate(context, {
@@ -53,7 +53,10 @@ ${'aaa'.repeat(30)}`
     }, v)
 
     context.report = (opts) => {
-      tt.fail('should not call report()')
+      tt.pass('called report')
+      tt.equal(opts.id, 'line-length', 'id')
+      tt.equal(opts.string, '', 'string')
+      tt.equal(opts.level, 'skip', 'level')
     }
 
     Rule.validate(context, {
