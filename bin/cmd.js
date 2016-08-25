@@ -3,24 +3,27 @@
 'use strict'
 
 const exec = require('child_process').exec
+const fs = require('fs')
 const http = require('http')
 const https = require('https')
 const url = require('url')
 const nopt = require('nopt')
-
+const path = require('path')
 const pretty = require('../lib/format-pretty')
-const tap = require('../lib/format-tap')
+const formatTap = require('../lib/format-tap')
 const Validator = require('../lib')
-
+const Tap = require('../lib/tap')
 const knownOpts = { help: Boolean
                   , version: Boolean
                   , 'validate-metadata': Boolean
                   , tap: Boolean
+                  , out: path
                   }
 const shortHand = { h: ['--help']
                   , v: ['--version']
                   , V: ['--validate-metadata']
                   , t: ['--tap']
+                  , o: ['--out']
                   }
 
 const parsed = nopt(knownOpts, shortHand)
@@ -77,14 +80,28 @@ function loadPatch(uri, cb) {
 const v = new Validator(parsed)
 
 if (parsed.tap) {
-  var errCount = 0
+  const stream = parsed.out
+    ? fs.createWriteStream(parsed.out)
+    : process.stdout
+
+  const tap = new Tap(stream)
+  var isEnding = false
+
   v.on('commit', (c) => {
-    errCount += c.commit.errors
-    tap(c.commit, c.messages, v)
+    const test = tap.test(c.commit.sha)
+    formatTap(test, c.commit, c.messages, v)
+    if (isEnding) {
+      setImmediate(() => {
+        tap.end()
+        if (tap.status === 'fail')
+          process.exitCode = 1
+      })
+    }
   })
 
   function run() {
     if (!args.length) {
+      isEnding = true
       return
     }
     const sha = args.shift()
