@@ -46,7 +46,7 @@ function load(sha, cb) {
     return loadPatch(parsed, cb)
   }
 
-  exec(`git show --quiet ${sha}`, (err, stdout, stderr) => {
+  exec(`git show --quiet --format=medium ${sha}`, (err, stdout, stderr) => {
     if (err) return cb(err)
     cb(null, stdout.trim())
   })
