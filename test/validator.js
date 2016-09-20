@@ -76,6 +76,35 @@ Date:   Thu Mar 3 10:10:46 2016 -0600
     The properties on memoryUsage were not checked before,
     this commit checks them.`
 
+/* eslint-disable */
+const str6 = {
+  "sha": "c5545f2c63fe30b0cfcdafab18c26df8286881d0",
+  "url": "https://api.github.com/repos/nodejs/node/git/commits/c5545f2c63fe30b0cfcdafab18c26df8286881d0",
+  "html_url": "https://github.com/nodejs/node/commit/c5545f2c63fe30b0cfcdafab18c26df8286881d0",
+  "author": {
+    "name": "Anna Henningsen",
+    "email": "anna@addaleax.net",
+    "date": "2016-09-13T10:57:49Z"
+  },
+  "committer": {
+    "name": "Anna Henningsen",
+    "email": "anna@addaleax.net",
+    "date": "2016-09-19T12:50:57Z"
+  },
+  "tree": {
+    "sha": "b505c0ffa0555730e9f4cdb391d1ebeb48bb2f59",
+    "url": "https://api.github.com/repos/nodejs/node/git/trees/b505c0ffa0555730e9f4cdb391d1ebeb48bb2f59"
+  },
+  "message": "fs: fix handling of `uv_stat_t` fields\n\n`FChown` and `Chown` test that the `uid` and `gid` parameters\nthey receive are unsigned integers, but `Stat()` and `FStat()`\nwould return the corresponding fields of `uv_stat_t` as signed\nintegers. Applications which pass those these values directly\nto `Chown` may fail\n(e.g. for `nobody` on OS X, who has an `uid` of `-2`, see e.g.\nhttps://github.com/nodejs/node-v0.x-archive/issues/5890).\n\nThis patch changes the `Integer::New()` call for `uid` and `gid`\nto `Integer::NewFromUnsigned()`.\n\nAll other fields are kept as they are, for performance, but\nstrictly speaking the respective sizes of those\nfields aren’t specified, either.\n\nRef: https://github.com/npm/npm/issues/13918\nPR-URL: https://github.com/nodejs/node/pull/8515\nReviewed-By: Ben Noordhuis <info@bnoordhuis.nl>\nReviewed-By: Sakthipriyan Vairamani <thechargingvolcano@gmail.com>\nReviewed-By: James M Snell <jasnell@gmail.com>\n\nundo accidental change to other fields of uv_fs_stat",
+  "parents": [
+    {
+      "sha": "4e76bffc0c7076a5901179e70c7b8a8f9fcd22e4",
+      "url": "https://api.github.com/repos/nodejs/node/git/commits/4e76bffc0c7076a5901179e70c7b8a8f9fcd22e4",
+      "html_url": "https://github.com/nodejs/node/commit/4e76bffc0c7076a5901179e70c7b8a8f9fcd22e4"
+    }
+  ]
+}
+/* eslint-enable */
 
 test('Validator - misc', (t) => {
   const v = new Validator()
@@ -209,6 +238,30 @@ test('Validator - real commits', (t) => {
         return item.level === 'fail'
       })
       tt.equal(filtered.length, 0, 'messages.length')
+      tt.end()
+    })
+  })
+
+  t.test('non empty lines after metadata', (tt) => {
+    const v = new Validator()
+    v.lint(str6)
+    v.on('commit', (data) => {
+      const c = data.commit.toJSON()
+      tt.equal(c.sha, 'c5545f2c63fe30b0cfcdafab18c26df8286881d0', 'sha')
+      tt.equal(c.date, '2016-09-13T10:57:49Z', 'date')
+      tt.deepEqual(c.subsystems, ['fs'], 'subsystems')
+      tt.equal(c.prUrl, 'https://github.com/nodejs/node/pull/8515', 'pr')
+      tt.equal(c.revert, false, 'revert')
+      const msgs = data.messages
+      const filtered = msgs.filter((item) => {
+        return item.level === 'fail'
+      })
+      tt.equal(filtered.length, 1, 'messages.length')
+      const item = filtered[0]
+      tt.equal(item.id, 'metadata-end', 'id')
+      tt.equal(item.message, 'commit metadata at end of message', 'message')
+      tt.equal(item.line, 22, 'line')
+      tt.equal(item.column, 0, 'column')
       tt.end()
     })
   })
