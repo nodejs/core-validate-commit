@@ -19,6 +19,16 @@ $ core-validate-commit <sha>
 
 # validate since <sha>
 $ git rev-list <sha>..HEAD | xargs core-validate-commit
+
+# list all rules
+$ core-validate-commit --list
+    fixes-url enforce format of Fixes URLs
+  line-length enforce max length of lines in commit body
+ metadata-end enforce that metadata is at the end of commit messages
+       pr-url enforce PR-URL
+    reviewers enforce having reviewers
+    subsystem enforce subsystem validity
+ title-length enforce max length of commit title
 ```
 
 ## Test

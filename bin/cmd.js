@@ -13,17 +13,20 @@ const pretty = require('../lib/format-pretty')
 const formatTap = require('../lib/format-tap')
 const Validator = require('../lib')
 const Tap = require('../lib/tap')
+const utils = require('../lib/utils')
 const knownOpts = { help: Boolean
                   , version: Boolean
                   , 'validate-metadata': Boolean
                   , tap: Boolean
                   , out: path
+                  , list: Boolean
                   }
 const shortHand = { h: ['--help']
                   , v: ['--version']
                   , V: ['--validate-metadata']
                   , t: ['--tap']
                   , o: ['--out']
+                  , l: ['--list']
                   }
 
 const parsed = nopt(knownOpts, shortHand)
@@ -78,6 +81,19 @@ function loadPatch(uri, cb) {
 }
 
 const v = new Validator(parsed)
+
+if (parsed.list) {
+  const ruleNames = Array.from(v.rules.keys())
+  const max = ruleNames.reduce((m, item) => {
+    if (item.length > m) m = item.length
+    return m
+  }, 0)
+
+  for (const rule of v.rules.values()) {
+    utils.describeRule(rule, max)
+  }
+  return
+}
 
 if (parsed.tap) {
   const stream = parsed.out
