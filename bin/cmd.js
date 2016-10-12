@@ -96,17 +96,17 @@ if (parsed.list) {
 }
 
 if (parsed.tap) {
-  const stream = parsed.out
-    ? fs.createWriteStream(parsed.out)
-    : process.stdout
-
-  const tap = new Tap(stream)
-  var isEnding = false
+  const tap = new Tap()
+  tap.pipe(process.stdout)
+  if (parsed.out) tap.pipe(fs.createWriteStream(parsed.out))
+  var count = 0
+  var total = args.length
 
   v.on('commit', (c) => {
+    count++
     const test = tap.test(c.commit.sha)
     formatTap(test, c.commit, c.messages, v)
-    if (isEnding) {
+    if (count === total) {
       setImmediate(() => {
         tap.end()
         if (tap.status === 'fail')
@@ -116,10 +116,7 @@ if (parsed.tap) {
   })
 
   function run() {
-    if (!args.length) {
-      isEnding = true
-      return
-    }
+    if (!args.length) return
     const sha = args.shift()
     load(sha, (err, data) => {
       if (err) throw err
