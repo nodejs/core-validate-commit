@@ -31,6 +31,20 @@ $ core-validate-commit --list
  title-length enforce max length of commit title
 ```
 
+## Git hook installation
+
+- install `node` and `core-validate-commits` as above
+- install this hook in your clone of node (here `~/src/node`):
+```
+ln -s commit-msg.sh   ~/src/node/.git/hooks/commit-msg
+```
+- Alternatively, you may be able to pull from the npm-installed package:
+```
+ln  -s /usr/local/lib/node_modules/core-validate-commit/commit-msg.sh \
+          ~/src/node/.git/hooks/commit-msg
+```
+- make sure `~/src/node/.git/hooks/commit-msg` is executable.
+
 ## Test
 
 ```bash
