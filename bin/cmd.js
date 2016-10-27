@@ -59,6 +59,11 @@ function loadPatch(uri, cb) {
   var h = http
   if (~uri.protocol.indexOf('https')) {
     h = https
+  } else if (~uri.protocol.indexOf('file:')) {
+    return fs.readFile(uri.pathname, (err, data) => {
+      if (err) return cb(err)
+      return cb(null, data.toString('utf-8'))
+    })
   }
   uri.headers = {
     'user-agent': 'core-validate-commit'
