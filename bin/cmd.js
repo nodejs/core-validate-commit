@@ -42,6 +42,8 @@ if (parsed.version) {
 }
 
 const args = parsed.argv.remain
+if (!args.length)
+  args.push('HEAD')
 
 function load(sha, cb) {
   const parsed = url.parse(sha)
