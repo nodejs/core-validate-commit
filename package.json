@@ -16,7 +16,7 @@
   },
   "devDependencies": {
     "lintit": "^5.1.0",
-    "tap": "^6.3.0"
+    "tap": "^10.3.2"
   },
   "license": "MIT",
   "bin": {
