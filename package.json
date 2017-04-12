@@ -15,7 +15,7 @@
     "nopt": "^3.0.6"
   },
   "devDependencies": {
-    "lintit": "~1.0.1",
+    "lintit": "^5.1.0",
     "tap": "^6.3.0"
   },
   "license": "MIT",
