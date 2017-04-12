@@ -5,7 +5,8 @@
   "main": "commit.js",
   "scripts": {
     "pretest": "lintit",
-    "test": "tap test --cov"
+    "test": "tap test --cov",
+    "posttest": "tap --coverage-report=text-summary"
   },
   "dependencies": {
     "chalk": "~1.1.1",
