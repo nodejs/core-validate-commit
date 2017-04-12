@@ -5,7 +5,7 @@
   "main": "commit.js",
   "scripts": {
     "pretest": "lintit",
-    "test": "tap test --cov",
+    "test": "tap -j4 test --cov",
     "posttest": "tap --coverage-report=text-summary"
   },
   "dependencies": {
