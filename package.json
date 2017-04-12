@@ -4,7 +4,7 @@
   "description": "Validate the commit message for a particular commit in node core",
   "main": "index.js",
   "scripts": {
-    "pretest": "lintit",
+    "pretest": "lintit && check-pkg",
     "test": "tap -j4 test --cov",
     "posttest": "tap --coverage-report=text-summary"
   },
