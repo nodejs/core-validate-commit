@@ -15,6 +15,7 @@
     "nopt": "^3.0.6"
   },
   "devDependencies": {
+    "check-pkg": "^2.0.2",
     "lintit": "^5.1.0",
     "tap": "^10.3.2"
   },
