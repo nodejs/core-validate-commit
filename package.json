@@ -26,10 +26,10 @@
   "author": "Evan Lucas <evanlucas@me.com>",
   "repository": {
     "type": "git",
-    "url": "https://github.com/evanlucas/core-validate-commit"
+    "url": "https://github.com/nodejs/core-validate-commit"
   },
-  "homepage": "https://github.com/evanlucas/core-validate-commit",
+  "homepage": "https://github.com/nodejs/core-validate-commit",
   "bugs": {
-    "url": "https://github.com/evanlucas/core-validate-commit/issues"
+    "url": "https://github.com/nodejs/core-validate-commit/issues"
   }
 }
