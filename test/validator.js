@@ -122,7 +122,7 @@ test('Validator - misc', (t) => {
 
 test('Validator - real commits', (t) => {
   t.test('basic', (tt) => {
-    tt.plan(18)
+    tt.plan(12)
     const v = new Validator()
     // run against the output of git show --quiet
     // run against the output of github's get commit api request
@@ -139,9 +139,7 @@ test('Validator - real commits', (t) => {
       const filtered = msgs.filter((item) => {
         return item.level === 'fail'
       })
-      tt.equal(filtered.length, 3, 'messages.length')
-      tt.equal(filtered[0].level, 'fail')
-      tt.equal(filtered[0].id, 'title-length')
+      tt.equal(filtered.length, 0, 'messages.length')
     })
   })
 
@@ -159,9 +157,7 @@ test('Validator - real commits', (t) => {
       const filtered = msgs.filter((item) => {
         return item.level === 'fail'
       })
-      tt.equal(filtered.length, 1, 'messages.length')
-      tt.equal(filtered[0].level, 'fail')
-      tt.equal(filtered[0].id, 'title-length')
+      tt.equal(filtered.length, 0, 'messages.length')
       tt.end()
     })
   })
@@ -180,11 +176,11 @@ test('Validator - real commits', (t) => {
       const filtered = msgs.filter((item) => {
         return item.level === 'fail'
       })
-      tt.equal(filtered.length, 3, 'messages.length')
+      tt.equal(filtered.length, 2, 'messages.length')
       const ids = filtered.map((item) => {
         return item.id
       })
-      const exp = ['line-length', 'line-length', 'title-length']
+      const exp = ['line-length', 'line-length']
       tt.deepEqual(ids.sort(), exp.sort(), 'message ids')
       tt.end()
     })
