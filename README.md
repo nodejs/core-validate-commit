@@ -28,7 +28,6 @@ $ core-validate-commit --list
        pr-url enforce PR-URL
     reviewers enforce having reviewers
     subsystem enforce subsystem validity
- title-length enforce max length of commit title
 ```
 
 ## Test
