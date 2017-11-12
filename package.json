@@ -17,7 +17,7 @@
   "devDependencies": {
     "check-pkg": "^2.0.2",
     "lintit": "^5.1.0",
-    "tap": "^10.3.2"
+    "tap": "^10.7.3"
   },
   "license": "MIT",
   "bin": {
