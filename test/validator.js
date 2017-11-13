@@ -43,7 +43,7 @@ const str3 = `commit 75487f0db80e70a3e27fabfe323a33258dfbbea8
 Author: Michaël Zasso <targos@protonmail.com>
 Date:   Fri Apr 15 13:32:36 2016 +0200
 
-    module: fix resolution of filename with trailing slash
+    module: fix resolution of filename with trailing slash - make this tile too long
 
     A recent optimization of module loading performance [1] forgot to check that
     extensions were set in a certain code path.
@@ -122,7 +122,7 @@ test('Validator - misc', (t) => {
 
 test('Validator - real commits', (t) => {
   t.test('basic', (tt) => {
-    tt.plan(18)
+    tt.plan(21)
     const v = new Validator()
     // run against the output of git show --quiet
     // run against the output of github's get commit api request
@@ -136,12 +136,16 @@ test('Validator - real commits', (t) => {
       tt.deepEqual(c.subsystems, ['stream'], 'subsystems')
       tt.equal(c.prUrl, 'https://github.com/nodejs/node/pull/6170', 'pr')
       const msgs = data.messages
-      const filtered = msgs.filter((item) => {
+      const failed = msgs.filter((item) => {
         return item.level === 'fail'
       })
-      tt.equal(filtered.length, 3, 'messages.length')
-      tt.equal(filtered[0].level, 'fail')
-      tt.equal(filtered[0].id, 'title-length')
+      tt.equal(failed.length, 0, 'failed.length')
+      const warned = msgs.filter((item) => {
+        return item.level === 'warn'
+      })
+      tt.equal(warned.length, 3, 'warned.length')
+      tt.equal(warned[0].level, 'warn')
+      tt.equal(warned[0].id, 'title-length')
     })
   })
 
@@ -157,10 +161,10 @@ test('Validator - real commits', (t) => {
       tt.equal(c.revert, true, 'revert')
       const msgs = data.messages
       const filtered = msgs.filter((item) => {
-        return item.level === 'fail'
+        return item.level === 'warn'
       })
       tt.equal(filtered.length, 1, 'messages.length')
-      tt.equal(filtered[0].level, 'fail')
+      tt.equal(filtered[0].level, 'warn')
       tt.equal(filtered[0].id, 'title-length')
       tt.end()
     })

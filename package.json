@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "pretest": "lintit && check-pkg",
-    "test": "tap -j4 test --cov",
+    "test": "tap -j4 --cov test/**/*.js",
     "posttest": "tap --coverage-report=text-summary"
   },
   "dependencies": {
