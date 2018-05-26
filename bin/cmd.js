@@ -15,19 +15,19 @@ const Validator = require('../lib')
 const Tap = require('../lib/tap')
 const utils = require('../lib/utils')
 const knownOpts = { help: Boolean
-                  , version: Boolean
-                  , 'validate-metadata': Boolean
-                  , tap: Boolean
-                  , out: path
-                  , list: Boolean
-                  }
+, version: Boolean
+, 'validate-metadata': Boolean
+, tap: Boolean
+, out: path
+, list: Boolean
+}
 const shortHand = { h: ['--help']
-                  , v: ['--version']
-                  , V: ['--validate-metadata']
-                  , t: ['--tap']
-                  , o: ['--out']
-                  , l: ['--list']
-                  }
+, v: ['--version']
+, V: ['--validate-metadata']
+, t: ['--tap']
+, o: ['--out']
+, l: ['--list']
+}
 
 const parsed = nopt(knownOpts, shortHand)
 const usage = require('help')()
