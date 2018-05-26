@@ -209,8 +209,8 @@ test('Validator - real commits', (t) => {
         return a.id < b.id
           ? -1
           : a.id > b.id
-          ? 1
-          : 0
+            ? 1
+            : 0
       })
       const filtered = msgs.filter((item) => {
         return item.level === 'fail'
