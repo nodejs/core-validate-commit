@@ -113,6 +113,20 @@ Date:   Thu Mar 3 10:10:46 2016 -0600
     test: check memoryUsage properties.
 `
 
+const str8 = `commit 7d3a7ea0d7df9b6f11df723dec370f49f4f87e99
+Author: Wyatt Preul <wpreul@gmail.com>
+Date:   Thu Mar 3 10:10:46 2016 -0600
+
+    test: Check memoryUsage properties
+`
+
+const str9 = `commit 7d3a7ea0d7df9b6f11df723dec370f49f4f87e99
+Author: Wyatt Preul <wpreul@gmail.com>
+Date:   Thu Mar 3 10:10:46 2016 -0600
+
+    test: Check memoryUsage properties.
+`
+
 test('Validator - misc', (t) => {
   const v = new Validator()
 
@@ -278,7 +292,7 @@ test('Validator - real commits', (t) => {
     })
   })
 
-  t.test('trailing punctuation in first line', (tt) => {
+  t.test('trailing punctuation in title line', (tt) => {
     const v = new Validator({
       'validate-metadata': false
     })
@@ -292,6 +306,40 @@ test('Validator - real commits', (t) => {
       tt.equal(filtered[0].message,
                'Do not use punctuation at end of title.',
                'message')
+      tt.end()
+    })
+  })
+
+  t.test('first word is lowercase in title line', (tt) => {
+    const v = new Validator({
+      'validate-metadata': false
+    })
+    v.lint(str8)
+    v.on('commit', (data) => {
+      const msgs = data.messages
+      const filtered = msgs.filter((item) => {
+        return item.level === 'fail'
+      })
+      tt.equal(filtered.length, 1, 'messages.length')
+      tt.equal(filtered[0].message,
+               'First word after subsystem(s) in title should be lowercase.',
+               'message')
+      tt.equal(filtered[0].column, 7, 'column')
+      tt.end()
+    })
+  })
+
+  t.test('more than one formatting error in title line', (tt) => {
+    const v = new Validator({
+      'validate-metadata': false
+    })
+    v.lint(str9)
+    v.on('commit', (data) => {
+      const msgs = data.messages
+      const filtered = msgs.filter((item) => {
+        return item.level === 'fail'
+      })
+      tt.equal(filtered.length, 2, 'messages.length')
       tt.end()
     })
   })
