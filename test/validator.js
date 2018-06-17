@@ -106,6 +106,13 @@ const str6 = {
 }
 /* eslint-enable */
 
+const str7 = `commit 7d3a7ea0d7df9b6f11df723dec370f49f4f87e99
+Author: Wyatt Preul <wpreul@gmail.com>
+Date:   Thu Mar 3 10:10:46 2016 -0600
+
+    test: check memoryUsage properties.
+`
+
 test('Validator - misc', (t) => {
   const v = new Validator()
 
@@ -267,6 +274,24 @@ test('Validator - real commits', (t) => {
       tt.equal(item.message, 'commit metadata at end of message', 'message')
       tt.equal(item.line, 22, 'line')
       tt.equal(item.column, 0, 'column')
+      tt.end()
+    })
+  })
+
+  t.test('trailing punctuation in first line', (tt) => {
+    const v = new Validator({
+      'validate-metadata': false
+    })
+    v.lint(str7)
+    v.on('commit', (data) => {
+      const msgs = data.messages
+      const filtered = msgs.filter((item) => {
+        return item.level === 'fail'
+      })
+      tt.equal(filtered.length, 1, 'messages.length')
+      tt.equal(filtered[0].message,
+               'Do not use punctuation at end of title.',
+               'message')
       tt.end()
     })
   })
