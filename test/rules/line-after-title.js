@@ -30,7 +30,7 @@ test('rule: line-after-title', (t) => {
     }
 
     Rule.validate(context)
-  }),
+  })
 
   t.test('blank line', (tt) => {
     tt.plan(4)
@@ -43,6 +43,29 @@ test('rule: line-after-title', (t) => {
       , date: '2016-04-12T19:42:23Z'
       }
     , message: 'test: fix something\n\nfhqwhgads'
+    }, v)
+
+    context.report = (opts) => {
+      tt.pass('called report')
+      tt.equal(opts.id, 'line-after-title', 'id')
+      tt.equal(opts.message, 'blank line after title', 'message')
+      tt.equal(opts.level, 'pass', 'level')
+    }
+
+    Rule.validate(context)
+  })
+
+  t.test('just one line', (tt) => {
+    tt.plan(4)
+    const v = new Validator()
+    const context = new Commit({
+      sha: 'e7c077c610afa371430180fbd447bfef60ebc5ea'
+    , author: {
+        name: 'Evan Lucas'
+      , email: 'evanlucas@me.com'
+      , date: '2016-04-12T19:42:23Z'
+      }
+    , message: 'test: fix something'
     }, v)
 
     context.report = (opts) => {
