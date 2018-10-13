@@ -205,11 +205,11 @@ test('Validator - real commits', (t) => {
       const filtered = msgs.filter((item) => {
         return item.level === 'fail'
       })
-      tt.equal(filtered.length, 3, 'messages.length')
+      tt.equal(filtered.length, 2, 'messages.length')
       const ids = filtered.map((item) => {
         return item.id
       })
-      const exp = ['line-length', 'line-length', 'title-length']
+      const exp = ['line-length', 'title-length']
       tt.deepEqual(ids.sort(), exp.sort(), 'message ids')
       tt.end()
     })
