@@ -5,7 +5,7 @@ core-validate-commit - Validate the commit message for a particular commit in no
   options:
     -h, --help                    show help and usage
     -v, --version                 show version
-    -V, --validate-metadata       validate PR-URL and revieweres (on by default)
+    -V, --validate-metadata       validate PR-URL and reviewers (on by default)
     -t, --tap                     output in tap format
     -l, --list                    list rules and their descriptions
 
