@@ -67,5 +67,69 @@ ${'aaa'.repeat(30)}`
     tt.end()
   })
 
+  t.test('quoted lines', (tt) => {
+    const v = new Validator()
+    const context = new Commit({
+      sha: 'e7c077c610afa371430180fbd447bfef60ebc5ea'
+    , author: {
+        name: 'Evan Lucas'
+      , email: 'evanlucas@me.com'
+      , date: '2016-04-12T19:42:23Z'
+      }
+    , message: `src: make foo mor foo-ey
+
+Here’s the original code:
+
+    ${'aaa'.repeat(30)}
+
+That was the original code.
+`
+    }, v)
+
+    context.report = (opts) => {
+      tt.pass('called report')
+      tt.equal(opts.id, 'line-length', 'id')
+      tt.equal(opts.string, '', 'string')
+      tt.equal(opts.level, 'pass', 'level')
+    }
+
+    Rule.validate(context, {
+      options: {
+        length: 72
+      }
+    })
+    tt.end()
+  })
+
+  t.test('URLs', (tt) => {
+    const v = new Validator()
+    const context = new Commit({
+      sha: 'e7c077c610afa371430180fbd447bfef60ebc5ea'
+    , author: {
+        name: 'Evan Lucas'
+      , email: 'evanlucas@me.com'
+      , date: '2016-04-12T19:42:23Z'
+      }
+    , message: `src: make foo mor foo-ey
+
+https://${'very-'.repeat(80)}-long-url.org/
+`
+    }, v)
+
+    context.report = (opts) => {
+      tt.pass('called report')
+      tt.equal(opts.id, 'line-length', 'id')
+      tt.equal(opts.string, '', 'string')
+      tt.equal(opts.level, 'pass', 'level')
+    }
+
+    Rule.validate(context, {
+      options: {
+        length: 72
+      }
+    })
+    tt.end()
+  })
+
   t.end()
 })
