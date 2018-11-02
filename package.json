@@ -1,6 +1,6 @@
 {
   "name": "core-validate-commit",
-  "version": "3.6.1",
+  "version": "3.6.2",
   "description": "Validate the commit message for a particular commit in node core",
   "main": "index.js",
   "scripts": {
