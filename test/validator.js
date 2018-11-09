@@ -127,6 +127,27 @@ Date:   Thu Mar 3 10:10:46 2016 -0600
     test: Check memoryUsage properties.
 `
 
+const str10 = `commit 9af419a04237c3d158e71ecde9e04bbc2e77de1f
+Author: Richard Lau <riclau@uk.ibm.com>
+Date:   Fri Nov 9 11:24:33 2018 -0500
+
+    skip fixup! and squash! commits
+`
+
+const str11 = `commit 1fd0e4375ea3ecb62d847827365d95e63bfe03f2
+Author: Richard Lau <riclau@uk.ibm.com>
+Date:   Fri Nov 9 11:26:11 2018 -0500
+
+    fixup! skip fixup! and squash! commits
+`
+
+const str12 = `commit 1fd0e4375ea3ecb62d847827365d95e63bfe03f2
+Author: Richard Lau <riclau@uk.ibm.com>
+Date:   Fri Nov 9 11:26:11 2018 -0500
+
+    squash! skip fixup! and squash! commits
+`
+
 test('Validator - misc', (t) => {
   const v = new Validator()
 
@@ -344,5 +365,54 @@ test('Validator - real commits', (t) => {
     })
   })
 
+  t.test('title contains but does not start with fixup! and squash!', (tt) => {
+    const v = new Validator({
+      'validate-metadata': false
+    })
+    v.lint(str10)
+    v.on('commit', (data) => {
+      const msgs = data.messages
+      const filtered = msgs.filter((item) => {
+        return item.level === 'fail'
+      })
+      tt.equal(filtered.length, 1, 'messages.length')
+      tt.equal(filtered[0].message, 'Missing subsystem.')
+      tt.end()
+    })
+  })
+
+  t.test('fixup! commits are skipped', (tt) => {
+    const v = new Validator({
+      'validate-metadata': false
+    })
+    v.lint(str11)
+    v.on('commit', (data) => {
+      const msgs = data.messages
+      const filtered = msgs.filter((item) => {
+        return item.level === 'fail'
+      })
+      tt.equal(filtered.length, 0, 'reported failures')
+      tt.equal(msgs.length, 1, 'messages.length')
+      tt.equal(msgs[0].message, 'Skipping fixup! commit.')
+      tt.end()
+    })
+  })
+
+  t.test('squash! commits are skipped', (tt) => {
+    const v = new Validator({
+      'validate-metadata': false
+    })
+    v.lint(str12)
+    v.on('commit', (data) => {
+      const msgs = data.messages
+      const filtered = msgs.filter((item) => {
+        return item.level === 'fail'
+      })
+      tt.equal(filtered.length, 0, 'reported failures')
+      tt.equal(msgs.length, 1, 'messages.length')
+      tt.equal(msgs[0].message, 'Skipping squash! commit.')
+      tt.end()
+    })
+  })
   t.end()
 })
