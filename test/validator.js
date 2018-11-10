@@ -368,6 +368,7 @@ test('Validator - real commits', (t) => {
   t.test('title contains but does not start with fixup! and squash!', (tt) => {
     const v = new Validator({
       'validate-metadata': false
+    , 'check-autosquashable': false
     })
     v.lint(str10)
     v.on('commit', (data) => {
@@ -446,6 +447,89 @@ test('Validator - real commits', (t) => {
       tt.equal(msgs.length, 1, 'messages.length')
       tt.equal(msgs[0].message, 'Skipping squash! commit.')
       tt.end()
+    })
+  })
+
+  t.test('autosquashable commits are not skipped by default', (tt) => {
+    const v = new Validator({
+      'validate-metadata': false
+    })
+    v.lint(require('./fixtures/autosquashable-pr'))
+    v.on('commit', (data) => {
+      switch (data.commit.sha) {
+        case '79f946e88e79f5063bbe775380a418bd8ab0b881': {
+          const msgs = data.messages
+          const filtered = msgs.filter((item) => {
+            return item.level === 'fail'
+          })
+          tt.equal(filtered.length, 0, 'reported failures')
+          break
+        }
+        case 'd07d94439be43a65d6e57ec2ee1d8c93676e8d55': {
+          const msgs = data.messages
+          const filtered = msgs.filter((item) => {
+            return item.level === 'fail'
+          })
+          tt.equal(filtered.length, 1, 'reported failures')
+          tt.equal(filtered[0].message, 'Invalid subsystem: "squash! lib"')
+          break
+        }
+        case '25e5398728b59ab0fdf141d1676a68969204c60a': {
+          const msgs = data.messages
+          const filtered = msgs.filter((item) => {
+            return item.level === 'fail'
+          })
+          tt.equal(filtered.length, 1, 'reported failures')
+          tt.equal(filtered[0].message, 'Invalid subsystem: "fixup! lib"')
+          tt.end()
+          break
+        }
+        default:
+          tt.fail(`unexpected commit sha ${data.commit.sha}`)
+      }
+    })
+  })
+
+  t.test('autosquashable commits are skipped', (tt) => {
+    const v = new Validator({
+      'validate-metadata': false
+    , 'check-autosquashable': false
+    })
+    v.lint(require('./fixtures/autosquashable-pr'))
+    v.on('commit', (data) => {
+      switch (data.commit.sha) {
+        case '79f946e88e79f5063bbe775380a418bd8ab0b881': {
+          const msgs = data.messages
+          const filtered = msgs.filter((item) => {
+            return item.level === 'fail'
+          })
+          tt.equal(filtered.length, 0, 'reported failures')
+          break
+        }
+        case 'd07d94439be43a65d6e57ec2ee1d8c93676e8d55': {
+          const msgs = data.messages
+          const filtered = msgs.filter((item) => {
+            return item.level === 'fail'
+          })
+          tt.equal(filtered.length, 0, 'reported failures')
+          tt.equal(msgs.length, 1, 'messages.length')
+          tt.equal(msgs[0].message, 'Skipping squash! commit.')
+          break
+        }
+        case '25e5398728b59ab0fdf141d1676a68969204c60a': {
+          const msgs = data.messages
+          const filtered = msgs.filter((item) => {
+            return item.level === 'fail'
+          })
+          tt.equal(filtered.length, 0, 'reported failures')
+          tt.equal(msgs.length, 1, 'messages.length')
+          tt.equal(msgs[0].message, 'Skipping fixup! commit.')
+          tt.end()
+          break
+        }
+        default:
+          tt.fail(`unexpected commit sha ${data.commit.sha}`)
+      }
     })
   })
   t.end()

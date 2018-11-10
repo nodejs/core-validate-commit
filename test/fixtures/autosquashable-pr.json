@@ -1,0 +1,239 @@
+[
+  {
+    "sha": "79f946e88e79f5063bbe775380a418bd8ab0b881",
+    "node_id": "MDY6Q29tbWl0MTU1ODE5NzI2Ojc5Zjk0NmU4OGU3OWY1MDYzYmJlNzc1MzgwYTQxOGJkOGFiMGI4ODE=",
+    "commit": {
+      "author": {
+        "name": "Richard Lau",
+        "email": "riclau@uk.ibm.com",
+        "date": "2018-11-09T16:24:33Z"
+      },
+      "committer": {
+        "name": "Richard Lau",
+        "email": "riclau@uk.ibm.com",
+        "date": "2018-11-09T18:19:29Z"
+      },
+      "message": "lib: skip fixup! and squash! commits",
+      "tree": {
+        "sha": "0117c48bf2beff44676b0fa8c4e652860d67e833",
+        "url": "https://api.github.com/repos/nodejs/core-validate-commit/git/trees/0117c48bf2beff44676b0fa8c4e652860d67e833"
+      },
+      "url": "https://api.github.com/repos/nodejs/core-validate-commit/git/commits/79f946e88e79f5063bbe775380a418bd8ab0b881",
+      "comment_count": 0,
+      "verification": {
+        "verified": false,
+        "reason": "unsigned",
+        "signature": null,
+        "payload": null
+      }
+    },
+    "url": "https://api.github.com/repos/nodejs/core-validate-commit/commits/79f946e88e79f5063bbe775380a418bd8ab0b881",
+    "html_url": "https://github.com/nodejs/core-validate-commit/commit/79f946e88e79f5063bbe775380a418bd8ab0b881",
+    "comments_url": "https://api.github.com/repos/nodejs/core-validate-commit/commits/79f946e88e79f5063bbe775380a418bd8ab0b881/comments",
+    "author": {
+      "login": "richardlau",
+      "id": 5445507,
+      "node_id": "MDQ6VXNlcjU0NDU1MDc=",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/5445507?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/richardlau",
+      "html_url": "https://github.com/richardlau",
+      "followers_url": "https://api.github.com/users/richardlau/followers",
+      "following_url": "https://api.github.com/users/richardlau/following{/other_user}",
+      "gists_url": "https://api.github.com/users/richardlau/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/richardlau/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/richardlau/subscriptions",
+      "organizations_url": "https://api.github.com/users/richardlau/orgs",
+      "repos_url": "https://api.github.com/users/richardlau/repos",
+      "events_url": "https://api.github.com/users/richardlau/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/richardlau/received_events",
+      "type": "User",
+      "site_admin": false
+    },
+    "committer": {
+      "login": "richardlau",
+      "id": 5445507,
+      "node_id": "MDQ6VXNlcjU0NDU1MDc=",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/5445507?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/richardlau",
+      "html_url": "https://github.com/richardlau",
+      "followers_url": "https://api.github.com/users/richardlau/followers",
+      "following_url": "https://api.github.com/users/richardlau/following{/other_user}",
+      "gists_url": "https://api.github.com/users/richardlau/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/richardlau/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/richardlau/subscriptions",
+      "organizations_url": "https://api.github.com/users/richardlau/orgs",
+      "repos_url": "https://api.github.com/users/richardlau/repos",
+      "events_url": "https://api.github.com/users/richardlau/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/richardlau/received_events",
+      "type": "User",
+      "site_admin": false
+    },
+    "parents": [
+      {
+        "sha": "4e64157b6a87267fd4b9f0598159eeb968e04e21",
+        "url": "https://api.github.com/repos/nodejs/core-validate-commit/commits/4e64157b6a87267fd4b9f0598159eeb968e04e21",
+        "html_url": "https://github.com/nodejs/core-validate-commit/commit/4e64157b6a87267fd4b9f0598159eeb968e04e21"
+      }
+    ]
+  },
+  {
+    "sha": "d07d94439be43a65d6e57ec2ee1d8c93676e8d55",
+    "node_id": "MDY6Q29tbWl0MTU1ODE5NzI2OmQwN2Q5NDQzOWJlNDNhNjVkNmU1N2VjMmVlMWQ4YzkzNjc2ZThkNTU=",
+    "commit": {
+      "author": {
+        "name": "Richard Lau",
+        "email": "riclau@uk.ibm.com",
+        "date": "2018-11-10T00:44:48Z"
+      },
+      "committer": {
+        "name": "Richard Lau",
+        "email": "riclau@uk.ibm.com",
+        "date": "2018-11-10T00:44:48Z"
+      },
+      "message": "squash! lib: skip fixup! and squash! commits",
+      "tree": {
+        "sha": "b37fb650a27feaddb950d153a7085fec2347ec7d",
+        "url": "https://api.github.com/repos/nodejs/core-validate-commit/git/trees/b37fb650a27feaddb950d153a7085fec2347ec7d"
+      },
+      "url": "https://api.github.com/repos/nodejs/core-validate-commit/git/commits/d07d94439be43a65d6e57ec2ee1d8c93676e8d55",
+      "comment_count": 0,
+      "verification": {
+        "verified": false,
+        "reason": "unsigned",
+        "signature": null,
+        "payload": null
+      }
+    },
+    "url": "https://api.github.com/repos/nodejs/core-validate-commit/commits/d07d94439be43a65d6e57ec2ee1d8c93676e8d55",
+    "html_url": "https://github.com/nodejs/core-validate-commit/commit/d07d94439be43a65d6e57ec2ee1d8c93676e8d55",
+    "comments_url": "https://api.github.com/repos/nodejs/core-validate-commit/commits/d07d94439be43a65d6e57ec2ee1d8c93676e8d55/comments",
+    "author": {
+      "login": "richardlau",
+      "id": 5445507,
+      "node_id": "MDQ6VXNlcjU0NDU1MDc=",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/5445507?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/richardlau",
+      "html_url": "https://github.com/richardlau",
+      "followers_url": "https://api.github.com/users/richardlau/followers",
+      "following_url": "https://api.github.com/users/richardlau/following{/other_user}",
+      "gists_url": "https://api.github.com/users/richardlau/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/richardlau/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/richardlau/subscriptions",
+      "organizations_url": "https://api.github.com/users/richardlau/orgs",
+      "repos_url": "https://api.github.com/users/richardlau/repos",
+      "events_url": "https://api.github.com/users/richardlau/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/richardlau/received_events",
+      "type": "User",
+      "site_admin": false
+    },
+    "committer": {
+      "login": "richardlau",
+      "id": 5445507,
+      "node_id": "MDQ6VXNlcjU0NDU1MDc=",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/5445507?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/richardlau",
+      "html_url": "https://github.com/richardlau",
+      "followers_url": "https://api.github.com/users/richardlau/followers",
+      "following_url": "https://api.github.com/users/richardlau/following{/other_user}",
+      "gists_url": "https://api.github.com/users/richardlau/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/richardlau/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/richardlau/subscriptions",
+      "organizations_url": "https://api.github.com/users/richardlau/orgs",
+      "repos_url": "https://api.github.com/users/richardlau/repos",
+      "events_url": "https://api.github.com/users/richardlau/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/richardlau/received_events",
+      "type": "User",
+      "site_admin": false
+    },
+    "parents": [
+      {
+        "sha": "79f946e88e79f5063bbe775380a418bd8ab0b881",
+        "url": "https://api.github.com/repos/nodejs/core-validate-commit/commits/79f946e88e79f5063bbe775380a418bd8ab0b881",
+        "html_url": "https://github.com/nodejs/core-validate-commit/commit/79f946e88e79f5063bbe775380a418bd8ab0b881"
+      }
+    ]
+  },
+  {
+    "sha": "25e5398728b59ab0fdf141d1676a68969204c60a",
+    "node_id": "MDY6Q29tbWl0MTU1ODE5NzI2OjI1ZTUzOTg3MjhiNTlhYjBmZGYxNDFkMTY3NmE2ODk2OTIwNGM2MGE=",
+    "commit": {
+      "author": {
+        "name": "Richard Lau",
+        "email": "riclau@uk.ibm.com",
+        "date": "2018-11-10T01:04:41Z"
+      },
+      "committer": {
+        "name": "Richard Lau",
+        "email": "riclau@uk.ibm.com",
+        "date": "2018-11-10T01:04:41Z"
+      },
+      "message": "fixup! lib: skip fixup! and squash! commits",
+      "tree": {
+        "sha": "c4f1faf780d28fce67c7d1ec0a7e0617f43bc79a",
+        "url": "https://api.github.com/repos/nodejs/core-validate-commit/git/trees/c4f1faf780d28fce67c7d1ec0a7e0617f43bc79a"
+      },
+      "url": "https://api.github.com/repos/nodejs/core-validate-commit/git/commits/25e5398728b59ab0fdf141d1676a68969204c60a",
+      "comment_count": 0,
+      "verification": {
+        "verified": false,
+        "reason": "unsigned",
+        "signature": null,
+        "payload": null
+      }
+    },
+    "url": "https://api.github.com/repos/nodejs/core-validate-commit/commits/25e5398728b59ab0fdf141d1676a68969204c60a",
+    "html_url": "https://github.com/nodejs/core-validate-commit/commit/25e5398728b59ab0fdf141d1676a68969204c60a",
+    "comments_url": "https://api.github.com/repos/nodejs/core-validate-commit/commits/25e5398728b59ab0fdf141d1676a68969204c60a/comments",
+    "author": {
+      "login": "richardlau",
+      "id": 5445507,
+      "node_id": "MDQ6VXNlcjU0NDU1MDc=",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/5445507?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/richardlau",
+      "html_url": "https://github.com/richardlau",
+      "followers_url": "https://api.github.com/users/richardlau/followers",
+      "following_url": "https://api.github.com/users/richardlau/following{/other_user}",
+      "gists_url": "https://api.github.com/users/richardlau/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/richardlau/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/richardlau/subscriptions",
+      "organizations_url": "https://api.github.com/users/richardlau/orgs",
+      "repos_url": "https://api.github.com/users/richardlau/repos",
+      "events_url": "https://api.github.com/users/richardlau/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/richardlau/received_events",
+      "type": "User",
+      "site_admin": false
+    },
+    "committer": {
+      "login": "richardlau",
+      "id": 5445507,
+      "node_id": "MDQ6VXNlcjU0NDU1MDc=",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/5445507?v=4",
+      "gravatar_id": "",
+      "url": "https://api.github.com/users/richardlau",
+      "html_url": "https://github.com/richardlau",
+      "followers_url": "https://api.github.com/users/richardlau/followers",
+      "following_url": "https://api.github.com/users/richardlau/following{/other_user}",
+      "gists_url": "https://api.github.com/users/richardlau/gists{/gist_id}",
+      "starred_url": "https://api.github.com/users/richardlau/starred{/owner}{/repo}",
+      "subscriptions_url": "https://api.github.com/users/richardlau/subscriptions",
+      "organizations_url": "https://api.github.com/users/richardlau/orgs",
+      "repos_url": "https://api.github.com/users/richardlau/repos",
+      "events_url": "https://api.github.com/users/richardlau/events{/privacy}",
+      "received_events_url": "https://api.github.com/users/richardlau/received_events",
+      "type": "User",
+      "site_admin": false
+    },
+    "parents": [
+      {
+        "sha": "d07d94439be43a65d6e57ec2ee1d8c93676e8d55",
+        "url": "https://api.github.com/repos/nodejs/core-validate-commit/commits/d07d94439be43a65d6e57ec2ee1d8c93676e8d55",
+        "html_url": "https://github.com/nodejs/core-validate-commit/commit/d07d94439be43a65d6e57ec2ee1d8c93676e8d55"
+      }
+    ]
+  }
+]
