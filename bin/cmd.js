@@ -20,6 +20,7 @@ const knownOpts = { help: Boolean
 , tap: Boolean
 , out: path
 , list: Boolean
+, 'check-autosquashable': Boolean
 }
 const shortHand = { h: ['--help']
 , v: ['--version']
@@ -27,6 +28,7 @@ const shortHand = { h: ['--help']
 , t: ['--tap']
 , o: ['--out']
 , l: ['--list']
+, a: ['--check-autosquashable']
 }
 
 const parsed = nopt(knownOpts, shortHand)

@@ -381,9 +381,42 @@ test('Validator - real commits', (t) => {
     })
   })
 
+  t.test('fixup! commits are not skipped by default', (tt) => {
+    const v = new Validator({
+      'validate-metadata': false
+    })
+    v.lint(str11)
+    v.on('commit', (data) => {
+      const msgs = data.messages
+      const filtered = msgs.filter((item) => {
+        return item.level === 'fail'
+      })
+      tt.equal(filtered.length, 1, 'messages.length')
+      tt.equal(filtered[0].message, 'Missing subsystem.')
+      tt.end()
+    })
+  })
+
+  t.test('squash! commits are not skipped by default', (tt) => {
+    const v = new Validator({
+      'validate-metadata': false
+    })
+    v.lint(str12)
+    v.on('commit', (data) => {
+      const msgs = data.messages
+      const filtered = msgs.filter((item) => {
+        return item.level === 'fail'
+      })
+      tt.equal(filtered.length, 1, 'messages.length')
+      tt.equal(filtered[0].message, 'Missing subsystem.')
+      tt.end()
+    })
+  })
+
   t.test('fixup! commits are skipped', (tt) => {
     const v = new Validator({
       'validate-metadata': false
+    , 'check-autosquashable': false
     })
     v.lint(str11)
     v.on('commit', (data) => {
@@ -401,6 +434,7 @@ test('Validator - real commits', (t) => {
   t.test('squash! commits are skipped', (tt) => {
     const v = new Validator({
       'validate-metadata': false
+    , 'check-autosquashable': false
     })
     v.lint(str12)
     v.on('commit', (data) => {

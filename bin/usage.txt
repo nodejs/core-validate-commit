@@ -8,6 +8,7 @@ core-validate-commit - Validate the commit message for a particular commit in no
     -V, --validate-metadata       validate PR-URL and reviewers (on by default)
     -t, --tap                     output in tap format
     -l, --list                    list rules and their descriptions
+    -a, --check-autosquashable    check autosquashable commits (on by default)
 
   examples:
     Validate a single sha:
