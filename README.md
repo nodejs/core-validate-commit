@@ -1,6 +1,6 @@
 # core-validate-commit
 
-[![Build Status](https://travis-ci.org/evanlucas/core-validate-commit.svg)](https://travis-ci.org/evanlucas/core-validate-commit)
+[![Build Status](https://travis-ci.org/nodejs/core-validate-commit.svg)](https://travis-ci.org/nodejs/core-validate-commit)
 [![Coverage Status](https://coveralls.io/repos/evanlucas/core-validate-commit/badge.svg?branch=master&service=github)](https://coveralls.io/github/evanlucas/core-validate-commit?branch=master)
 
 Validate the commit message for a particular commit in node core
