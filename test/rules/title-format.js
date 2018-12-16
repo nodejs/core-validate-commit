@@ -39,6 +39,24 @@ test('rule: title-format', (t) => {
     tt.end()
   })
 
+  t.test('space after subsystem, colon in message', (tt) => {
+    tt.plan(2)
+    const context = makeCommit('test: missing:space')
+
+    context.report = (opts) => {
+      tt.pass('called report')
+      tt.strictSame(opts, {
+        id: 'title-format'
+      , message: 'Title is formatted correctly.'
+      , string: ''
+      , level: 'pass'
+      })
+    }
+
+    Rule.validate(context)
+    tt.end()
+  })
+
   t.test('consecutive spaces', (tt) => {
     tt.plan(2)
     const context = makeCommit('test: with  two spaces')
