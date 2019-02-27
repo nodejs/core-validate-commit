@@ -77,5 +77,43 @@ test('rule: title-format', (t) => {
     tt.end()
   })
 
+  t.test('first word after subsystem should be in lowercase', (tt) => {
+    tt.plan(2)
+    const context = makeCommit('test: Some message')
+
+    context.report = (opts) => {
+      tt.pass('called report')
+      tt.strictSame(opts, {
+        id: 'title-format'
+      , message: 'First word after subsystem(s) in title should be lowercase.'
+      , string: 'test: Some message'
+      , line: 0
+      , column: 7
+      , level: 'fail'
+      })
+    }
+
+    Rule.validate(context)
+    tt.end()
+  })
+
+  t.test('colon in message followed by uppercase word', (tt) => {
+    tt.plan(2)
+    const context = makeCommit('test: some message: Message')
+
+    context.report = (opts) => {
+      tt.pass('called report')
+      tt.strictSame(opts, {
+        id: 'title-format'
+      , message: 'Title is formatted correctly.'
+      , string: ''
+      , level: 'pass'
+      })
+    }
+
+    Rule.validate(context)
+    tt.end()
+  })
+
   t.end()
 })
