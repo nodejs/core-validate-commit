@@ -44,7 +44,7 @@ test('rule: subsystem', (t) => {
       , email: 'evanlucas@me.com'
       , date: '2016-04-12T19:42:23Z'
       }
-    , message: 'worker: come on, fhqwhgads'
+    , message: 'quic: come on, fhqwhgads'
     }, v)
 
     context.report = (opts) => {
@@ -52,7 +52,7 @@ test('rule: subsystem', (t) => {
       tt.strictSame(opts, {
         id: 'subsystem'
       , message: 'valid subsystems'
-      , string: 'worker'
+      , string: 'quic'
       , level: 'pass'
       })
       tt.end()
