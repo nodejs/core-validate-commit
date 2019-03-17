@@ -35,5 +35,33 @@ This is a test`
     Rule.validate(context)
   })
 
+  t.test('skip for release commit', (tt) => {
+    tt.plan(2)
+    const v = new Validator()
+    const context = new Commit({
+      sha: 'e7c077c610afa371430180fbd447bfef60ebc5ea'
+    , author: {
+        name: 'Evan Lucas'
+      , email: 'evanlucas@me.com'
+      , date: '2016-04-12T19:42:23Z'
+      }
+    , message: `2016-04-12, Version x.y.z
+
+This is a test`
+    }, v)
+
+    context.report = (opts) => {
+      tt.pass('called report')
+      tt.strictSame(opts, {
+        id: 'reviewers'
+      , message: 'skipping reviewers for release commit'
+      , string: ''
+      , level: 'skip'
+      })
+    }
+
+    Rule.validate(context)
+  })
+
   t.end()
 })
