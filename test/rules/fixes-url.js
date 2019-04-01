@@ -23,150 +23,70 @@ const makeCommit = (msg) => {
 }
 
 test('rule: fixes-url', (t) => {
-  t.test('issue number', (tt) => {
-    tt.plan(7)
-    const context = makeCommit(`test: fix something
+  const valid = [
+    [ 'GitHub issue URL'
+    , 'https://github.com/nodejs/node/issues/1234' ]
+  , [ 'GitHub issue URL with comment'
+    , 'https://github.com/nodejs/node/issues/1234#issuecomment-1234' ]
+  , [ 'GitHub PR URL with comment'
+    , 'https://github.com/nodejs/node/pull/1234#issuecomment-1234' ]
+  , [ 'GitHub PR URL with discussion comment'
+    , 'https://github.com/nodejs/node/pull/1234#discussion_r1234' ]
+  ]
 
-Fixes: #1234`
-    )
-
-    context.report = (opts) => {
-      tt.pass('called report')
-      tt.equal(opts.id, 'fixes-url', 'id')
-      tt.equal(opts.message, NOT_AN_ISSUE_NUMBER, 'message')
-      tt.equal(opts.string, '#1234', 'string')
-      tt.equal(opts.line, 1, 'line')
-      tt.equal(opts.column, 7, 'column')
-      tt.equal(opts.level, 'fail', 'level')
-    }
-
-    Rule.validate(context)
-  })
-
-  t.test('GitHub issue URL', (tt) => {
-    tt.plan(7)
-    const url = 'https://github.com/nodejs/node/issues/1234'
-    const context = makeCommit(`test: fix something
+  for (const [name, url] of valid) {
+    t.test(name, (tt) => {
+      tt.plan(7)
+      const context = makeCommit(`test: fix something
 
 Fixes: ${url}`
-    )
+      )
 
-    context.report = (opts) => {
-      tt.pass('called report')
-      tt.equal(opts.id, 'fixes-url', 'id')
-      tt.equal(opts.message, VALID_FIXES_URL, 'message')
-      tt.equal(opts.string, url, 'string')
-      tt.equal(opts.line, 1, 'line')
-      tt.equal(opts.column, 7, 'column')
-      tt.equal(opts.level, 'pass', 'level')
-    }
+      context.report = (opts) => {
+        tt.pass('called report')
+        tt.equal(opts.id, 'fixes-url', 'id')
+        tt.equal(opts.message, VALID_FIXES_URL, 'message')
+        tt.equal(opts.string, url, 'string')
+        tt.equal(opts.line, 1, 'line')
+        tt.equal(opts.column, 7, 'column')
+        tt.equal(opts.level, 'pass', 'level')
+      }
 
-    Rule.validate(context)
-  })
+      Rule.validate(context)
+    })
+  }
 
-  t.test('GitHub issue URL with comment', (tt) => {
-    tt.plan(7)
-    const url = 'https://github.com/nodejs/node/issues/1234#issuecomment-1234'
-    const context = makeCommit(`test: fix something
-
-Fixes: ${url}`
-    )
-
-    context.report = (opts) => {
-      tt.pass('called report')
-      tt.equal(opts.id, 'fixes-url', 'id')
-      tt.equal(opts.message, VALID_FIXES_URL, 'message')
-      tt.equal(opts.string, url, 'string')
-      tt.equal(opts.line, 1, 'line')
-      tt.equal(opts.column, 7, 'column')
-      tt.equal(opts.level, 'pass', 'level')
-    }
-
-    Rule.validate(context)
-  })
-
-  t.test('GitHub PR URL', (tt) => {
-    tt.plan(7)
-    const url = 'https://github.com/nodejs/node/pull/1234'
-    const context = makeCommit(`test: fix something
+  const invalid = [
+    [ 'issue number', NOT_AN_ISSUE_NUMBER
+    , '#1234' ]
+  , [ 'GitHub PR URL', INVALID_PRURL
+    , 'https://github.com/nodejs/node/pull/1234' ]
+  , [ 'non-GitHub URL', NOT_A_GITHUB_URL
+    , 'https://nodejs.org' ]
+  , [ 'not a URL or issue number', NOT_A_GITHUB_URL
+    , 'fhqwhgads' ]
+  ]
+  for (const [name, expected, url] of invalid) {
+    t.test(name, (tt) => {
+      tt.plan(7)
+      const context = makeCommit(`test: fix something
 
 Fixes: ${url}`
-    )
+      )
 
-    context.report = (opts) => {
-      tt.pass('called report')
-      tt.equal(opts.id, 'fixes-url', 'id')
-      tt.equal(opts.message, INVALID_PRURL, 'message')
-      tt.equal(opts.string, url, 'string')
-      tt.equal(opts.line, 1, 'line')
-      tt.equal(opts.column, 7, 'column')
-      tt.equal(opts.level, 'fail', 'level')
-    }
+      context.report = (opts) => {
+        tt.pass('called report')
+        tt.equal(opts.id, 'fixes-url', 'id')
+        tt.equal(opts.message, expected, 'message')
+        tt.equal(opts.string, url, 'string')
+        tt.equal(opts.line, 1, 'line')
+        tt.equal(opts.column, 7, 'column')
+        tt.equal(opts.level, 'fail', 'level')
+      }
 
-    Rule.validate(context)
-  })
-
-  t.test('GitHub PR URL with comment', (tt) => {
-    tt.plan(7)
-    const url = 'https://github.com/nodejs/node/pull/1234#issuecomment-1234'
-    const context = makeCommit(`test: fix something
-
-Fixes: ${url}`
-    )
-
-    context.report = (opts) => {
-      tt.pass('called report')
-      tt.equal(opts.id, 'fixes-url', 'id')
-      tt.equal(opts.message, VALID_FIXES_URL, 'message')
-      tt.equal(opts.string, url, 'string')
-      tt.equal(opts.line, 1, 'line')
-      tt.equal(opts.column, 7, 'column')
-      tt.equal(opts.level, 'pass', 'level')
-    }
-
-    Rule.validate(context)
-  })
-
-  t.test('GitHub PR URL with discussion comment', (tt) => {
-    tt.plan(7)
-    const url = 'https://github.com/nodejs/node/pull/1234#discussion_r1234'
-    const context = makeCommit(`test: fix something
-
-Fixes: ${url}`
-    )
-
-    context.report = (opts) => {
-      tt.pass('called report')
-      tt.equal(opts.id, 'fixes-url', 'id')
-      tt.equal(opts.message, VALID_FIXES_URL, 'message')
-      tt.equal(opts.string, url, 'string')
-      tt.equal(opts.line, 1, 'line')
-      tt.equal(opts.column, 7, 'column')
-      tt.equal(opts.level, 'pass', 'level')
-    }
-
-    Rule.validate(context)
-  })
-
-  t.test('non-GitHub URL', (tt) => {
-    tt.plan(7)
-    const context = makeCommit(`test: fix something
-
-Fixes: https://nodejs.org`
-    )
-
-    context.report = (opts) => {
-      tt.pass('called report')
-      tt.equal(opts.id, 'fixes-url', 'id')
-      tt.equal(opts.message, NOT_A_GITHUB_URL, 'message')
-      tt.equal(opts.string, 'https://nodejs.org', 'string')
-      tt.equal(opts.line, 1, 'line')
-      tt.equal(opts.column, 7, 'column')
-      tt.equal(opts.level, 'fail', 'level')
-    }
-
-    Rule.validate(context)
-  })
+      Rule.validate(context)
+    })
+  }
 
   t.end()
 })
