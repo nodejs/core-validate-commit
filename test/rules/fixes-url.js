@@ -26,8 +26,16 @@ test('rule: fixes-url', (t) => {
   const valid = [
     [ 'GitHub issue URL'
     , 'https://github.com/nodejs/node/issues/1234' ]
+  , [ 'GitHub issue URL containing hyphen'
+    , 'https://github.com/nodejs/node-report/issues/1234' ]
+  , [ 'GitHub issue URL containing hyphen with comment'
+    , 'https://github.com/nodejs/node-report/issues/1234#issuecomment-1234' ]
   , [ 'GitHub issue URL with comment'
     , 'https://github.com/nodejs/node/issues/1234#issuecomment-1234' ]
+  , [ 'GitHub PR URL containing hyphen with comment'
+    , 'https://github.com/nodejs/node-report/pull/1234#issuecomment-1234' ]
+  , [ 'GitHub PR URL containing hyphen with discussion comment'
+    , 'https://github.com/nodejs/node-report/pull/1234#discussion_r1234' ]
   , [ 'GitHub PR URL with comment'
     , 'https://github.com/nodejs/node/pull/1234#issuecomment-1234' ]
   , [ 'GitHub PR URL with discussion comment'
@@ -61,6 +69,8 @@ Fixes: ${url}`
     , '#1234' ]
   , [ 'GitHub PR URL', INVALID_PRURL
     , 'https://github.com/nodejs/node/pull/1234' ]
+  , [ 'GitHub PR URL containing hyphen', INVALID_PRURL
+    , 'https://github.com/nodejs/node-report/pull/1234' ]
   , [ 'non-GitHub URL', NOT_A_GITHUB_URL
     , 'https://nodejs.org' ]
   , [ 'not a URL or issue number', NOT_A_GITHUB_URL
