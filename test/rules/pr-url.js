@@ -95,5 +95,28 @@ test('rule: pr-url', (t) => {
     Rule.validate(context)
   })
 
+  t.test('valid URL containing hyphen', (tt) => {
+    tt.plan(7)
+    const url = 'https://github.com/nodejs/node-report/pull/1234'
+    const context = {
+      prUrl: url
+    , body: [
+        ''
+      , `PR-URL: ${url}`
+      ]
+    , report: (opts) => {
+        tt.pass('called report')
+        tt.equal(opts.id, 'pr-url', 'id')
+        tt.equal(opts.message, VALID_PR_URL, 'message')
+        tt.equal(opts.string, url, 'string')
+        tt.equal(opts.line, 1, 'line')
+        tt.equal(opts.column, 8, 'column')
+        tt.equal(opts.level, 'pass', 'level')
+      }
+    }
+
+    Rule.validate(context)
+  })
+
   t.end()
 })
