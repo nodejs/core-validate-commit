@@ -88,5 +88,45 @@ test('rule: subsystem', (t) => {
 
     Rule.validate(context, {options: {subsystems: Rule.defaults.subsystems}})
   })
+
+  const suggestionTests = [
+    [ 'docs', 'doc' ]
+  , [ 'error', 'errors' ]
+  , [ 'napi', 'n-api' ]
+  , [ 'perfhooks', 'perf_hooks' ]
+  , [ 'worker_threads', 'worker' ]
+  , [ 'V8', 'v8' ]
+  ]
+  for (const [sub, suggestion] of suggestionTests) {
+    t.test(`suggestion "${sub}" -> "${suggestion}"`, (tt) => {
+      tt.plan(7)
+      const title = `${sub}: come on`
+      const v = new Validator()
+      const context = new Commit({
+        sha: 'e7c077c610afa371430180fbd447bfef60ebc5ea'
+      , author: {
+          name: 'Evan Lucas'
+        , email: 'evanlucas@me.com'
+        , date: '2016-04-12T19:42:23Z'
+        }
+      , message: title
+      }, v)
+
+      context.report = (opts) => {
+        tt.pass('called report')
+        tt.equal(opts.id, 'subsystem', 'id')
+        tt.equal(opts.message
+        , `Invalid subsystem: "${sub}"\nDid you mean "${suggestion}"?`
+        , 'message')
+        tt.equal(opts.string, title, 'string')
+        tt.equal(opts.line, 0, 'line')
+        tt.equal(opts.column, 0, 'column')
+        tt.equal(opts.level, 'fail', 'level')
+        tt.end()
+      }
+
+      Rule.validate(context, {options: {subsystems: Rule.defaults.subsystems}})
+    })
+  }
   t.end()
 })
