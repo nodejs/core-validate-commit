@@ -1,6 +1,7 @@
 # core-validate-commit
 
 [![Build Status](https://travis-ci.com/nodejs/core-validate-commit.svg?branch=master)](https://travis-ci.com/nodejs/core-validate-commit)
+[![codecov](https://img.shields.io/codecov/c/github/nodejs/core-validate-commit.svg?style=flat-square)](https://codecov.io/gh/nodejs/core-validate-commit)
 
 Validate the commit message for a particular commit in node core
 
