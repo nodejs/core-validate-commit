@@ -6,7 +6,8 @@
   "scripts": {
     "pretest": "lintit && check-pkg",
     "test": "tap -j4 --cov test/**/*.js test/*.js",
-    "posttest": "tap --coverage-report=text-summary"
+    "posttest": "tap --coverage-report=text-summary",
+    "test-ci": "npm run test -- --coverage-report=lcov"
   },
   "dependencies": {
     "chalk": "~1.1.1",
