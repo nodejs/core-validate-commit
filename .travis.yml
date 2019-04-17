@@ -4,3 +4,5 @@ node_js:
   - "10"
   - "11"
 cache: npm
+script: 'npm run test-ci'
+after_script: 'bash <(curl -s https://codecov.io/bash)'
