@@ -64,6 +64,27 @@ Fixes: ${url}`
     Rule.validate(context)
   })
 
+  t.test('GitHub issue URL with dash', (tt) => {
+    tt.plan(7)
+    const url = 'https://github.com/foo-bar/bar-baz/issues/1234'
+    const context = makeCommit(`test: fix something
+
+Fixes: ${url}`
+    )
+
+    context.report = (opts) => {
+      tt.pass('called report')
+      tt.equal(opts.id, 'fixes-url', 'id')
+      tt.equal(opts.message, VALID_FIXES_URL, 'message')
+      tt.equal(opts.string, url, 'string')
+      tt.equal(opts.line, 1, 'line')
+      tt.equal(opts.column, 7, 'column')
+      tt.equal(opts.level, 'pass', 'level')
+    }
+
+    Rule.validate(context)
+  })
+
   t.test('GitHub issue URL with comment', (tt) => {
     tt.plan(7)
     const url = 'https://github.com/nodejs/node/issues/1234#issuecomment-1234'
