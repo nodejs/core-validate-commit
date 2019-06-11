@@ -20,6 +20,11 @@
     "lintit": "^6.0.1",
     "tap": "^12.6.1"
   },
+  "files": [
+    "lib/",
+    "bin/",
+    "index.js"
+  ],
   "license": "MIT",
   "bin": {
     "core-validate-commit": "./bin/cmd.js"
