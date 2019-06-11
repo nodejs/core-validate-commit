@@ -115,5 +115,23 @@ test('rule: title-format', (t) => {
     tt.end()
   })
 
+  t.test('Skip case checks for V8 updates ', (tt) => {
+    tt.plan(2)
+    const context = makeCommit('deps: V8: cherry-pick e0a109c')
+
+    context.report = (opts) => {
+      tt.pass('called report')
+      tt.strictSame(opts, {
+        id: 'title-format'
+      , message: 'Title is formatted correctly.'
+      , string: ''
+      , level: 'pass'
+      })
+    }
+
+    Rule.validate(context)
+    tt.end()
+  })
+
   t.end()
 })
