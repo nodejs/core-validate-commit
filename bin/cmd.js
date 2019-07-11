@@ -88,7 +88,7 @@ function loadPatch(uri, cb) {
 const v = new Validator(parsed)
 
 if (parsed['list-subsystems']) {
-  utils.describeSubsystem(subsystem.defaults.subsystems)
+  utils.describeSubsystem(subsystem.defaults.subsystems.sort())
   return
 }
 
