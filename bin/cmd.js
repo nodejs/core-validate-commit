@@ -14,12 +14,14 @@ const formatTap = require('../lib/format-tap')
 const Validator = require('../lib')
 const Tap = require('../lib/tap')
 const utils = require('../lib/utils')
+const subsystem = require('../lib/rules/subsystem')
 const knownOpts = { help: Boolean
 , version: Boolean
 , 'validate-metadata': Boolean
 , tap: Boolean
 , out: path
 , list: Boolean
+, 'list-subsystems': Boolean
 }
 const shortHand = { h: ['--help']
 , v: ['--version']
@@ -27,6 +29,7 @@ const shortHand = { h: ['--help']
 , t: ['--tap']
 , o: ['--out']
 , l: ['--list']
+, ls: ['--list-subsystems']
 }
 
 const parsed = nopt(knownOpts, shortHand)
@@ -83,6 +86,11 @@ function loadPatch(uri, cb) {
 }
 
 const v = new Validator(parsed)
+
+if (parsed['list-subsystems']) {
+  utils.describeSubsystem(subsystem.defaults.subsystems.sort())
+  return
+}
 
 if (parsed.list) {
   const ruleNames = Array.from(v.rules.keys())
