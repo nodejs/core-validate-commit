@@ -7,6 +7,29 @@ const subsystems = require('../lib/rules/subsystem')
 const cmd = './bin/cmd.js'
 
 test('Test cli flags', (t) => {
+  t.test('test version', (tt) => {
+    const version = spawn(cmd, ['--version'])
+    let chunk = ''
+
+    version.stdout.on('data', (data) => {
+      chunk += data
+    })
+
+    version.stderr.on('data', (data) => {
+      tt.fail('this should not happen')
+    })
+
+    version.on('close', (code) => {
+      console.log(chunk)
+      tt.equal(chunk.trim(),
+               `core-validate-commit v${require('../package.json').version}`,
+               'Versions should be equal to the version in the package.json')
+      tt.pass()
+      tt.end()
+    })
+
+  })
+
   t.test('test list-subsystems', (tt) => {
     const ls = spawn(cmd, ['--list-subsystems'])
     let chunk = ''
