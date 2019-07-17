@@ -3,6 +3,12 @@
 const { test } = require('tap')
 const { spawn } = require('child_process')
 const subsystems = require('../lib/rules/subsystem')
+const { promisify } = require('util')
+const fs = require('fs')
+
+
+const readFile = promisify(fs.readFile)
+
 
 const cmd = './bin/cmd.js'
 
@@ -23,7 +29,6 @@ test('Test cli flags', (t) => {
       tt.equal(chunk.trim(),
                `core-validate-commit v${require('../package.json').version}`,
                'Versions should be equal to the version in the package.json')
-      tt.pass()
       tt.end()
     })
 
