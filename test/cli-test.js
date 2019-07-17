@@ -13,6 +13,24 @@ const readFile = promisify(fs.readFile)
 const cmd = './bin/cmd.js'
 
 test('Test cli flags', (t) => {
+  t.test('test usage', (tt) => {
+    const usage = spawn(cmd, ['--help'])
+    let chunk = ''
+    usage.stdout.on('data', (data) => {
+      chunk += data
+    })
+
+    usage.stderr.on('data', (data) => {
+      tt.fail('This should not happen')
+    })
+
+    usage.on('close', async () => {
+      const usageTxt = await readFile(`${process.cwd()}/bin/usage.txt`, 'utf8')
+      tt.equal(chunk, usageTxt, 'helps should be equal')
+      tt.end()
+    })
+  })
+
   t.test('test version', (tt) => {
     const version = spawn(cmd, ['--version'])
     let chunk = ''
