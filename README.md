@@ -32,7 +32,13 @@ $ core-validate-commit --list
       title-format enforce commit title format
       title-length enforce max length of commit title
 ```
-Valid subsystems are defined in [lib/rules/subsystem.js](./lib/rules/subsystem.js).
+
+To see a list of valid subsystems:
+```bash
+$ core-validate-commit --list-subsystem
+```
+
+Valid subsystems are also defined in [lib/rules/subsystem.js](./lib/rules/subsystem.js).
 
 ## Test
 
