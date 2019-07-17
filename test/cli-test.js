@@ -20,7 +20,6 @@ test('Test cli flags', (t) => {
     })
 
     version.on('close', (code) => {
-      console.log(chunk)
       tt.equal(chunk.trim(),
                `core-validate-commit v${require('../package.json').version}`,
                'Versions should be equal to the version in the package.json')
