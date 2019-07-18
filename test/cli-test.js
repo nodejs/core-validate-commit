@@ -3,6 +3,7 @@
 const { test } = require('tap')
 const { spawn } = require('child_process')
 const subsystems = require('../lib/rules/subsystem')
+const rules = require('../lib/rules')
 const { promisify } = require('util')
 const fs = require('fs')
 
@@ -50,6 +51,37 @@ test('Test cli flags', (t) => {
       tt.end()
     })
 
+  })
+
+  t.test('test list flag', (tt) => {
+    const list = spawn(cmd, ['--list'])
+    let chunk = ''
+    list.stdout.on('data', (data) => {
+      chunk += data
+    })
+
+    list.stderr.on('data', (data) => {
+      tt.fail('This should not happen')
+    })
+
+    list.on('close', (code) => {
+      const rulesFromOutput = chunk.trim().split('\n')
+      const missing = []
+      for (const rule in rules) {
+        const filtered = rulesFromOutput.find((x) => {
+          return x.trim()
+              === `${rules[rule].id} ${rules[rule].meta.description}`
+        })
+
+        if (!filtered) {
+          missing.push(rule)
+        }
+      }
+
+      tt.equal(missing.length, 0, 'Should have no missing subsystems')
+
+      tt.end()
+    })
   })
 
   t.test('test list-subsystems', (tt) => {
