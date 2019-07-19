@@ -35,19 +35,28 @@ const shortHand = { h: ['--help']
 const parsed = nopt(knownOpts, shortHand)
 const usage = require('help')()
 
+// The --help or -h flag was used
 if (parsed.help) {
   return usage()
 }
 
+// The --version or -v flag was used
 if (parsed.version) {
   console.log('core-validate-commit', 'v' + require('../package').version)
   return
 }
 
+// any arguments after a --flag will be in the remain array
 const args = parsed.argv.remain
+
+// The argument should be the commit you are validating
+// If there is no args,  then use the HEAD commit
 if (!args.length)
   args.push('HEAD')
 
+// Given a commit hash, load it
+// If a URL is passed in, then load the commit remotely
+// If not, then do a git show
 function load(sha, cb) {
   const parsed = url.parse(sha)
   if (parsed.protocol) {
@@ -60,6 +69,7 @@ function load(sha, cb) {
   })
 }
 
+// Load the commit from a URL
 function loadPatch(uri, cb) {
   let h = http
   if (~uri.protocol.indexOf('https')) {
@@ -85,26 +95,36 @@ function loadPatch(uri, cb) {
   }).on('error', cb)
 }
 
+// Create a new Validator
 const v = new Validator(parsed)
 
+// The --list-subsytems or --ls flag was used
 if (parsed['list-subsystems']) {
   utils.describeSubsystem(subsystem.defaults.subsystems.sort())
   return
 }
 
+// The --list or -l flag was used
 if (parsed.list) {
+  // Get the list of Rule names
+  // There is nothing here that says we need to have created that validator first,
+  // unless at some point we don't count disabled things
+  // But we should probably just get the rules from the rules in ./lib/rules
+  // Then this function can move up to the top
   const ruleNames = Array.from(v.rules.keys())
+  // Find the length of the longest Rule names
   const max = ruleNames.reduce((m, item) => {
     if (item.length > m) m = item.length
     return m
   }, 0)
-
+  // Loop through and output the rules
   for (const rule of v.rules.values()) {
     utils.describeRule(rule, max)
   }
   return
 }
 
+// The --tap or -t flag was used
 if (parsed.tap) {
   const tap = new Tap()
   tap.pipe(process.stdout)
@@ -138,6 +158,7 @@ if (parsed.tap) {
   run()
 
 } else {
+  // no --flags used,  defaults to --validate-metadata
   v.on('commit', (c) => {
     pretty(c.commit, c.messages, v)
     run()
