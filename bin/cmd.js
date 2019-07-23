@@ -5,7 +5,6 @@
 const fs = require('fs')
 const nopt = require('nopt')
 const path = require('path')
-const pretty = require('../lib/format-pretty')
 const formatTap = require('../lib/format-tap')
 const Validator = require('../lib')
 const Tap = require('../lib/tap')
@@ -110,22 +109,6 @@ if (parsed.tap) {
 
 } else {
   // no --flags used,  defaults to --validate-metadata
-  v.on('commit', (c) => {
-    pretty(c.commit, c.messages, v)
-    run()
-  })
-
-  function run() {
-    if (!args.length) {
-      process.exitCode = v.errors
-      return
-    }
-    const sha = args.shift()
-    utils.load(sha, (err, data) => {
-      if (err) throw err
-      v.lint(data)
-    })
-  }
-
-  run()
+  utils.validateMetadata(v, args)
+  return
 }
