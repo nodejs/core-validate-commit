@@ -46,6 +46,12 @@ if (parsed.version) {
   return
 }
 
+// The --list-subsytems or --ls flag was used
+if (parsed['list-subsystems']) {
+  utils.describeSubsystem(subsystem.defaults.subsystems.sort())
+  return
+}
+
 // any arguments after a --flag will be in the remain array
 const args = parsed.argv.remain
 
@@ -97,12 +103,6 @@ function loadPatch(uri, cb) {
 
 // Create a new Validator
 const v = new Validator(parsed)
-
-// The --list-subsytems or --ls flag was used
-if (parsed['list-subsystems']) {
-  utils.describeSubsystem(subsystem.defaults.subsystems.sort())
-  return
-}
 
 // The --list or -l flag was used
 if (parsed.list) {
