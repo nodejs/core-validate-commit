@@ -61,7 +61,7 @@ function load(sha, cb) {
 }
 
 function loadPatch(uri, cb) {
-  var h = http
+  let h = http
   if (~uri.protocol.indexOf('https')) {
     h = https
   }
@@ -69,7 +69,7 @@ function loadPatch(uri, cb) {
     'user-agent': 'core-validate-commit'
   }
   h.get(uri, (res) => {
-    var buf = ''
+    let buf = ''
     res.on('data', (chunk) => {
       buf += chunk
     })
@@ -109,8 +109,8 @@ if (parsed.tap) {
   const tap = new Tap()
   tap.pipe(process.stdout)
   if (parsed.out) tap.pipe(fs.createWriteStream(parsed.out))
-  var count = 0
-  var total = args.length
+  let count = 0
+  let total = args.length
 
   v.on('commit', (c) => {
     count++
