@@ -2,11 +2,7 @@
 
 'use strict'
 
-const exec = require('child_process').exec
 const fs = require('fs')
-const http = require('http')
-const https = require('https')
-const url = require('url')
 const nopt = require('nopt')
 const path = require('path')
 const pretty = require('../lib/format-pretty')
@@ -60,57 +56,12 @@ const args = parsed.argv.remain
 if (!args.length)
   args.push('HEAD')
 
-// Given a commit hash, load it
-// If a URL is passed in, then load the commit remotely
-// If not, then do a git show
-function load(sha, cb) {
-  const parsed = url.parse(sha)
-  if (parsed.protocol) {
-    return loadPatch(parsed, cb)
-  }
-
-  exec(`git show --quiet --format=medium ${sha}`, (err, stdout, stderr) => {
-    if (err) return cb(err)
-    cb(null, stdout.trim())
-  })
-}
-
-// Load the commit from a URL
-function loadPatch(uri, cb) {
-  let h = http
-  if (~uri.protocol.indexOf('https')) {
-    h = https
-  }
-  uri.headers = {
-    'user-agent': 'core-validate-commit'
-  }
-  h.get(uri, (res) => {
-    let buf = ''
-    res.on('data', (chunk) => {
-      buf += chunk
-    })
-
-    res.on('end', () => {
-      try {
-        const out = JSON.parse(buf)
-        cb(null, out)
-      } catch (err) {
-        cb(err)
-      }
-    })
-  }).on('error', cb)
-}
-
 // Create a new Validator
 const v = new Validator(parsed)
 
 // The --list or -l flag was used
 if (parsed.list) {
   // Get the list of Rule names
-  // There is nothing here that says we need to have created that validator first,
-  // unless at some point we don't count disabled things
-  // But we should probably just get the rules from the rules in ./lib/rules
-  // Then this function can move up to the top
   const ruleNames = Array.from(v.rules.keys())
   // Find the length of the longest Rule names
   const max = ruleNames.reduce((m, item) => {
@@ -148,7 +99,7 @@ if (parsed.tap) {
   function run() {
     if (!args.length) return
     const sha = args.shift()
-    load(sha, (err, data) => {
+    utils.load(sha, (err, data) => {
       if (err) throw err
       v.lint(data)
       run()
@@ -170,7 +121,7 @@ if (parsed.tap) {
       return
     }
     const sha = args.shift()
-    load(sha, (err, data) => {
+    utils.load(sha, (err, data) => {
       if (err) throw err
       v.lint(data)
     })
