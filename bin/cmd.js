@@ -2,12 +2,9 @@
 
 'use strict'
 
-const fs = require('fs')
 const nopt = require('nopt')
 const path = require('path')
-const formatTap = require('../lib/format-tap')
 const Validator = require('../lib')
-const Tap = require('../lib/tap')
 const utils = require('../lib/utils')
 const subsystem = require('../lib/rules/subsystem')
 const knownOpts = { help: Boolean
@@ -76,37 +73,8 @@ if (parsed.list) {
 
 // The --tap or -t flag was used
 if (parsed.tap) {
-  const tap = new Tap()
-  tap.pipe(process.stdout)
-  if (parsed.out) tap.pipe(fs.createWriteStream(parsed.out))
-  let count = 0
-  let total = args.length
-
-  v.on('commit', (c) => {
-    count++
-    const test = tap.test(c.commit.sha)
-    formatTap(test, c.commit, c.messages, v)
-    if (count === total) {
-      setImmediate(() => {
-        tap.end()
-        if (tap.status === 'fail')
-          process.exitCode = 1
-      })
-    }
-  })
-
-  function run() {
-    if (!args.length) return
-    const sha = args.shift()
-    utils.load(sha, (err, data) => {
-      if (err) throw err
-      v.lint(data)
-      run()
-    })
-  }
-
-  run()
-
+  utils.parseTap(v, parsed, args)
+  return
 } else {
   // no --flags used,  defaults to --validate-metadata
   utils.validateMetadata(v, args)
