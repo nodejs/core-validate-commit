@@ -73,10 +73,14 @@ if (parsed.list) {
 
 // The --tap or -t flag was used
 if (parsed.tap) {
-  utils.parseTap(v, parsed, args)
-  return
+  utils.parseTap(v, parsed, args, (code) => {
+    process.exitCode = code
+    return
+  })
 } else {
   // no --flags used,  defaults to --validate-metadata
-  utils.validateMetadata(v, args)
-  return
+  utils.validateMetadata(v, args, (code) => {
+    process.exitCode = code
+    return
+  })
 }
