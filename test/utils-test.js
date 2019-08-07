@@ -7,6 +7,8 @@ const utils = require('../lib/utils')
 const stripAnsiRegex =
 /[\u001b\u009b][[()#;?]*(?:[0-9]{1,4}(?:;[0-9]{0,4})*)?[0-9A-ORZcf-nqry=><]/g
 
+const originalConsoleLog = console.log
+
 test('test utility functions', (t) => {
   t.test('test rightPad function - with padding', (tt) => {
     const padded = utils.rightPad('string', 10)
@@ -69,6 +71,38 @@ test('test utility functions', (t) => {
     tt.equal(header.replace(stripAnsiRegex, ''),
              '✖  abc123',
              'should be equal')
+    tt.end()
+  })
+
+  t.test('test describeRule function', (tt) => {
+    function logger() {
+      const args = [...arguments]
+      tt.equal(args[1].replace(stripAnsiRegex, ''),
+               '              rule-id', 'has a title with padding')
+      tt.equal(args[2].replace(stripAnsiRegex, ''),
+               'a description', 'has a description')
+    }
+
+    // overrite the console.log
+    console.log = logger
+    utils.describeRule({id: 'rule-id', meta: {description: 'a description'}})
+    // put it back
+    console.log = originalConsoleLog
+    tt.end()
+  })
+
+  t.test('test describeRule function - no meta data description', (tt) => {
+    function logger() {
+      tt.fails('should not reach here')
+    }
+
+    // overrite the console.log
+    console.log = logger
+    utils.describeRule({id: 'rule-id', meta: {}})
+    tt.pass('no return value')
+
+    // put it back
+    console.log = originalConsoleLog
     tt.end()
   })
 
