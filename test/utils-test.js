@@ -106,5 +106,19 @@ test('test utility functions', (t) => {
     tt.end()
   })
 
+  t.test('test describeSubsystem function - no subsystems', (tt) => {
+    function logger() {
+      tt.fails('should not reach here')
+    }
+
+    // overrite the console.log
+    console.log = logger
+    utils.describeSubsystem()
+    tt.pass('no return value')
+    // put it back
+    console.log = originalConsoleLog
+    tt.end()
+  })
+
   t.end()
 })
