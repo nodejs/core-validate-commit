@@ -15,7 +15,8 @@ const Validator = require('../lib')
 const Tap = require('../lib/tap')
 const utils = require('../lib/utils')
 const subsystem = require('../lib/rules/subsystem')
-const knownOpts = { help: Boolean
+const knownOpts = {
+  help: Boolean
 , version: Boolean
 , 'validate-metadata': Boolean
 , tap: Boolean
@@ -23,7 +24,8 @@ const knownOpts = { help: Boolean
 , list: Boolean
 , 'list-subsystems': Boolean
 }
-const shortHand = { h: ['--help']
+const shortHand = {
+  h: ['--help']
 , v: ['--version']
 , V: ['--validate-metadata']
 , t: ['--tap']

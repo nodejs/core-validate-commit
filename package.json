@@ -10,15 +10,15 @@
     "test-ci": "npm run test -- --coverage-report=lcov"
   },
   "dependencies": {
-    "chalk": "~1.1.1",
+    "chalk": "^2.4.2",
     "gitlint-parser-node": "^1.1.0",
-    "help": "^2.1.3",
-    "nopt": "^3.0.6"
+    "help": "^3.0.2",
+    "nopt": "^4.0.1"
   },
   "devDependencies": {
-    "check-pkg": "^2.0.2",
-    "lintit": "^6.0.1",
-    "tap": "^12.6.1"
+    "check-pkg": "^2.1.1",
+    "lintit": "^7.2.1",
+    "tap": "^14.9.1"
   },
   "files": [
     "lib/",

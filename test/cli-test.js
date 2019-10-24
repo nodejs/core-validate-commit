@@ -1,12 +1,14 @@
 'use strict'
 
-const { test } = require('tap')
-const { spawn } = require('child_process')
+const {test} = require('tap')
+const {spawn} = require('child_process')
 const subsystems = require('../lib/rules/subsystem')
 
 test('Test cli flags', (t) => {
   t.test('test list-subsystems', (tt) => {
-    const ls = spawn('./bin/cmd.js', ['--list-subsystems'])
+    const ls = spawn('./bin/cmd.js', ['--list-subsystems'], {
+      env: {FORCE_COLOR: 0}
+    })
     let compiledData = ''
     ls.stdout.on('data', (data) => {
       compiledData += data
