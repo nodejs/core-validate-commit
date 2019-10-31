@@ -1,6 +1,6 @@
 'use strict'
 
-const { test } = require('tap')
+const {test} = require('tap')
 const utils = require('../lib/utils')
 
 // We aren't testing the chalk library, so strip off the colors/styles it adds
