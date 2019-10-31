@@ -40,5 +40,24 @@ test('Test cli flags', (t) => {
     })
   })
 
+  t.test('test version flag', (tt) => {
+    const ls = spawn('./bin/cmd.js', ['--version'])
+    let compiledData = ''
+    ls.stdout.on('data', (data) => {
+      compiledData += data
+    })
+
+    ls.stderr.on('data', (data) => {
+      tt.fail('This should not happen')
+    })
+
+    ls.on('close', (code) => {
+      tt.equal(compiledData.trim(),
+               `core-validate-commit v${require('../package.json').version}`,
+               'output is equal')
+      tt.end()
+    })
+  })
+
   t.end()
 })
