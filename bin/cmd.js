@@ -112,7 +112,7 @@ if (parsed.tap) {
   tap.pipe(process.stdout)
   if (parsed.out) tap.pipe(fs.createWriteStream(parsed.out))
   let count = 0
-  let total = args.length
+  const total = args.length
 
   v.on('commit', (c) => {
     count++
