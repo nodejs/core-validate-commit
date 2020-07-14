@@ -38,12 +38,13 @@ const parsed = nopt(knownOpts, shortHand)
 const usage = require('help')()
 
 if (parsed.help) {
-  return usage()
+  usage()
+  process.exit(0)
 }
 
 if (parsed.version) {
   console.log('core-validate-commit', 'v' + require('../package').version)
-  return
+  process.exit(0)
 }
 
 const args = parsed.argv.remain
@@ -91,7 +92,7 @@ const v = new Validator(parsed)
 
 if (parsed['list-subsystems']) {
   utils.describeSubsystem(subsystem.defaults.subsystems.sort())
-  return
+  process.exit(0)
 }
 
 if (parsed.list) {
@@ -104,7 +105,7 @@ if (parsed.list) {
   for (const rule of v.rules.values()) {
     utils.describeRule(rule, max)
   }
-  return
+  process.exit(0)
 }
 
 if (parsed.tap) {
@@ -127,35 +128,35 @@ if (parsed.tap) {
     }
   })
 
-  function run() {
-    if (!args.length) return
-    const sha = args.shift()
-    load(sha, (err, data) => {
-      if (err) throw err
-      v.lint(data)
-      run()
-    })
-  }
-
-  run()
+  tapRun()
 
 } else {
   v.on('commit', (c) => {
     pretty(c.commit, c.messages, v)
-    run()
+    commitRun()
   })
 
-  function run() {
-    if (!args.length) {
-      process.exitCode = v.errors
-      return
-    }
-    const sha = args.shift()
-    load(sha, (err, data) => {
-      if (err) throw err
-      v.lint(data)
-    })
-  }
+  commitRun()
+}
 
-  run()
+function tapRun () {
+  if (!args.length) return
+  const sha = args.shift()
+  load(sha, (err, data) => {
+    if (err) throw err
+    v.lint(data)
+    tapRun()
+  })
+}
+
+function commitRun () {
+  if (!args.length) {
+    process.exitCode = v.errors
+    return
+  }
+  const sha = args.shift()
+  load(sha, (err, data) => {
+    if (err) throw err
+    v.lint(data)
+  })
 }
