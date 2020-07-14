@@ -16,22 +16,22 @@ const Tap = require('../lib/tap')
 const utils = require('../lib/utils')
 const subsystem = require('../lib/rules/subsystem')
 const knownOpts = {
-  help: Boolean
-, version: Boolean
-, 'validate-metadata': Boolean
-, tap: Boolean
-, out: path
-, list: Boolean
-, 'list-subsystems': Boolean
+  help: Boolean,
+  version: Boolean,
+  'validate-metadata': Boolean,
+  tap: Boolean,
+  out: path,
+  list: Boolean,
+  'list-subsystems': Boolean
 }
 const shortHand = {
-  h: ['--help']
-, v: ['--version']
-, V: ['--validate-metadata']
-, t: ['--tap']
-, o: ['--out']
-, l: ['--list']
-, ls: ['--list-subsystems']
+  h: ['--help'],
+  v: ['--version'],
+  V: ['--validate-metadata'],
+  t: ['--tap'],
+  o: ['--out'],
+  l: ['--list'],
+  ls: ['--list-subsystems']
 }
 
 const parsed = nopt(knownOpts, shortHand)
@@ -48,10 +48,9 @@ if (parsed.version) {
 }
 
 const args = parsed.argv.remain
-if (!args.length)
-  args.push('HEAD')
+if (!args.length) { args.push('HEAD') }
 
-function load(sha, cb) {
+function load (sha, cb) {
   const parsed = url.parse(sha)
   if (parsed.protocol) {
     return loadPatch(parsed, cb)
@@ -63,7 +62,7 @@ function load(sha, cb) {
   })
 }
 
-function loadPatch(uri, cb) {
+function loadPatch (uri, cb) {
   let h = http
   if (~uri.protocol.indexOf('https')) {
     h = https
@@ -122,14 +121,12 @@ if (parsed.tap) {
     if (count === total) {
       setImmediate(() => {
         tap.end()
-        if (tap.status === 'fail')
-          process.exitCode = 1
+        if (tap.status === 'fail') { process.exitCode = 1 }
       })
     }
   })
 
   tapRun()
-
 } else {
   v.on('commit', (c) => {
     pretty(c.commit, c.messages, v)
