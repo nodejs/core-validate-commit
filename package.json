@@ -4,7 +4,7 @@
   "description": "Validate the commit message for a particular commit in node core",
   "main": "index.js",
   "scripts": {
-    "pretest": "lintit && check-pkg",
+    "pretest": "standard && check-pkg",
     "test": "tap -j4 --cov test/**/*.js test/*.js",
     "posttest": "tap --coverage-report=text-summary",
     "test-ci": "npm run test -- --coverage-report=lcov"
@@ -17,7 +17,7 @@
   },
   "devDependencies": {
     "check-pkg": "^2.1.1",
-    "lintit": "^7.2.1",
+    "standard": "^14.3.4",
     "tap": "^14.10.2"
   },
   "files": [
