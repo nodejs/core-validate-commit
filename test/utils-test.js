@@ -5,7 +5,7 @@ const utils = require('../lib/utils')
 
 // We aren't testing the chalk library, so strip off the colors/styles it adds
 const stripAnsiRegex =
-/[\u001b\u009b][[()#;?]*(?:[0-9]{1,4}(?:;[0-9]{0,4})*)?[0-9A-ORZcf-nqry=><]/g
+/[\u001b\u009b][[()#;?]*(?:[0-9]{1,4}(?:;[0-9]{0,4})*)?[0-9A-ORZcf-nqry=><]/g // eslint-disable-line no-control-regex
 
 const originalConsoleLog = console.log
 
