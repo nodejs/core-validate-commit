@@ -6,7 +6,6 @@ const exec = require('child_process').exec
 const fs = require('fs')
 const http = require('http')
 const https = require('https')
-const url = require('url')
 const nopt = require('nopt')
 const path = require('path')
 const pretty = require('../lib/format-pretty')
@@ -51,7 +50,7 @@ const args = parsed.argv.remain
 if (!args.length) { args.push('HEAD') }
 
 function load (sha, cb) {
-  const parsed = url.parse(sha)
+  const parsed = new URL(sha)
   if (parsed.protocol) {
     return loadPatch(parsed, cb)
   }
