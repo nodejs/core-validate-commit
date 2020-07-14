@@ -1,6 +1,6 @@
 'use strict'
 
-const {test} = require('tap')
+const { test } = require('tap')
 const utils = require('../lib/utils')
 
 // We aren't testing the chalk library, so strip off the colors/styles it adds
@@ -45,60 +45,60 @@ test('test utility functions', (t) => {
   t.test('test headers function - skip', (tt) => {
     const header = utils.header('abc123', 'skip')
     tt.equal(header.replace(stripAnsiRegex, ''),
-             '✔  abc123 # SKIPPED',
-             'should be equal')
+      '✔  abc123 # SKIPPED',
+      'should be equal')
     tt.end()
   })
 
   t.test('test headers function - pass', (tt) => {
     const header = utils.header('abc123', 'pass')
     tt.equal(header.replace(stripAnsiRegex, ''),
-             '✔  abc123',
-             'should be equal')
+      '✔  abc123',
+      'should be equal')
     tt.end()
   })
 
   t.test('test headers function - pass', (tt) => {
     const header = utils.header('abc123', 'pass')
     tt.equal(header.replace(stripAnsiRegex, ''),
-             '✔  abc123',
-             'should be equal')
+      '✔  abc123',
+      'should be equal')
     tt.end()
   })
 
   t.test('test headers function - fail', (tt) => {
     const header = utils.header('abc123', 'fail')
     tt.equal(header.replace(stripAnsiRegex, ''),
-             '✖  abc123',
-             'should be equal')
+      '✖  abc123',
+      'should be equal')
     tt.end()
   })
 
   t.test('test describeRule function', (tt) => {
-    function logger() {
+    function logger () {
       const args = [...arguments]
       tt.equal(args[1].replace(stripAnsiRegex, ''),
-               '              rule-id', 'has a title with padding')
+        '              rule-id', 'has a title with padding')
       tt.equal(args[2].replace(stripAnsiRegex, ''),
-               'a description', 'has a description')
+        'a description', 'has a description')
     }
 
     // overrite the console.log
     console.log = logger
-    utils.describeRule({id: 'rule-id', meta: {description: 'a description'}})
+    utils.describeRule({ id: 'rule-id', meta: { description: 'a description' } })
     // put it back
     console.log = originalConsoleLog
     tt.end()
   })
 
   t.test('test describeRule function - no meta data description', (tt) => {
-    function logger() {
+    function logger () {
       tt.fails('should not reach here')
     }
 
     // overrite the console.log
     console.log = logger
-    utils.describeRule({id: 'rule-id', meta: {}})
+    utils.describeRule({ id: 'rule-id', meta: {} })
     tt.pass('no return value')
 
     // put it back
@@ -107,7 +107,7 @@ test('test utility functions', (t) => {
   })
 
   t.test('test describeSubsystem function - no subsystems', (tt) => {
-    function logger() {
+    function logger () {
       tt.fails('should not reach here')
     }
 

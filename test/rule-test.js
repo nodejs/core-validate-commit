@@ -14,7 +14,7 @@ test('Base Rule Test', (t) => {
 
   t.test('No validate function', (tt) => {
     tt.throws(() => {
-      new BaseRule({id: 'test-rule'})
+      new BaseRule({ id: 'test-rule' })
     }, 'Rule must have validate function')
 
     tt.end()

@@ -10,13 +10,13 @@ test('rule: line-after-title', (t) => {
     tt.plan(7)
     const v = new Validator()
     const context = new Commit({
-      sha: 'e7c077c610afa371430180fbd447bfef60ebc5ea'
-    , author: {
-        name: 'Evan Lucas'
-      , email: 'evanlucas@me.com'
-      , date: '2016-04-12T19:42:23Z'
-      }
-    , message: 'test: fix something\nfhqwhgads'
+      sha: 'e7c077c610afa371430180fbd447bfef60ebc5ea',
+      author: {
+        name: 'Evan Lucas',
+        email: 'evanlucas@me.com',
+        date: '2016-04-12T19:42:23Z'
+      },
+      message: 'test: fix something\nfhqwhgads'
     }, v)
 
     context.report = (opts) => {
@@ -36,13 +36,13 @@ test('rule: line-after-title', (t) => {
     tt.plan(4)
     const v = new Validator()
     const context = new Commit({
-      sha: 'e7c077c610afa371430180fbd447bfef60ebc5ea'
-    , author: {
-        name: 'Evan Lucas'
-      , email: 'evanlucas@me.com'
-      , date: '2016-04-12T19:42:23Z'
-      }
-    , message: 'test: fix something\n\nfhqwhgads'
+      sha: 'e7c077c610afa371430180fbd447bfef60ebc5ea',
+      author: {
+        name: 'Evan Lucas',
+        email: 'evanlucas@me.com',
+        date: '2016-04-12T19:42:23Z'
+      },
+      message: 'test: fix something\n\nfhqwhgads'
     }, v)
 
     context.report = (opts) => {
@@ -59,13 +59,13 @@ test('rule: line-after-title', (t) => {
     tt.plan(4)
     const v = new Validator()
     const context = new Commit({
-      sha: 'e7c077c610afa371430180fbd447bfef60ebc5ea'
-    , author: {
-        name: 'Evan Lucas'
-      , email: 'evanlucas@me.com'
-      , date: '2016-04-12T19:42:23Z'
-      }
-    , message: 'test: fix something'
+      sha: 'e7c077c610afa371430180fbd447bfef60ebc5ea',
+      author: {
+        name: 'Evan Lucas',
+        email: 'evanlucas@me.com',
+        date: '2016-04-12T19:42:23Z'
+      },
+      message: 'test: fix something'
     }, v)
 
     context.report = (opts) => {

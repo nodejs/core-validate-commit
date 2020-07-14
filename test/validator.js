@@ -304,8 +304,8 @@ test('Validator - real commits', (t) => {
       })
       tt.equal(filtered.length, 1, 'messages.length')
       tt.equal(filtered[0].message,
-               'Do not use punctuation at end of title.',
-               'message')
+        'Do not use punctuation at end of title.',
+        'message')
       tt.end()
     })
   })
@@ -322,8 +322,8 @@ test('Validator - real commits', (t) => {
       })
       tt.equal(filtered.length, 1, 'messages.length')
       tt.equal(filtered[0].message,
-               'First word after subsystem(s) in title should be lowercase.',
-               'message')
+        'First word after subsystem(s) in title should be lowercase.',
+        'message')
       tt.equal(filtered[0].column, 7, 'column')
       tt.end()
     })
