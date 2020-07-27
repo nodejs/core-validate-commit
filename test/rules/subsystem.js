@@ -10,13 +10,13 @@ test('rule: subsystem', (t) => {
     tt.plan(7)
     const v = new Validator()
     const context = new Commit({
-      sha: 'e7c077c610afa371430180fbd447bfef60ebc5ea'
-    , author: {
-        name: 'Evan Lucas'
-      , email: 'evanlucas@me.com'
-      , date: '2016-04-12T19:42:23Z'
-      }
-    , message: 'fhqwhgads: come on'
+      sha: 'e7c077c610afa371430180fbd447bfef60ebc5ea',
+      author: {
+        name: 'Evan Lucas',
+        email: 'evanlucas@me.com',
+        date: '2016-04-12T19:42:23Z'
+      },
+      message: 'fhqwhgads: come on'
     }, v)
 
     context.report = (opts) => {
@@ -30,7 +30,7 @@ test('rule: subsystem', (t) => {
       tt.end()
     }
 
-    Rule.validate(context, {options: {subsystems: Rule.defaults.subsystems}})
+    Rule.validate(context, { options: { subsystems: Rule.defaults.subsystems } })
   })
 
   t.test('skip for release commit', (tt) => {
@@ -38,27 +38,27 @@ test('rule: subsystem', (t) => {
 
     const v = new Validator()
     const context = new Commit({
-      sha: 'e7c077c610afa371430180fbd447bfef60ebc5ea'
-    , author: {
-        name: 'Evan Lucas'
-      , email: 'evanlucas@me.com'
-      , date: '2016-04-12T19:42:23Z'
-      }
-    , message: '2016-04-12, Version x.y.z'
+      sha: 'e7c077c610afa371430180fbd447bfef60ebc5ea',
+      author: {
+        name: 'Evan Lucas',
+        email: 'evanlucas@me.com',
+        date: '2016-04-12T19:42:23Z'
+      },
+      message: '2016-04-12, Version x.y.z'
     }, v)
 
     context.report = (opts) => {
       tt.pass('called report')
       tt.strictSame(opts, {
-        id: 'subsystem'
-      , message: 'Release commits do not have subsystems'
-      , string: ''
-      , level: 'skip'
+        id: 'subsystem',
+        message: 'Release commits do not have subsystems',
+        string: '',
+        level: 'skip'
       })
       tt.end()
     }
 
-    Rule.validate(context, {options: {subsystems: Rule.defaults.subsystems}})
+    Rule.validate(context, { options: { subsystems: Rule.defaults.subsystems } })
   })
 
   t.test('valid', (tt) => {
@@ -66,27 +66,27 @@ test('rule: subsystem', (t) => {
 
     const v = new Validator()
     const context = new Commit({
-      sha: 'e7c077c610afa371430180fbd447bfef60ebc5ea'
-    , author: {
-        name: 'Evan Lucas'
-      , email: 'evanlucas@me.com'
-      , date: '2016-04-12T19:42:23Z'
-      }
-    , message: 'quic: come on, fhqwhgads'
+      sha: 'e7c077c610afa371430180fbd447bfef60ebc5ea',
+      author: {
+        name: 'Evan Lucas',
+        email: 'evanlucas@me.com',
+        date: '2016-04-12T19:42:23Z'
+      },
+      message: 'quic: come on, fhqwhgads'
     }, v)
 
     context.report = (opts) => {
       tt.pass('called report')
       tt.strictSame(opts, {
-        id: 'subsystem'
-      , message: 'valid subsystems'
-      , string: 'quic'
-      , level: 'pass'
+        id: 'subsystem',
+        message: 'valid subsystems',
+        string: 'quic',
+        level: 'pass'
       })
       tt.end()
     }
 
-    Rule.validate(context, {options: {subsystems: Rule.defaults.subsystems}})
+    Rule.validate(context, { options: { subsystems: Rule.defaults.subsystems } })
   })
   t.end()
 })

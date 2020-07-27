@@ -11,8 +11,8 @@ test('rule: pr-url', (t) => {
   t.test('missing', (tt) => {
     tt.plan(7)
     const context = {
-      prUrl: null
-    , report: (opts) => {
+      prUrl: null,
+      report: (opts) => {
         tt.pass('called report')
         tt.equal(opts.id, 'pr-url', 'id')
         tt.equal(opts.message, MISSING_PR_URL, 'message')
@@ -26,16 +26,15 @@ test('rule: pr-url', (t) => {
     Rule.validate(context)
   })
 
-
   t.test('invalid numeric', (tt) => {
     tt.plan(7)
     const context = {
-      prUrl: '#1234'
-    , body: [
-        ''
-      , 'PR-URL: #1234'
-      ]
-    , report: (opts) => {
+      prUrl: '#1234',
+      body: [
+        '',
+        'PR-URL: #1234'
+      ],
+      report: (opts) => {
         tt.pass('called report')
         tt.equal(opts.id, 'pr-url', 'id')
         tt.equal(opts.message, NUMERIC_PR_URL, 'message')
@@ -53,12 +52,12 @@ test('rule: pr-url', (t) => {
     tt.plan(7)
     const url = 'https://github.com/nodejs/node/issues/1234'
     const context = {
-      prUrl: url
-    , body: [
-        ''
-      , `PR-URL: ${url}`
-      ]
-    , report: (opts) => {
+      prUrl: url,
+      body: [
+        '',
+        `PR-URL: ${url}`
+      ],
+      report: (opts) => {
         tt.pass('called report')
         tt.equal(opts.id, 'pr-url', 'id')
         tt.equal(opts.message, INVALID_PR_URL, 'message')
@@ -76,12 +75,12 @@ test('rule: pr-url', (t) => {
     tt.plan(7)
     const url = 'https://github.com/nodejs/node/pull/1234'
     const context = {
-      prUrl: url
-    , body: [
-        ''
-      , `PR-URL: ${url}`
-      ]
-    , report: (opts) => {
+      prUrl: url,
+      body: [
+        '',
+        `PR-URL: ${url}`
+      ],
+      report: (opts) => {
         tt.pass('called report')
         tt.equal(opts.id, 'pr-url', 'id')
         tt.equal(opts.message, VALID_PR_URL, 'message')
@@ -99,12 +98,12 @@ test('rule: pr-url', (t) => {
     tt.plan(7)
     const url = 'https://github.com/nodejs/node-report/pull/1234'
     const context = {
-      prUrl: url
-    , body: [
-        ''
-      , `PR-URL: ${url}`
-      ]
-    , report: (opts) => {
+      prUrl: url,
+      body: [
+        '',
+        `PR-URL: ${url}`
+      ],
+      report: (opts) => {
         tt.pass('called report')
         tt.equal(opts.id, 'pr-url', 'id')
         tt.equal(opts.message, VALID_PR_URL, 'message')

@@ -11,13 +11,13 @@ test('rule: reviewers', (t) => {
     tt.plan(7)
     const v = new Validator()
     const context = new Commit({
-      sha: 'e7c077c610afa371430180fbd447bfef60ebc5ea'
-    , author: {
-        name: 'Evan Lucas'
-      , email: 'evanlucas@me.com'
-      , date: '2016-04-12T19:42:23Z'
-      }
-    , message: `test: fix something
+      sha: 'e7c077c610afa371430180fbd447bfef60ebc5ea',
+      author: {
+        name: 'Evan Lucas',
+        email: 'evanlucas@me.com',
+        date: '2016-04-12T19:42:23Z'
+      },
+      message: `test: fix something
 
 This is a test`
     }, v)
@@ -39,13 +39,13 @@ This is a test`
     tt.plan(2)
     const v = new Validator()
     const context = new Commit({
-      sha: 'e7c077c610afa371430180fbd447bfef60ebc5ea'
-    , author: {
-        name: 'Evan Lucas'
-      , email: 'evanlucas@me.com'
-      , date: '2016-04-12T19:42:23Z'
-      }
-    , message: `2016-04-12, Version x.y.z
+      sha: 'e7c077c610afa371430180fbd447bfef60ebc5ea',
+      author: {
+        name: 'Evan Lucas',
+        email: 'evanlucas@me.com',
+        date: '2016-04-12T19:42:23Z'
+      },
+      message: `2016-04-12, Version x.y.z
 
 This is a test`
     }, v)
@@ -53,10 +53,10 @@ This is a test`
     context.report = (opts) => {
       tt.pass('called report')
       tt.strictSame(opts, {
-        id: 'reviewers'
-      , message: 'skipping reviewers for release commit'
-      , string: ''
-      , level: 'skip'
+        id: 'reviewers',
+        message: 'skipping reviewers for release commit',
+        string: '',
+        level: 'skip'
       })
     }
 

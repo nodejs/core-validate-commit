@@ -6,7 +6,6 @@ const exec = require('child_process').exec
 const fs = require('fs')
 const http = require('http')
 const https = require('https')
-const url = require('url')
 const nopt = require('nopt')
 const path = require('path')
 const pretty = require('../lib/format-pretty')
@@ -16,42 +15,42 @@ const Tap = require('../lib/tap')
 const utils = require('../lib/utils')
 const subsystem = require('../lib/rules/subsystem')
 const knownOpts = {
-  help: Boolean
-, version: Boolean
-, 'validate-metadata': Boolean
-, tap: Boolean
-, out: path
-, list: Boolean
-, 'list-subsystems': Boolean
+  help: Boolean,
+  version: Boolean,
+  'validate-metadata': Boolean,
+  tap: Boolean,
+  out: path,
+  list: Boolean,
+  'list-subsystems': Boolean
 }
 const shortHand = {
-  h: ['--help']
-, v: ['--version']
-, V: ['--validate-metadata']
-, t: ['--tap']
-, o: ['--out']
-, l: ['--list']
-, ls: ['--list-subsystems']
+  h: ['--help'],
+  v: ['--version'],
+  V: ['--validate-metadata'],
+  t: ['--tap'],
+  o: ['--out'],
+  l: ['--list'],
+  ls: ['--list-subsystems']
 }
 
 const parsed = nopt(knownOpts, shortHand)
 const usage = require('help')()
 
 if (parsed.help) {
-  return usage()
+  usage()
+  process.exit(0)
 }
 
 if (parsed.version) {
   console.log('core-validate-commit', 'v' + require('../package').version)
-  return
+  process.exit(0)
 }
 
 const args = parsed.argv.remain
-if (!args.length)
-  args.push('HEAD')
+if (!args.length) { args.push('HEAD') }
 
-function load(sha, cb) {
-  const parsed = url.parse(sha)
+function load (sha, cb) {
+  const parsed = new URL(sha)
   if (parsed.protocol) {
     return loadPatch(parsed, cb)
   }
@@ -62,7 +61,7 @@ function load(sha, cb) {
   })
 }
 
-function loadPatch(uri, cb) {
+function loadPatch (uri, cb) {
   let h = http
   if (~uri.protocol.indexOf('https')) {
     h = https
@@ -91,7 +90,7 @@ const v = new Validator(parsed)
 
 if (parsed['list-subsystems']) {
   utils.describeSubsystem(subsystem.defaults.subsystems.sort())
-  return
+  process.exit(0)
 }
 
 if (parsed.list) {
@@ -104,7 +103,7 @@ if (parsed.list) {
   for (const rule of v.rules.values()) {
     utils.describeRule(rule, max)
   }
-  return
+  process.exit(0)
 }
 
 if (parsed.tap) {
@@ -112,7 +111,7 @@ if (parsed.tap) {
   tap.pipe(process.stdout)
   if (parsed.out) tap.pipe(fs.createWriteStream(parsed.out))
   let count = 0
-  let total = args.length
+  const total = args.length
 
   v.on('commit', (c) => {
     count++
@@ -121,41 +120,39 @@ if (parsed.tap) {
     if (count === total) {
       setImmediate(() => {
         tap.end()
-        if (tap.status === 'fail')
-          process.exitCode = 1
+        if (tap.status === 'fail') { process.exitCode = 1 }
       })
     }
   })
 
-  function run() {
-    if (!args.length) return
-    const sha = args.shift()
-    load(sha, (err, data) => {
-      if (err) throw err
-      v.lint(data)
-      run()
-    })
-  }
-
-  run()
-
+  tapRun()
 } else {
   v.on('commit', (c) => {
     pretty(c.commit, c.messages, v)
-    run()
+    commitRun()
   })
 
-  function run() {
-    if (!args.length) {
-      process.exitCode = v.errors
-      return
-    }
-    const sha = args.shift()
-    load(sha, (err, data) => {
-      if (err) throw err
-      v.lint(data)
-    })
-  }
+  commitRun()
+}
 
-  run()
+function tapRun () {
+  if (!args.length) return
+  const sha = args.shift()
+  load(sha, (err, data) => {
+    if (err) throw err
+    v.lint(data)
+    tapRun()
+  })
+}
+
+function commitRun () {
+  if (!args.length) {
+    process.exitCode = v.errors
+    return
+  }
+  const sha = args.shift()
+  load(sha, (err, data) => {
+    if (err) throw err
+    v.lint(data)
+  })
 }

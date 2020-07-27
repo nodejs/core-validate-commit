@@ -1,13 +1,13 @@
 'use strict'
 
-const {test} = require('tap')
-const {spawn} = require('child_process')
+const { test } = require('tap')
+const { spawn } = require('child_process')
 const subsystems = require('../lib/rules/subsystem')
 
 test('Test cli flags', (t) => {
   t.test('test list-subsystems', (tt) => {
     const ls = spawn('./bin/cmd.js', ['--list-subsystems'], {
-      env: {FORCE_COLOR: 0}
+      env: { FORCE_COLOR: 0 }
     })
     let compiledData = ''
     ls.stdout.on('data', (data) => {
@@ -25,14 +25,14 @@ test('Test cli flags', (t) => {
       const defaultSubsystems = subsystems.defaults.subsystems
 
       tt.equal(subsystemsFromOutput.length,
-               defaultSubsystems.length,
-               'Should have the same length')
+        defaultSubsystems.length,
+        'Should have the same length')
 
       // Loop through the output list and compare with the real list
       // to make sure they are all there
       const missing = []
       subsystemsFromOutput.forEach((sub) => {
-        if (!defaultSubsystems.find((x) => {return x === sub})) {
+        if (!defaultSubsystems.find((x) => { return x === sub })) {
           missing.push(sub)
         }
       })
@@ -55,8 +55,8 @@ test('Test cli flags', (t) => {
 
     ls.on('close', (code) => {
       tt.equal(compiledData.trim(),
-               `core-validate-commit v${require('../package.json').version}`,
-               'output is equal')
+        `core-validate-commit v${require('../package.json').version}`,
+        'output is equal')
       tt.end()
     })
   })

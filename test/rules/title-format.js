@@ -5,16 +5,16 @@ const Rule = require('../../lib/rules/title-format')
 const Commit = require('gitlint-parser-node')
 const Validator = require('../../')
 
-function makeCommit(title) {
+function makeCommit (title) {
   const v = new Validator()
   return new Commit({
-    sha: 'e7c077c610afa371430180fbd447bfef60ebc5ea'
-  , author: {
-      name: 'Evan Lucas'
-    , email: 'evanlucas@me.com'
-    , date: '2016-04-12T19:42:23Z'
-    }
-  , message: title
+    sha: 'e7c077c610afa371430180fbd447bfef60ebc5ea',
+    author: {
+      name: 'Evan Lucas',
+      email: 'evanlucas@me.com',
+      date: '2016-04-12T19:42:23Z'
+    },
+    message: title
   }, v)
 }
 
@@ -26,12 +26,12 @@ test('rule: title-format', (t) => {
     context.report = (opts) => {
       tt.pass('called report')
       tt.strictSame(opts, {
-        id: 'title-format'
-      , message: 'Add a space after subsystem(s).'
-      , string: 'test:missing space'
-      , line: 0
-      , column: 5
-      , level: 'fail'
+        id: 'title-format',
+        message: 'Add a space after subsystem(s).',
+        string: 'test:missing space',
+        line: 0,
+        column: 5,
+        level: 'fail'
       })
     }
 
@@ -46,10 +46,10 @@ test('rule: title-format', (t) => {
     context.report = (opts) => {
       tt.pass('called report')
       tt.strictSame(opts, {
-        id: 'title-format'
-      , message: 'Title is formatted correctly.'
-      , string: ''
-      , level: 'pass'
+        id: 'title-format',
+        message: 'Title is formatted correctly.',
+        string: '',
+        level: 'pass'
       })
     }
 
@@ -64,12 +64,12 @@ test('rule: title-format', (t) => {
     context.report = (opts) => {
       tt.pass('called report')
       tt.strictSame(opts, {
-        id: 'title-format'
-      , message: 'Do not use consecutive spaces in title.'
-      , string: 'test: with  two spaces'
-      , line: 0
-      , column: 11
-      , level: 'fail'
+        id: 'title-format',
+        message: 'Do not use consecutive spaces in title.',
+        string: 'test: with  two spaces',
+        line: 0,
+        column: 11,
+        level: 'fail'
       })
     }
 
@@ -84,12 +84,12 @@ test('rule: title-format', (t) => {
     context.report = (opts) => {
       tt.pass('called report')
       tt.strictSame(opts, {
-        id: 'title-format'
-      , message: 'First word after subsystem(s) in title should be lowercase.'
-      , string: 'test: Some message'
-      , line: 0
-      , column: 7
-      , level: 'fail'
+        id: 'title-format',
+        message: 'First word after subsystem(s) in title should be lowercase.',
+        string: 'test: Some message',
+        line: 0,
+        column: 7,
+        level: 'fail'
       })
     }
 
@@ -104,10 +104,10 @@ test('rule: title-format', (t) => {
     context.report = (opts) => {
       tt.pass('called report')
       tt.strictSame(opts, {
-        id: 'title-format'
-      , message: 'Title is formatted correctly.'
-      , string: ''
-      , level: 'pass'
+        id: 'title-format',
+        message: 'Title is formatted correctly.',
+        string: '',
+        level: 'pass'
       })
     }
 
@@ -122,10 +122,10 @@ test('rule: title-format', (t) => {
     context.report = (opts) => {
       tt.pass('called report')
       tt.strictSame(opts, {
-        id: 'title-format'
-      , message: 'Title is formatted correctly.'
-      , string: ''
-      , level: 'pass'
+        id: 'title-format',
+        message: 'Title is formatted correctly.',
+        string: '',
+        level: 'pass'
       })
     }
 

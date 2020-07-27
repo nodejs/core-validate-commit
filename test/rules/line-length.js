@@ -10,13 +10,13 @@ test('rule: line-length', (t) => {
     tt.plan(7)
     const v = new Validator()
     const context = new Commit({
-      sha: 'e7c077c610afa371430180fbd447bfef60ebc5ea'
-    , author: {
-        name: 'Evan Lucas'
-      , email: 'evanlucas@me.com'
-      , date: '2016-04-12T19:42:23Z'
-      }
-    , message: `test: fix something
+      sha: 'e7c077c610afa371430180fbd447bfef60ebc5ea',
+      author: {
+        name: 'Evan Lucas',
+        email: 'evanlucas@me.com',
+        date: '2016-04-12T19:42:23Z'
+      },
+      message: `test: fix something
 
 ${'aaa'.repeat(30)}`
     }, v)
@@ -41,13 +41,13 @@ ${'aaa'.repeat(30)}`
   t.test('release commit', (tt) => {
     const v = new Validator()
     const context = new Commit({
-      sha: 'e7c077c610afa371430180fbd447bfef60ebc5ea'
-    , author: {
-        name: 'Evan Lucas'
-      , email: 'evanlucas@me.com'
-      , date: '2016-04-12T19:42:23Z'
-      }
-    , message: `2016-01-01, Version 1.0.0
+      sha: 'e7c077c610afa371430180fbd447bfef60ebc5ea',
+      author: {
+        name: 'Evan Lucas',
+        email: 'evanlucas@me.com',
+        date: '2016-04-12T19:42:23Z'
+      },
+      message: `2016-01-01, Version 1.0.0
 
 ${'aaa'.repeat(30)}`
     }, v)
@@ -70,13 +70,13 @@ ${'aaa'.repeat(30)}`
   t.test('quoted lines', (tt) => {
     const v = new Validator()
     const context = new Commit({
-      sha: 'e7c077c610afa371430180fbd447bfef60ebc5ea'
-    , author: {
-        name: 'Evan Lucas'
-      , email: 'evanlucas@me.com'
-      , date: '2016-04-12T19:42:23Z'
-      }
-    , message: `src: make foo mor foo-ey
+      sha: 'e7c077c610afa371430180fbd447bfef60ebc5ea',
+      author: {
+        name: 'Evan Lucas',
+        email: 'evanlucas@me.com',
+        date: '2016-04-12T19:42:23Z'
+      },
+      message: `src: make foo mor foo-ey
 
 Here’s the original code:
 
@@ -104,13 +104,13 @@ That was the original code.
   t.test('URLs', (tt) => {
     const v = new Validator()
     const context = new Commit({
-      sha: 'e7c077c610afa371430180fbd447bfef60ebc5ea'
-    , author: {
-        name: 'Evan Lucas'
-      , email: 'evanlucas@me.com'
-      , date: '2016-04-12T19:42:23Z'
-      }
-    , message: `src: make foo mor foo-ey
+      sha: 'e7c077c610afa371430180fbd447bfef60ebc5ea',
+      author: {
+        name: 'Evan Lucas',
+        email: 'evanlucas@me.com',
+        date: '2016-04-12T19:42:23Z'
+      },
+      message: `src: make foo mor foo-ey
 
 https://${'very-'.repeat(80)}-long-url.org/
 `
