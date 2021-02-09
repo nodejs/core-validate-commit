@@ -42,6 +42,44 @@ test('Test cli flags', (t) => {
     })
   })
 
+  t.test('test sha', (tt) => {
+    const ls = spawn('./bin/cmd.js', ['--no-validate-metadata', '2b98d02b52'])
+    let compiledData = ''
+    ls.stdout.on('data', (data) => {
+      compiledData += data
+    })
+
+    ls.stderr.on('data', (data) => {
+      tt.fail('This should not happen')
+    })
+
+    ls.on('close', (code) => {
+      tt.match(compiledData.trim(),
+        /2b98d02b52/,
+        'output is as expected')
+      tt.end()
+    })
+  })
+
+  t.test('test url', (tt) => {
+    const ls = spawn('./bin/cmd.js', ['--no-validate-metadata', 'https://api.github.com/repos/nodejs/core-validate-commit/commits/2b98d02b52'])
+    let compiledData = ''
+    ls.stdout.on('data', (data) => {
+      compiledData += data
+    })
+
+    ls.stderr.on('data', (data) => {
+      tt.fail('This should not happen')
+    })
+
+    ls.on('close', (code) => {
+      tt.match(compiledData.trim(),
+        /2b98d02b52/,
+        'output is as expected')
+      tt.end()
+    })
+  })
+
   t.test('test version flag', (tt) => {
     const ls = spawn('./bin/cmd.js', ['--version'])
     let compiledData = ''
