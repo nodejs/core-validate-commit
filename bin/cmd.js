@@ -50,15 +50,15 @@ const args = parsed.argv.remain
 if (!args.length) { args.push('HEAD') }
 
 function load (sha, cb) {
-  const parsed = new URL(sha)
-  if (parsed.protocol) {
+  try {
+    const parsed = new URL(sha)
     return loadPatch(parsed, cb)
+  } catch (_) {
+    exec(`git show --quiet --format=medium ${sha}`, (err, stdout, stderr) => {
+      if (err) return cb(err)
+      cb(null, stdout.trim())
+    })
   }
-
-  exec(`git show --quiet --format=medium ${sha}`, (err, stdout, stderr) => {
-    if (err) return cb(err)
-    cb(null, stdout.trim())
-  })
 }
 
 function loadPatch (uri, cb) {
@@ -66,10 +66,10 @@ function loadPatch (uri, cb) {
   if (~uri.protocol.indexOf('https')) {
     h = https
   }
-  uri.headers = {
+  const headers = {
     'user-agent': 'core-validate-commit'
   }
-  h.get(uri, (res) => {
+  h.get(uri, { headers }, (res) => {
     let buf = ''
     res.on('data', (chunk) => {
       buf += chunk
