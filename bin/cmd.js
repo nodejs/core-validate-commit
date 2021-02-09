@@ -38,7 +38,6 @@ const usage = require('help')()
 
 if (parsed.help) {
   usage()
-  process.exit(0)
 }
 
 if (parsed.version) {
@@ -47,7 +46,7 @@ if (parsed.version) {
 }
 
 const args = parsed.argv.remain
-if (!args.length) { args.push('HEAD') }
+if (!parsed.help && !args.length) { args.push('HEAD') }
 
 function load (sha, cb) {
   try {
