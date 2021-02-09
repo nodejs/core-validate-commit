@@ -1,13 +1,14 @@
 'use strict'
 
 const { test } = require('tap')
+const { readFileSync } = require('fs')
 const { spawn } = require('child_process')
 const subsystems = require('../lib/rules/subsystem')
 
 test('Test cli flags', (t) => {
   t.test('test list-subsystems', (tt) => {
     const ls = spawn('./bin/cmd.js', ['--list-subsystems'], {
-      env: { FORCE_COLOR: 0 }
+      env: { ...process.env, FORCE_COLOR: 0 }
     })
     let compiledData = ''
     ls.stdout.on('data', (data) => {
@@ -38,6 +39,26 @@ test('Test cli flags', (t) => {
       })
 
       tt.equal(missing.length, 0, 'Should have no missing subsystems')
+      tt.end()
+    })
+  })
+
+  t.test('test help output', (tt) => {
+    const usage = readFileSync('bin/usage.txt', { encoding: 'utf8' })
+    const ls = spawn('./bin/cmd.js', ['--help'])
+    let compiledData = ''
+    ls.stdout.on('data', (data) => {
+      compiledData += data
+    })
+
+    ls.stderr.on('data', (data) => {
+      tt.fail('This should not happen')
+    })
+
+    ls.on('close', (code) => {
+      tt.equal(compiledData.trim(),
+        usage.trim(),
+        '--help output is as expected')
       tt.end()
     })
   })
