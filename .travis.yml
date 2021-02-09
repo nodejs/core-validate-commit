@@ -1,9 +1,0 @@
-language: node_js
-node_js:
-  - "8"
-  - "10"
-  - "12"
-  - "13"
-cache: npm
-script: 'npm run test-ci'
-after_script: 'bash <(curl -s https://codecov.io/bash)'
