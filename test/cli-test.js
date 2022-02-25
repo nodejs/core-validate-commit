@@ -82,6 +82,37 @@ test('Test cli flags', (t) => {
     })
   })
 
+  t.test('test tap output', (tt) => {
+    // Use a commit from this repository that does not follow the guidelines.
+    const ls = spawn('./bin/cmd.js', ['--no-validate-metadata', '--tap', '69435db261'])
+    let compiledData = ''
+    ls.stdout.on('data', (data) => {
+      compiledData += data
+    })
+
+    ls.stderr.on('data', (data) => {
+      tt.fail(`Unexpected stderr output ${data.toString()}`)
+    })
+
+    ls.on('close', (code) => {
+      const output = compiledData.trim()
+      tt.match(output,
+        /# 69435db261/,
+        'TAP output contains the sha of the commit being linted')
+      tt.match(output,
+        /not ok \d+ subsystem: Invalid subsystem: "chore" \(chore: update tested node release lines \(#94\)\)/,
+        'TAP output contains failure for subsystem')
+      tt.match(output,
+        /# fail\s+\d+/,
+        'TAP output contains total failures')
+      tt.match(output,
+        /# Please review the commit message guidelines:\s# https:\/\/github.com\/nodejs\/node\/blob\/HEAD\/doc\/contributing\/pull-requests.md#commit-message-guidelines/,
+        'TAP output contains pointer to commit message guidelines')
+      tt.equal(code, 1, 'CLI exits with non-zero code on failure')
+      tt.end()
+    })
+  })
+
   t.test('test url', (tt) => {
     const ls = spawn('./bin/cmd.js', ['--no-validate-metadata', 'https://api.github.com/repos/nodejs/core-validate-commit/commits/2b98d02b52'])
     let compiledData = ''
