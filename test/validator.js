@@ -25,7 +25,7 @@ const str2 = `commit b6475b9a9d0da0971eec7eb5559dff4d18a0e721
 Author: Evan Lucas <evanlucas@me.com>
 Date:   Tue Mar 29 08:09:37 2016 -0500
 
-    Revert "tty: don't read from console stream upon creation"
+    Revert "tty: do not read from the console stream upon creation"
 
     This reverts commit 461138929498f31bd35bea61aa4375a2f56cceb7.
 
@@ -127,6 +127,42 @@ Date:   Thu Mar 3 10:10:46 2016 -0600
     test: Check memoryUsage properties.
 `
 
+const str10 = `commit b04fe688d5859f707cf1a5e0206967268118bf7a
+Author: Darshan Sen <raisinten@gmail.com>
+Date:   Sun May 1 21:10:21 2022 +0530
+
+    Revert "bootstrap: delay the instantiation of maps in per-context scripts"
+
+    The linked issue, https://bugs.chromium.org/p/v8/issues/detail?id=6593,
+    is marked as "Fixed", so I think we can revert this now.
+
+    This reverts commit 08a9c4a996964aca909cd75fa8ecafd652c54885.
+
+    Signed-off-by: Darshan Sen <raisinten@gmail.com>
+    PR-URL: https://github.com/nodejs/node/pull/42934
+    Refs: https://bugs.chromium.org/p/v8/issues/detail?id=9187
+    Reviewed-By: Joyee Cheung <joyeec9h3@gmail.com>
+    Reviewed-By: Antoine du Hamel <duhamelantoine1995@gmail.com>
+`
+
+const str11 = `commit b04fe688d5859f707cf1a5e0206967268118bf7a
+Author: Darshan Sen <raisinten@gmail.com>
+Date:   Sun May 1 21:10:21 2022 +0530
+
+    Revert "bootstrap: delay the instantiation of all maps in the per-context scripts"
+
+    The linked issue, https://bugs.chromium.org/p/v8/issues/detail?id=6593,
+    is marked as "Fixed", so I think we can revert this now.
+
+    This reverts commit 08a9c4a996964aca909cd75fa8ecafd652c54885.
+
+    Signed-off-by: Darshan Sen <raisinten@gmail.com>
+    PR-URL: https://github.com/nodejs/node/pull/42934
+    Refs: https://bugs.chromium.org/p/v8/issues/detail?id=9187
+    Reviewed-By: Joyee Cheung <joyeec9h3@gmail.com>
+    Reviewed-By: Antoine du Hamel <duhamelantoine1995@gmail.com>
+`
+
 test('Validator - misc', (t) => {
   const v = new Validator()
 
@@ -210,6 +246,49 @@ test('Validator - real commits', (t) => {
         return item.id
       })
       const exp = ['line-length', 'title-length']
+      tt.deepEqual(ids.sort(), exp.sort(), 'message ids')
+      tt.end()
+    })
+  })
+
+  t.test('accept revert commit titles that are elongated by git', (tt) => {
+    const v = new Validator()
+    v.lint(str10)
+    v.on('commit', (data) => {
+      const c = data.commit.toJSON()
+      tt.equal(c.sha, 'b04fe688d5859f707cf1a5e0206967268118bf7a', 'sha')
+      tt.equal(c.date, 'Sun May 1 21:10:21 2022 +0530', 'date')
+      tt.deepEqual(c.subsystems, ['bootstrap'], 'subsystems')
+      tt.equal(c.prUrl, 'https://github.com/nodejs/node/pull/42934', 'pr')
+      tt.equal(c.revert, true, 'revert')
+      const msgs = data.messages
+      const filtered = msgs.filter((item) => {
+        return item.level === 'fail'
+      })
+      tt.equal(filtered.length, 0, 'messages.length')
+      tt.end()
+    })
+  })
+
+  t.test('reject revert commit titles whose original titles are really long', (tt) => {
+    const v = new Validator()
+    v.lint(str11)
+    v.on('commit', (data) => {
+      const c = data.commit.toJSON()
+      tt.equal(c.sha, 'b04fe688d5859f707cf1a5e0206967268118bf7a', 'sha')
+      tt.equal(c.date, 'Sun May 1 21:10:21 2022 +0530', 'date')
+      tt.deepEqual(c.subsystems, ['bootstrap'], 'subsystems')
+      tt.equal(c.prUrl, 'https://github.com/nodejs/node/pull/42934', 'pr')
+      tt.equal(c.revert, true, 'revert')
+      const msgs = data.messages
+      const filtered = msgs.filter((item) => {
+        return item.level === 'fail'
+      })
+      tt.equal(filtered.length, 1, 'messages.length')
+      const ids = filtered.map((item) => {
+        return item.id
+      })
+      const exp = ['title-length']
       tt.deepEqual(ids.sort(), exp.sort(), 'message ids')
       tt.end()
     })
