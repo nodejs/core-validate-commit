@@ -163,6 +163,15 @@ Date:   Sun May 1 21:10:21 2022 +0530
     Reviewed-By: Antoine du Hamel <duhamelantoine1995@gmail.com>
 `
 
+const str12 = `commit cbb404503c9df13aaeb3dd8b345cb3f34c8c07e4
+Author: Michaël Zasso <targos@protonmail.com>
+Date:   Sat Oct 22 10:22:43 2022 +0200
+
+    Revert "deps: V8: forward declaration of \`Rtl*FunctionTable\`"
+
+    This reverts commit 01bc8e6fd81314e76c7fb0d09e5310f609e48bee.
+`
+
 test('Validator - misc', (t) => {
   const v = new Validator()
 
@@ -290,6 +299,26 @@ test('Validator - real commits', (t) => {
       })
       const exp = ['title-length']
       tt.deepEqual(ids.sort(), exp.sort(), 'message ids')
+      tt.end()
+    })
+  })
+
+  t.test('accept deps: V8 as the subsystem for revert commits', (tt) => {
+    const v = new Validator({
+      'validate-metadata': false
+    })
+    v.lint(str12)
+    v.on('commit', (data) => {
+      const c = data.commit.toJSON()
+      tt.equal(c.sha, 'cbb404503c9df13aaeb3dd8b345cb3f34c8c07e4', 'sha')
+      tt.equal(c.date, 'Sat Oct 22 10:22:43 2022 +0200', 'date')
+      tt.deepEqual(c.subsystems, ['deps'], 'subsystems')
+      tt.equal(c.revert, true, 'revert')
+      const msgs = data.messages
+      const filtered = msgs.filter((item) => {
+        return item.level === 'fail'
+      })
+      tt.equal(filtered.length, 0, 'messages.length')
       tt.end()
     })
   })
