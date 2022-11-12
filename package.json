@@ -5,9 +5,9 @@
   "main": "index.js",
   "scripts": {
     "pretest": "standard && check-pkg",
-    "test": "tap -j4 --cov test/**/*.js test/*.js",
-    "posttest": "tap --coverage-report=text-summary",
-    "test-ci": "npm run test -- --coverage-report=lcov"
+    "test": "tap -j4 --no-check-coverage --cov test/**/*.js test/*.js",
+    "posttest": "tap --no-check-coverage --coverage-report=text-summary",
+    "test-ci": "npm run test -- --no-check-coverage --coverage-report=lcov"
   },
   "dependencies": {
     "chalk": "^3.0.0",
@@ -18,7 +18,7 @@
   "devDependencies": {
     "check-pkg": "^2.1.1",
     "standard": "^14.3.4",
-    "tap": "^14.10.2"
+    "tap": "^15.2.3"
   },
   "files": [
     "lib/",
