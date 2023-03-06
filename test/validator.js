@@ -199,7 +199,7 @@ test('Validator - real commits', (t) => {
     v.on('commit', (data) => {
       const c = data.commit
       tt.equal(c.sha, 'e7c077c610afa371430180fbd447bfef60ebc5ea', 'sha')
-      tt.deepEqual(c.subsystems, ['stream'], 'subsystems')
+      tt.same(c.subsystems, ['stream'], 'subsystems')
       tt.equal(c.prUrl, 'https://github.com/nodejs/node/pull/6170', 'pr')
       const msgs = data.messages
       const failed = msgs.filter((item) => {
@@ -222,7 +222,7 @@ test('Validator - real commits', (t) => {
       const c = data.commit.toJSON()
       tt.equal(c.sha, 'b6475b9a9d0da0971eec7eb5559dff4d18a0e721', 'sha')
       tt.equal(c.date, 'Tue Mar 29 08:09:37 2016 -0500', 'date')
-      tt.deepEqual(c.subsystems, ['tty'], 'subsystems')
+      tt.same(c.subsystems, ['tty'], 'subsystems')
       tt.equal(c.prUrl, 'https://github.com/nodejs/node/pull/5947', 'pr')
       tt.equal(c.revert, true, 'revert')
       const msgs = data.messages
@@ -243,7 +243,7 @@ test('Validator - real commits', (t) => {
       const c = data.commit.toJSON()
       tt.equal(c.sha, '75487f0db80e70a3e27fabfe323a33258dfbbea8', 'sha')
       tt.equal(c.date, 'Fri Apr 15 13:32:36 2016 +0200', 'date')
-      tt.deepEqual(c.subsystems, ['module'], 'subsystems')
+      tt.same(c.subsystems, ['module'], 'subsystems')
       tt.equal(c.prUrl, 'https://github.com/nodejs/node/pull/6215', 'pr')
       tt.equal(c.revert, false, 'revert')
       const msgs = data.messages
@@ -255,7 +255,7 @@ test('Validator - real commits', (t) => {
         return item.id
       })
       const exp = ['line-length', 'title-length']
-      tt.deepEqual(ids.sort(), exp.sort(), 'message ids')
+      tt.same(ids.sort(), exp.sort(), 'message ids')
       tt.end()
     })
   })
@@ -267,7 +267,7 @@ test('Validator - real commits', (t) => {
       const c = data.commit.toJSON()
       tt.equal(c.sha, 'b04fe688d5859f707cf1a5e0206967268118bf7a', 'sha')
       tt.equal(c.date, 'Sun May 1 21:10:21 2022 +0530', 'date')
-      tt.deepEqual(c.subsystems, ['bootstrap'], 'subsystems')
+      tt.same(c.subsystems, ['bootstrap'], 'subsystems')
       tt.equal(c.prUrl, 'https://github.com/nodejs/node/pull/42934', 'pr')
       tt.equal(c.revert, true, 'revert')
       const msgs = data.messages
@@ -286,7 +286,7 @@ test('Validator - real commits', (t) => {
       const c = data.commit.toJSON()
       tt.equal(c.sha, 'b04fe688d5859f707cf1a5e0206967268118bf7a', 'sha')
       tt.equal(c.date, 'Sun May 1 21:10:21 2022 +0530', 'date')
-      tt.deepEqual(c.subsystems, ['bootstrap'], 'subsystems')
+      tt.same(c.subsystems, ['bootstrap'], 'subsystems')
       tt.equal(c.prUrl, 'https://github.com/nodejs/node/pull/42934', 'pr')
       tt.equal(c.revert, true, 'revert')
       const msgs = data.messages
@@ -298,7 +298,7 @@ test('Validator - real commits', (t) => {
         return item.id
       })
       const exp = ['title-length']
-      tt.deepEqual(ids.sort(), exp.sort(), 'message ids')
+      tt.same(ids.sort(), exp.sort(), 'message ids')
       tt.end()
     })
   })
@@ -312,7 +312,7 @@ test('Validator - real commits', (t) => {
       const c = data.commit.toJSON()
       tt.equal(c.sha, 'cbb404503c9df13aaeb3dd8b345cb3f34c8c07e4', 'sha')
       tt.equal(c.date, 'Sat Oct 22 10:22:43 2022 +0200', 'date')
-      tt.deepEqual(c.subsystems, ['deps'], 'subsystems')
+      tt.same(c.subsystems, ['deps'], 'subsystems')
       tt.equal(c.revert, true, 'revert')
       const msgs = data.messages
       const filtered = msgs.filter((item) => {
@@ -330,7 +330,7 @@ test('Validator - real commits', (t) => {
       const c = data.commit.toJSON()
       tt.equal(c.sha, '7d3a7ea0d7df9b6f11df723dec370f49f4f87e99', 'sha')
       tt.equal(c.date, 'Thu Mar 3 10:10:46 2016 -0600', 'date')
-      tt.deepEqual(c.subsystems, [], 'subsystems')
+      tt.same(c.subsystems, [], 'subsystems')
       tt.equal(c.prUrl, '#5546', 'pr')
       tt.equal(c.revert, false, 'revert')
       const msgs = data.messages
@@ -364,7 +364,7 @@ test('Validator - real commits', (t) => {
       const c = data.commit.toJSON()
       tt.equal(c.sha, '7d3a7ea0d7df9b6f11df723dec370f49f4f87e99', 'sha')
       tt.equal(c.date, 'Thu Mar 3 10:10:46 2016 -0600', 'date')
-      tt.deepEqual(c.subsystems, ['test'], 'subsystems')
+      tt.same(c.subsystems, ['test'], 'subsystems')
       tt.equal(c.prUrl, null, 'pr')
       tt.equal(c.revert, false, 'revert')
       const msgs = data.messages
@@ -383,7 +383,7 @@ test('Validator - real commits', (t) => {
       const c = data.commit.toJSON()
       tt.equal(c.sha, 'c5545f2c63fe30b0cfcdafab18c26df8286881d0', 'sha')
       tt.equal(c.date, '2016-09-13T10:57:49Z', 'date')
-      tt.deepEqual(c.subsystems, ['fs'], 'subsystems')
+      tt.same(c.subsystems, ['fs'], 'subsystems')
       tt.equal(c.prUrl, 'https://github.com/nodejs/node/pull/8515', 'pr')
       tt.equal(c.revert, false, 'revert')
       const msgs = data.messages
