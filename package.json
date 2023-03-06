@@ -10,7 +10,7 @@
     "test-ci": "npm run test -- --no-check-coverage --coverage-report=lcov"
   },
   "dependencies": {
-    "chalk": "^3.0.0",
+    "chalk": "^4.1.2",
     "gitlint-parser-node": "^1.1.0",
     "help": "^3.0.2",
     "nopt": "^6.0.0"
