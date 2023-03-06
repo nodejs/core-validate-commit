@@ -17,7 +17,7 @@
   },
   "devDependencies": {
     "check-pkg": "^2.1.1",
-    "standard": "^14.3.4",
+    "standard": "^17.0.0",
     "tap": "^15.2.3"
   },
   "files": [
