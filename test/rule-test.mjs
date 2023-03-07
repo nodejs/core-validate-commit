@@ -1,7 +1,5 @@
-'use strict'
-
-const test = require('tap').test
-const BaseRule = require('../lib/rule')
+import { test } from 'tap'
+import BaseRule from '../lib/rule.mjs'
 
 test('Base Rule Test', (t) => {
   t.test('No id param', (tt) => {

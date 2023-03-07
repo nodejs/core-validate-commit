@@ -1,9 +1,7 @@
-'use strict'
-
-const test = require('tap').test
-const Rule = require('../../lib/rules/fixes-url')
-const Commit = require('gitlint-parser-node')
-const Validator = require('../../')
+import { test } from 'tap'
+import Rule from '../../lib/rules/fixes-url.mjs'
+import Commit from 'gitlint-parser-node'
+import Validator from '../../index.mjs'
 
 const INVALID_PRURL = 'Pull request URL must reference a comment or discussion.'
 const NOT_AN_ISSUE_NUMBER = 'Fixes must be a URL, not an issue number.'

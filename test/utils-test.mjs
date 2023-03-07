@@ -1,7 +1,5 @@
-'use strict'
-
-const { test } = require('tap')
-const utils = require('../lib/utils')
+import { test } from 'tap'
+import utils from '../lib/utils.mjs'
 
 // We aren't testing the chalk library, so strip off the colors/styles it adds
 const stripAnsiRegex =

@@ -1,9 +1,7 @@
-'use strict'
-
-const test = require('tap').test
-const Rule = require('../../lib/rules/line-length')
-const Commit = require('gitlint-parser-node')
-const Validator = require('../../')
+import { test } from 'tap'
+import Rule from '../../lib/rules/line-length.mjs'
+import Commit from 'gitlint-parser-node'
+import Validator from '../../index.mjs'
 
 test('rule: line-length', (t) => {
   t.test('line too long', (tt) => {

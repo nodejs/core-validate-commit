@@ -1,19 +1,18 @@
 #!/usr/bin/env node
 
-'use strict'
+import { exec } from 'child_process'
+import fs from 'fs'
+import http from 'http'
+import https from 'https'
+import nopt from 'nopt'
+import path from 'path'
+import pretty from '../lib/format-pretty.mjs'
+import formatTap from '../lib/format-tap.mjs'
+import Validator from '../lib/validator.mjs'
+import Tap from '../lib/tap.mjs'
+import utils from '../lib/utils.mjs'
+import subsystem from '../lib/rules/subsystem.mjs'
 
-const exec = require('child_process').exec
-const fs = require('fs')
-const http = require('http')
-const https = require('https')
-const nopt = require('nopt')
-const path = require('path')
-const pretty = require('../lib/format-pretty')
-const formatTap = require('../lib/format-tap')
-const Validator = require('../lib')
-const Tap = require('../lib/tap')
-const utils = require('../lib/utils')
-const subsystem = require('../lib/rules/subsystem')
 const knownOpts = {
   help: Boolean,
   version: Boolean,
@@ -34,14 +33,19 @@ const shortHand = {
 }
 
 const parsed = nopt(knownOpts, shortHand)
-const usage = require('help')()
 
 if (parsed.help) {
-  usage()
+  const usagePath = path.join(new URL(import.meta.url).pathname, '../usage.txt')
+  const help = await fs.promises.readFile(usagePath, 'utf8')
+  console.log(help)
+  process.exit(0)
 }
 
 if (parsed.version) {
-  console.log('core-validate-commit', 'v' + require('../package').version)
+  const pkgJsonPath = path.join(new URL(import.meta.url).pathname, '../../package.json')
+  const pkgJson = await fs.promises.readFile(pkgJsonPath, 'utf8')
+  const { version } = JSON.parse(pkgJson)
+  console.log(`core-validate-commit v${version}`)
   process.exit(0)
 }
 

@@ -1,9 +1,7 @@
-'use strict'
-
-const test = require('tap').test
-const Rule = require('../../lib/rules/reviewers')
-const Commit = require('gitlint-parser-node')
-const Validator = require('../../')
+import { test } from 'tap'
+import Rule from '../../lib/rules/reviewers.mjs'
+import Commit from 'gitlint-parser-node'
+import Validator from '../../index.mjs'
 const MSG = 'Commit must have at least 1 reviewer.'
 
 test('rule: reviewers', (t) => {
