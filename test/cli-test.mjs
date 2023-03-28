@@ -3,7 +3,7 @@ import { readFileSync } from 'fs'
 import { spawn } from 'child_process'
 import subsystems from '../lib/rules/subsystem.mjs'
 
-import path from 'path'
+import path from 'node:path'
 
 test('Test cli flags', (t) => {
   t.test('test list-subsystems', (tt) => {
