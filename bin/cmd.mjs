@@ -10,7 +10,7 @@ import pretty from '../lib/format-pretty.mjs'
 import formatTap from '../lib/format-tap.mjs'
 import Validator from '../lib/validator.mjs'
 import Tap from '../lib/tap.mjs'
-import utils from '../lib/utils.mjs'
+import * as utils from '../lib/utils.mjs'
 import subsystem from '../lib/rules/subsystem.mjs'
 
 const knownOpts = {
