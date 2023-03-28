@@ -144,7 +144,7 @@ test('Test cli flags', (t) => {
     })
 
     ls.on('close', async (code) => {
-      const pkgJsonPath = path.join(new URL(import.meta.url).pathname, '../../package.json')
+      const pkgJsonPath = new URL('../package.json', import.meta.url)
       const pkgJson = readFileSync(pkgJsonPath, { encoding: 'utf8' })
       const { version } = JSON.parse(pkgJson)
       tt.equal(compiledData.trim(),
