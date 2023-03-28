@@ -1,7 +1,7 @@
 import { test } from 'tap'
 import Validator from '../lib/validator.mjs'
-import { readFileSync } from 'fs'
-import { join } from 'path'
+import { readFileSync } from 'node:fs'
+import { join } from 'node:path'
 
 // Note, these are not necessarily all real commit messages
 const str = `commit e7c077c610afa371430180fbd447bfef60ebc5ea
