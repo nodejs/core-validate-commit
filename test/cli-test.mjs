@@ -1,6 +1,6 @@
 import { test } from 'tap'
-import { readFileSync } from 'fs'
-import { spawn } from 'child_process'
+import { readFileSync } from 'node:fs'
+import { spawn } from 'node:child_process'
 import subsystems from '../lib/rules/subsystem.mjs'
 
 import path from 'node:path'
