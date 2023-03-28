@@ -1,11 +1,11 @@
 #!/usr/bin/env node
 
-import { exec } from 'child_process'
-import fs from 'fs'
-import http from 'http'
-import https from 'https'
+import { exec } from 'node:child_process'
+import fs from 'node:fs'
+import http from 'node:http'
+import https from 'node:https'
+import path from 'node:path'
 import nopt from 'nopt'
-import path from 'path'
 import pretty from '../lib/format-pretty.mjs'
 import formatTap from '../lib/format-tap.mjs'
 import Validator from '../lib/validator.mjs'
