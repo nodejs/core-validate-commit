@@ -188,8 +188,8 @@ test('Validator - misc', (t) => {
 
 test('Validator - real commits', (t) => {
   t.test('basic', (tt) => {
-    const commit = JSON.parse(readFileSync(join(new URL(import.meta.url).pathname, '..', 'fixtures', 'commit.json'), { encoding: 'utf8' }))
-    const pr = JSON.parse(readFileSync(join(new URL(import.meta.url).pathname, '..', 'fixtures', 'pr.json'), { encoding: 'utf8' }))
+    const commit = JSON.parse(readFileSync(new URL('fixtures/commit.json', import.meta.url), { encoding: 'utf8' }))
+    const pr = JSON.parse(readFileSync(new URL('fixtures/pr.json', import.meta.url), { encoding: 'utf8' }))
     tt.plan(21)
     const v = new Validator()
     // run against the output of git show --quiet
