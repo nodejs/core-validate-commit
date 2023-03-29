@@ -1,7 +1,7 @@
 import { test } from 'tap'
-import Rule from '../../lib/rules/subsystem.mjs'
+import Rule from '../../lib/rules/subsystem.js'
 import Commit from 'gitlint-parser-node'
-import Validator from '../../index.mjs'
+import Validator from '../../index.js'
 
 test('rule: subsystem', (t) => {
   t.test('invalid', (tt) => {

@@ -1,11 +1,11 @@
 import { test } from 'tap'
 import { readFileSync } from 'node:fs'
 import { spawn } from 'node:child_process'
-import subsystems from '../lib/rules/subsystem.mjs'
+import subsystems from '../lib/rules/subsystem.js'
 
 test('Test cli flags', (t) => {
   t.test('test list-subsystems', (tt) => {
-    const ls = spawn('./bin/cmd.mjs', ['--list-subsystems'], {
+    const ls = spawn('./bin/cmd.js', ['--list-subsystems'], {
       env: { ...process.env, FORCE_COLOR: 0 }
     })
     let compiledData = ''
@@ -43,7 +43,7 @@ test('Test cli flags', (t) => {
 
   t.test('test help output', (tt) => {
     const usage = readFileSync('bin/usage.txt', { encoding: 'utf8' })
-    const ls = spawn('./bin/cmd.mjs', ['--help'])
+    const ls = spawn('./bin/cmd.js', ['--help'])
     let compiledData = ''
     ls.stdout.on('data', (data) => {
       compiledData += data
@@ -62,7 +62,7 @@ test('Test cli flags', (t) => {
   })
 
   t.test('test sha', (tt) => {
-    const ls = spawn('./bin/cmd.mjs', ['--no-validate-metadata', '2b98d02b52'])
+    const ls = spawn('./bin/cmd.js', ['--no-validate-metadata', '2b98d02b52'])
     let compiledData = ''
     ls.stdout.on('data', (data) => {
       compiledData += data
@@ -82,7 +82,7 @@ test('Test cli flags', (t) => {
 
   t.test('test tap output', (tt) => {
     // Use a commit from this repository that does not follow the guidelines.
-    const ls = spawn('./bin/cmd.mjs', ['--no-validate-metadata', '--tap', '69435db261'])
+    const ls = spawn('./bin/cmd.js', ['--no-validate-metadata', '--tap', '69435db261'])
     let compiledData = ''
     ls.stdout.on('data', (data) => {
       compiledData += data
@@ -112,7 +112,7 @@ test('Test cli flags', (t) => {
   })
 
   t.test('test url', (tt) => {
-    const ls = spawn('./bin/cmd.mjs', ['--no-validate-metadata', 'https://api.github.com/repos/nodejs/core-validate-commit/commits/2b98d02b52'])
+    const ls = spawn('./bin/cmd.js', ['--no-validate-metadata', 'https://api.github.com/repos/nodejs/core-validate-commit/commits/2b98d02b52'])
     let compiledData = ''
     ls.stdout.on('data', (data) => {
       compiledData += data
@@ -131,7 +131,7 @@ test('Test cli flags', (t) => {
   })
 
   t.test('test version flag', (tt) => {
-    const ls = spawn('./bin/cmd.mjs', ['--version'])
+    const ls = spawn('./bin/cmd.js', ['--version'])
     let compiledData = ''
     ls.stdout.on('data', (data) => {
       compiledData += data

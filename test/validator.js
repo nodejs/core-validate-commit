@@ -1,5 +1,5 @@
 import { test } from 'tap'
-import Validator from '../lib/validator.mjs'
+import Validator from '../lib/validator.js'
 import { readFileSync } from 'node:fs'
 
 // Note, these are not necessarily all real commit messages

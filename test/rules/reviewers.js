@@ -1,7 +1,7 @@
 import { test } from 'tap'
-import Rule from '../../lib/rules/reviewers.mjs'
+import Rule from '../../lib/rules/reviewers.js'
 import Commit from 'gitlint-parser-node'
-import Validator from '../../index.mjs'
+import Validator from '../../index.js'
 const MSG = 'Commit must have at least 1 reviewer.'
 
 test('rule: reviewers', (t) => {

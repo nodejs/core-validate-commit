@@ -6,12 +6,12 @@ import http from 'node:http'
 import https from 'node:https'
 import path from 'node:path'
 import nopt from 'nopt'
-import pretty from '../lib/format-pretty.mjs'
-import formatTap from '../lib/format-tap.mjs'
-import Validator from '../lib/validator.mjs'
-import Tap from '../lib/tap.mjs'
-import * as utils from '../lib/utils.mjs'
-import subsystem from '../lib/rules/subsystem.mjs'
+import pretty from '../lib/format-pretty.js'
+import formatTap from '../lib/format-tap.js'
+import Validator from '../lib/validator.js'
+import Tap from '../lib/tap.js'
+import * as utils from '../lib/utils.js'
+import subsystem from '../lib/rules/subsystem.js'
 
 const knownOpts = {
   help: Boolean,

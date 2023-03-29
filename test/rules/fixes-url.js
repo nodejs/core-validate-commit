@@ -1,7 +1,7 @@
 import { test } from 'tap'
-import Rule from '../../lib/rules/fixes-url.mjs'
+import Rule from '../../lib/rules/fixes-url.js'
 import Commit from 'gitlint-parser-node'
-import Validator from '../../index.mjs'
+import Validator from '../../index.js'
 
 const INVALID_PRURL = 'Pull request URL must reference a comment or discussion.'
 const NOT_AN_ISSUE_NUMBER = 'Fixes must be a URL, not an issue number.'

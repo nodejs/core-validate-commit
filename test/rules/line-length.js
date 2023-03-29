@@ -1,7 +1,7 @@
 import { test } from 'tap'
-import Rule from '../../lib/rules/line-length.mjs'
+import Rule from '../../lib/rules/line-length.js'
 import Commit from 'gitlint-parser-node'
-import Validator from '../../index.mjs'
+import Validator from '../../index.js'
 
 test('rule: line-length', (t) => {
   t.test('line too long', (tt) => {

@@ -1,5 +1,5 @@
 import { test } from 'tap'
-import * as utils from '../lib/utils.mjs'
+import * as utils from '../lib/utils.js'
 
 // We aren't testing the chalk library, so strip off the colors/styles it adds
 const stripAnsiRegex =

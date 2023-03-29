@@ -1,7 +1,7 @@
 import { test } from 'tap'
-import Rule from '../../lib/rules/co-authored-by-is-trailer.mjs'
+import Rule from '../../lib/rules/co-authored-by-is-trailer.js'
 import Commit from 'gitlint-parser-node'
-import Validator from '../../index.mjs'
+import Validator from '../../index.js'
 
 test('rule: co-authored-by-is-trailer', (t) => {
   t.test('no co-authors', (tt) => {

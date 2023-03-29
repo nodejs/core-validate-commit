@@ -2,10 +2,11 @@
   "name": "core-validate-commit",
   "version": "3.20.0",
   "description": "Validate the commit message for a particular commit in node core",
-  "main": "index.mjs",
+  "main": "index.js",
+  "type": "module",
   "scripts": {
     "pretest": "standard && check-pkg",
-    "test": "tap -j4 --no-check-coverage --cov test/**/*.mjs test/*.mjs",
+    "test": "tap -j4 --no-check-coverage --cov test/**/*.js test/*.js",
     "posttest": "tap --no-check-coverage --coverage-report=text-summary",
     "test-ci": "npm run test -- --no-check-coverage --coverage-report=lcov"
   },
@@ -22,11 +23,11 @@
   "files": [
     "lib/",
     "bin/",
-    "index.mjs"
+    "index.js"
   ],
   "license": "MIT",
   "bin": {
-    "core-validate-commit": "./bin/cmd.mjs"
+    "core-validate-commit": "./bin/cmd.js"
   },
   "author": "Evan Lucas <evanlucas@me.com>",
   "repository": {

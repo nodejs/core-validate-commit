@@ -1,7 +1,7 @@
 import { test } from 'tap'
-import Rule from '../../lib/rules/line-after-title.mjs'
+import Rule from '../../lib/rules/line-after-title.js'
 import Commit from 'gitlint-parser-node'
-import Validator from '../../index.mjs'
+import Validator from '../../index.js'
 
 test('rule: line-after-title', (t) => {
   t.test('no blank line', (tt) => {

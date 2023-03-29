@@ -1,5 +1,5 @@
 import { test } from 'tap'
-import BaseRule from '../lib/rule.mjs'
+import BaseRule from '../lib/rule.js'
 
 test('Base Rule Test', (t) => {
   t.test('No id param', (tt) => {
