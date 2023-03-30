@@ -1,3 +1,3 @@
-'use strict'
+import Validator from './lib/validator.js'
 
-module.exports = require('./lib')
+export default Validator

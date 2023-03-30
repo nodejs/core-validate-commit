@@ -3,6 +3,7 @@
   "version": "3.20.0",
   "description": "Validate the commit message for a particular commit in node core",
   "main": "index.js",
+  "type": "module",
   "scripts": {
     "pretest": "standard && check-pkg",
     "test": "tap -j4 --no-check-coverage --cov test/**/*.js test/*.js",
@@ -10,10 +11,9 @@
     "test-ci": "npm run test -- --no-check-coverage --coverage-report=lcov"
   },
   "dependencies": {
-    "chalk": "^4.1.2",
+    "chalk": "^5.2.0",
     "gitlint-parser-node": "^1.1.0",
-    "help": "^3.0.2",
-    "nopt": "^6.0.0"
+    "nopt": "^7.0.0"
   },
   "devDependencies": {
     "check-pkg": "^2.1.1",

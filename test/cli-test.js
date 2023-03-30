@@ -1,9 +1,7 @@
-'use strict'
-
-const { test } = require('tap')
-const { readFileSync } = require('fs')
-const { spawn } = require('child_process')
-const subsystems = require('../lib/rules/subsystem')
+import { test } from 'tap'
+import { readFileSync } from 'node:fs'
+import { spawn } from 'node:child_process'
+import subsystems from '../lib/rules/subsystem.js'
 
 test('Test cli flags', (t) => {
   t.test('test list-subsystems', (tt) => {
@@ -143,9 +141,12 @@ test('Test cli flags', (t) => {
       tt.fail('This should not happen')
     })
 
-    ls.on('close', (code) => {
+    ls.on('close', async (code) => {
+      const pkgJsonPath = new URL('../package.json', import.meta.url)
+      const pkgJson = readFileSync(pkgJsonPath, { encoding: 'utf8' })
+      const { version } = JSON.parse(pkgJson)
       tt.equal(compiledData.trim(),
-        `core-validate-commit v${require('../package.json').version}`,
+        `core-validate-commit v${version}`,
         'output is equal')
       tt.end()
     })

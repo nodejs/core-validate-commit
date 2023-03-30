@@ -1,9 +1,7 @@
-'use strict'
-
-const test = require('tap').test
-const Rule = require('../../lib/rules/co-authored-by-is-trailer')
-const Commit = require('gitlint-parser-node')
-const Validator = require('../../')
+import { test } from 'tap'
+import Rule from '../../lib/rules/co-authored-by-is-trailer.js'
+import Commit from 'gitlint-parser-node'
+import Validator from '../../index.js'
 
 test('rule: co-authored-by-is-trailer', (t) => {
   t.test('no co-authors', (tt) => {

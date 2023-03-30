@@ -1,9 +1,7 @@
-'use strict'
-
-const test = require('tap').test
-const Rule = require('../../lib/rules/title-format')
-const Commit = require('gitlint-parser-node')
-const Validator = require('../../')
+import { test } from 'tap'
+import Rule from '../../lib/rules/title-format.js'
+import Commit from 'gitlint-parser-node'
+import Validator from '../../index.js'
 
 function makeCommit (title) {
   const v = new Validator()

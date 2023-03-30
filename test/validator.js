@@ -1,7 +1,6 @@
-'use strict'
-
-const test = require('tap').test
-const Validator = require('../')
+import { test } from 'tap'
+import Validator from '../lib/validator.js'
+import { readFileSync } from 'node:fs'
 
 // Note, these are not necessarily all real commit messages
 const str = `commit e7c077c610afa371430180fbd447bfef60ebc5ea
@@ -188,14 +187,16 @@ test('Validator - misc', (t) => {
 
 test('Validator - real commits', (t) => {
   t.test('basic', (tt) => {
+    const commit = JSON.parse(readFileSync(new URL('fixtures/commit.json', import.meta.url), { encoding: 'utf8' }))
+    const pr = JSON.parse(readFileSync(new URL('fixtures/pr.json', import.meta.url), { encoding: 'utf8' }))
     tt.plan(21)
     const v = new Validator()
     // run against the output of git show --quiet
     // run against the output of github's get commit api request
     // run against the output of github's list commits for pr api request
     v.lint(str)
-    v.lint(require('./fixtures/commit'))
-    v.lint(require('./fixtures/pr'))
+    v.lint(commit)
+    v.lint(pr)
     v.on('commit', (data) => {
       const c = data.commit
       tt.equal(c.sha, 'e7c077c610afa371430180fbd447bfef60ebc5ea', 'sha')

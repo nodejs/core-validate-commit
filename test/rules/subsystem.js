@@ -1,9 +1,7 @@
-'use strict'
-
-const test = require('tap').test
-const Rule = require('../../lib/rules/subsystem')
-const Commit = require('gitlint-parser-node')
-const Validator = require('../../')
+import { test } from 'tap'
+import Rule from '../../lib/rules/subsystem.js'
+import Commit from 'gitlint-parser-node'
+import Validator from '../../index.js'
 
 test('rule: subsystem', (t) => {
   t.test('invalid', (tt) => {

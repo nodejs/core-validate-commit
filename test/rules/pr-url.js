@@ -1,7 +1,5 @@
-'use strict'
-
-const test = require('tap').test
-const Rule = require('../../lib/rules/pr-url')
+import { test } from 'tap'
+import Rule from '../../lib/rules/pr-url.js'
 const MISSING_PR_URL = 'Commit must have a PR-URL.'
 const INVALID_PR_URL = 'PR-URL must be a GitHub pull request URL.'
 const NUMERIC_PR_URL = 'PR-URL must be a URL, not a pull request number.'
