@@ -6,9 +6,8 @@
   "type": "module",
   "scripts": {
     "pretest": "standard && check-pkg",
-    "test": "tap -j4 --no-check-coverage --cov test/**/*.js test/*.js",
-    "posttest": "tap --no-check-coverage --coverage-report=text-summary",
-    "test-ci": "npm run test -- --no-check-coverage --coverage-report=lcov"
+    "test": "c8 tap -j4 --no-coverage test/**/*.js test/*.js",
+    "test-ci": "npm run test && c8 report --reporter=lcov"
   },
   "dependencies": {
     "chalk": "^5.2.0",
@@ -16,6 +15,7 @@
     "nopt": "^7.0.0"
   },
   "devDependencies": {
+    "c8": "^7.13.0",
     "check-pkg": "^2.1.1",
     "standard": "^17.0.0",
     "tap": "^16.3.4"
