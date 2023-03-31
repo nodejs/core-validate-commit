@@ -6,7 +6,8 @@
   "type": "module",
   "scripts": {
     "pretest": "standard && check-pkg",
-    "test": "c8 tap -j4 --no-coverage test/**/*.js test/*.js"
+    "test": "c8 tap -j4 --no-coverage test/**/*.js test/*.js",
+    "test-ci": "npm run test && c8 report --reporter=lcov"
   },
   "dependencies": {
     "chalk": "^5.2.0",
