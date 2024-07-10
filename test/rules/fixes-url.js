@@ -24,6 +24,8 @@ test('rule: fixes-url', (t) => {
   const valid = [
     ['GitHub issue URL',
       'https://github.com/nodejs/node/issues/1234'],
+    ['GitHub issue URL with trailing slash',
+      'https://github.com/nodejs/node/issues/1234/'],
     ['GitHub issue URL containing hyphen',
       'https://github.com/nodejs/node-report/issues/1234'],
     ['GitHub issue URL containing hyphen with comment',
