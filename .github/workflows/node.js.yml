@@ -16,7 +16,9 @@ jobs:
     with:
       post-install-steps: |
         - run: npm run build --if-present
+          shell: bash
       test-command: npm run test-ci
       post-test-steps: |
         - name: Upload coverage report to Codecov
           run: bash <(curl -s https://codecov.io/bash)
+          shell: bash
