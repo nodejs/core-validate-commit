@@ -29,6 +29,9 @@
   "bin": {
     "core-validate-commit": "./bin/cmd.js"
   },
+  "engines": {
+    "node": "^18.18.0 || >=20.10.0"
+  },
   "author": "Evan Lucas <evanlucas@me.com>",
   "repository": {
     "type": "git",
