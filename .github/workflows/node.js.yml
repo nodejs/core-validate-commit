@@ -14,6 +14,7 @@ jobs:
     name: Test on Node.js
     uses: pkgjs/action/.github/workflows/node-test.yaml@v0
     with:
+      # We need to fetch some specific commits that we are using in our tests. We also need `--deepen=2` for CodCov.
       post-checkout-steps: |
         - run: git fetch --deepen=2 origin 2b98d02b52a0abe98054eccb351e1e5c71c81bb0 69435db261650dfc74ede6dca89acbe97ba30081
           shell: bash
