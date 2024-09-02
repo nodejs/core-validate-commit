@@ -10,26 +10,19 @@ on:
     branches: [ main ]
 
 jobs:
-  build:
-
-    runs-on: ubuntu-latest
-
-    strategy:
-      matrix:
-        node-version: [16.x, 18.x, 20.x]
-
-    steps:
-    - uses: actions/checkout@v3
-      with:
-        # Need commit history test for cli-tests
-        fetch-depth: 0
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v3
-      with:
-        node-version: ${{ matrix.node-version }}
-    - run: npm install
-    - run: npm run build --if-present
-    - run: npm run test-ci
-      env:
-        CI: true
-    - run: bash <(curl -s https://codecov.io/bash)
+  test:
+    name: Test on Node.js
+    uses: pkgjs/action/.github/workflows/node-test.yaml@v0
+    with:
+      # We need to fetch some specific commits that we are using in our tests. We also need `--deepen=2` for CodCov.
+      post-checkout-steps: |
+        - run: git fetch --deepen=2 origin 2b98d02b52a0abe98054eccb351e1e5c71c81bb0 69435db261650dfc74ede6dca89acbe97ba30081
+          shell: bash
+      post-install-steps: |
+        - run: npm run build --if-present
+          shell: bash
+      test-command: npm run test-ci
+      post-test-steps: |
+        - name: Upload coverage report to Codecov
+          run: bash <(curl -s https://codecov.io/bash)
+          shell: bash
