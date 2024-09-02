@@ -17,6 +17,7 @@ const knownOpts = {
   help: Boolean,
   version: Boolean,
   'validate-metadata': Boolean,
+  'validate-no-metadata': Boolean,
   tap: Boolean,
   out: path,
   list: Boolean,

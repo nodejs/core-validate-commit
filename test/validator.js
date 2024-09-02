@@ -453,5 +453,35 @@ test('Validator - real commits', (t) => {
     })
   })
 
+  t.test('validate no metadata should report commits for having metadata', (tt) => {
+    const v = new Validator({
+      'validate-no-metadata': true
+    })
+    v.lint(str)
+    v.on('commit', (data) => {
+      const msgs = data.messages
+      const filtered = msgs.filter((item) => {
+        return item.level === 'fail'
+      })
+      tt.equal(filtered.length, 2, 'messages.length')
+      tt.end()
+    })
+  })
+
+  t.test('validate no metadata should not report commits without metadata', (tt) => {
+    const v = new Validator({
+      'validate-no-metadata': true
+    })
+    v.lint(str5)
+    v.on('commit', (data) => {
+      const msgs = data.messages
+      const filtered = msgs.filter((item) => {
+        return item.level === 'fail'
+      })
+      tt.equal(filtered.length, 0, 'messages.length')
+      tt.end()
+    })
+  })
+
   t.end()
 })
