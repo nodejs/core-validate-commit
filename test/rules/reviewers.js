@@ -30,7 +30,7 @@ This is a test`
       tt.equal(opts.level, 'fail', 'level')
     }
 
-    Rule.validate(context)
+    Rule.validate(context, { options: {} })
   })
 
   t.test('skip for release commit', (tt) => {
@@ -58,7 +58,7 @@ This is a test`
       })
     }
 
-    Rule.validate(context)
+    Rule.validate(context, { options: {} })
   })
 
   t.end()
