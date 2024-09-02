@@ -15,7 +15,7 @@ jobs:
     uses: pkgjs/action/.github/workflows/node-test.yaml@v0
     with:
       post-checkout-steps: |
-        - run: git fetch --depth=2 origin HEAD 2b98d02b52a0abe98054eccb351e1e5c71c81bb0 69435db261650dfc74ede6dca89acbe97ba30081
+        - run: git fetch --deepen=2 origin 2b98d02b52a0abe98054eccb351e1e5c71c81bb0 69435db261650dfc74ede6dca89acbe97ba30081
           shell: bash
       post-install-steps: |
         - run: npm run build --if-present
