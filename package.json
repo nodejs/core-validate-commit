@@ -30,7 +30,7 @@
     "core-validate-commit": "./bin/cmd.js"
   },
   "engines": {
-    "node": "^18.18.0 || >=20.10.0"
+    "node": "^20.19.6 || ^22.21.1 || >=24.12.0"
   },
   "author": "Evan Lucas <evanlucas@me.com>",
   "repository": {
