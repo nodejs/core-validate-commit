@@ -158,11 +158,11 @@ test('Test cli flags', (t) => {
       message: 'stream: make null an invalid chunk to write in object mode\n\nthis harmonizes behavior between readable, writable, and transform\nstreams so that they all handle nulls in object mode the same way by\nconsidering them invalid chunks.\n\nPR-URL: https://github.com/nodejs/node/pull/6170\nReviewed-By: James M Snell <jasnell@gmail.com>\nReviewed-By: Matteo Collina <matteo.collina@gmail.com>'
     }
     const input = JSON.stringify([validCommit])
-    
+
     const ls = spawn('./bin/cmd.js', ['-'])
     let compiledData = ''
     let errorData = ''
-    
+
     ls.stdout.on('data', (data) => {
       compiledData += data
     })
@@ -188,10 +188,10 @@ test('Test cli flags', (t) => {
       message: 'this is a bad commit message without subsystem\n\nPR-URL: https://github.com/nodejs/node/pull/1234\nReviewed-By: Someone <someone@example.com>'
     }
     const input = JSON.stringify([invalidCommit])
-    
+
     const ls = spawn('./bin/cmd.js', ['-'])
     let compiledData = ''
-    
+
     ls.stdout.on('data', (data) => {
       compiledData += data
     })
@@ -219,10 +219,10 @@ test('Test cli flags', (t) => {
       }
     ]
     const input = JSON.stringify(commits)
-    
+
     const ls = spawn('./bin/cmd.js', ['-'])
     let compiledData = ''
-    
+
     ls.stdout.on('data', (data) => {
       compiledData += data
     })
@@ -244,10 +244,10 @@ test('Test cli flags', (t) => {
       message: 'doc: update documentation\n\nPR-URL: https://github.com/nodejs/node/pull/5555\nReviewed-By: Someone <someone@example.com>'
     }
     const input = JSON.stringify([validCommit])
-    
+
     const ls = spawn('./bin/cmd.js', ['--tap', '-'])
     let compiledData = ''
-    
+
     ls.stdout.on('data', (data) => {
       compiledData += data
     })
@@ -265,10 +265,10 @@ test('Test cli flags', (t) => {
 
   t.test('test stdin with invalid JSON', (tt) => {
     const input = 'this is not valid JSON'
-    
+
     const ls = spawn('./bin/cmd.js', ['-'])
     let errorData = ''
-    
+
     ls.stderr.on('data', (data) => {
       errorData += data
     })
@@ -285,10 +285,10 @@ test('Test cli flags', (t) => {
 
   t.test('test stdin with non-array JSON', (tt) => {
     const input = JSON.stringify({ id: 'test', message: 'test' })
-    
+
     const ls = spawn('./bin/cmd.js', ['-'])
     let errorData = ''
-    
+
     ls.stderr.on('data', (data) => {
       errorData += data
     })
@@ -305,10 +305,10 @@ test('Test cli flags', (t) => {
 
   t.test('test stdin with missing properties', (tt) => {
     const input = JSON.stringify([{ id: 'test' }]) // missing 'message'
-    
+
     const ls = spawn('./bin/cmd.js', ['-'])
     let errorData = ''
-    
+
     ls.stderr.on('data', (data) => {
       errorData += data
     })
@@ -329,10 +329,10 @@ test('Test cli flags', (t) => {
       message: 'doc: update README\n\nThis commit has no PR-URL or reviewers'
     }
     const input = JSON.stringify([commit])
-    
+
     const ls = spawn('./bin/cmd.js', ['--no-validate-metadata', '-'])
     let compiledData = ''
-    
+
     ls.stdout.on('data', (data) => {
       compiledData += data
     })

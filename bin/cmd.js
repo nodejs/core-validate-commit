@@ -71,8 +71,8 @@ function load (sha, cb) {
       cb(null, sha.message)
     })
   }
-  
-  const parsed = URL.parse(sha);
+
+  const parsed = URL.parse(sha)
   if (parsed != null) {
     return loadPatch(parsed, cb)
   }
@@ -135,11 +135,11 @@ if (args.length === 1 && args[0] === '-') {
     try {
       const input = Buffer.concat(chunks).toString('utf8')
       const commits = JSON.parse(input)
-      
+
       if (!Array.isArray(commits)) {
         throw new Error('Input must be an array')
       }
-      
+
       // Replace args with the commit data directly
       args.splice(0, 1, ...commits.map(commit => {
         if (!commit.id || !commit.message) {
