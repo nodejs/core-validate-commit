@@ -11,8 +11,7 @@
   },
   "dependencies": {
     "chalk": "^5.2.0",
-    "gitlint-parser-node": "^1.1.0",
-    "nopt": "^7.0.0"
+    "gitlint-parser-node": "^1.1.0"
   },
   "devDependencies": {
     "c8": "^7.13.0",
