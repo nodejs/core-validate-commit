@@ -21,6 +21,7 @@
   "files": [
     "lib/",
     "bin/",
+    "npm-shrinkwrap.json",
     "index.js"
   ],
   "license": "MIT",
