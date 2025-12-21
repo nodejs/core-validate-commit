@@ -66,9 +66,9 @@ if (!parsed.help && !args.length) { args.push('HEAD') }
 
 function load (sha, cb) {
   // Handle pre-parsed commit objects from stdin
-  if (typeof sha === 'object' && sha.id && sha.message) {
+  if (typeof sha === 'object') {
     return process.nextTick(() => {
-      cb(null, sha.message)
+      cb(null, sha)
     })
   }
 

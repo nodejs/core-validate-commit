@@ -154,7 +154,7 @@ test('Test cli flags', (t) => {
 
   t.test('test stdin with valid JSON', (tt) => {
     const validCommit = {
-      id: 'abc123',
+      id: '2b98d02b52',
       message: 'stream: make null an invalid chunk to write in object mode\n\nthis harmonizes behavior between readable, writable, and transform\nstreams so that they all handle nulls in object mode the same way by\nconsidering them invalid chunks.\n\nPR-URL: https://github.com/nodejs/node/pull/6170\nReviewed-By: James M Snell <jasnell@gmail.com>\nReviewed-By: Matteo Collina <matteo.collina@gmail.com>'
     }
     const input = JSON.stringify([validCommit])
@@ -176,7 +176,7 @@ test('Test cli flags', (t) => {
 
     ls.on('close', (code) => {
       tt.equal(code, 0, 'CLI exits with zero code on success')
-      tt.match(compiledData, /abc123/, 'output contains commit id')
+      tt.match(compiledData, /[^0-9a-f]2b98d02b52[^0-9a-f]/, 'output contains commit id')
       tt.equal(errorData, '', 'no error output')
       tt.end()
     })
@@ -240,12 +240,12 @@ test('Test cli flags', (t) => {
 
   t.test('test stdin with TAP output', (tt) => {
     const validCommit = {
-      id: 'tap123',
-      message: 'doc: update documentation\n\nPR-URL: https://github.com/nodejs/node/pull/5555\nReviewed-By: Someone <someone@example.com>'
+      id: '69435db261',
+      message: 'chore: update tested node release lines (#94)'
     }
     const input = JSON.stringify([validCommit])
 
-    const ls = spawn('./bin/cmd.js', ['--tap', '-'])
+    const ls = spawn('./bin/cmd.js', ['--no-validate-metadata', '--tap', '-'])
     let compiledData = ''
 
     ls.stdout.on('data', (data) => {
@@ -256,9 +256,20 @@ test('Test cli flags', (t) => {
     ls.stdin.end()
 
     ls.on('close', (code) => {
-      tt.equal(code, 0, 'CLI exits with zero code on success')
-      tt.match(compiledData, /TAP version 14/, 'output is in TAP format')
-      tt.match(compiledData, /# tap123/, 'TAP output contains commit id')
+      const output = compiledData.trim()
+      tt.match(output,
+        /# 69435db261/,
+        'TAP output contains the sha of the commit being linted')
+      tt.match(output,
+        /not ok \d+ subsystem: Invalid subsystem: "chore" \(chore: update tested node release lines \(#94\)\)/,
+        'TAP output contains failure for subsystem')
+      tt.match(output,
+        /# fail\s+\d+/,
+        'TAP output contains total failures')
+      tt.match(output,
+        /# Please review the commit message guidelines:\s# https:\/\/github.com\/nodejs\/node\/blob\/HEAD\/doc\/contributing\/pull-requests.md#commit-message-guidelines/,
+        'TAP output contains pointer to commit message guidelines')
+      tt.equal(code, 1, 'CLI exits with non-zero code on failure')
       tt.end()
     })
   })
