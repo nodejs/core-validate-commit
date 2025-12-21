@@ -5,7 +5,7 @@ import fs from 'node:fs'
 import http from 'node:http'
 import https from 'node:https'
 import path from 'node:path'
-import nopt from 'nopt'
+import { parseArgs } from 'node:util'
 import pretty from '../lib/format-pretty.js'
 import formatTap from '../lib/format-tap.js'
 import Validator from '../lib/validator.js'
@@ -13,26 +13,38 @@ import Tap from '../lib/tap.js'
 import * as utils from '../lib/utils.js'
 import subsystem from '../lib/rules/subsystem.js'
 
-const knownOpts = {
-  help: Boolean,
-  version: Boolean,
-  'validate-metadata': Boolean,
-  tap: Boolean,
-  out: path,
-  list: Boolean,
-  'list-subsystems': Boolean
-}
-const shortHand = {
-  h: ['--help'],
-  v: ['--version'],
-  V: ['--validate-metadata'],
-  t: ['--tap'],
-  o: ['--out'],
-  l: ['--list'],
-  ls: ['--list-subsystems']
-}
-
-const parsed = nopt(knownOpts, shortHand)
+const { values: parsed, positionals: args } = parseArgs({
+  options: {
+    help: {
+      type: 'boolean',
+      short: 'h'
+    },
+    version: {
+      type: 'boolean',
+      short: 'v'
+    },
+    'validate-metadata': {
+      type: 'boolean',
+      short: 'V'
+    },
+    tap: {
+      type: 'boolean',
+      short: 't'
+    },
+    out: {
+      type: 'string',
+      short: 'o'
+    },
+    list: {
+      type: 'boolean',
+      short: 'l'
+    },
+    'list-subsystems': {
+      type: 'boolean'
+    }
+  },
+  allowPositionals: true
+})
 
 if (parsed.help) {
   const usagePath = path.join(new URL(import.meta.url).pathname, '../usage.txt')
@@ -49,7 +61,6 @@ if (parsed.version) {
   process.exit(0)
 }
 
-const args = parsed.argv.remain
 if (!parsed.help && !args.length) { args.push('HEAD') }
 
 function load (sha, cb) {
