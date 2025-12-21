@@ -65,15 +65,21 @@ if (parsed.version) {
 if (!parsed.help && !args.length) { args.push('HEAD') }
 
 function load (sha, cb) {
-  try {
-    const parsed = new URL(sha)
-    return loadPatch(parsed, cb)
-  } catch (_) {
-    exec(`git show --quiet --format=medium ${sha}`, (err, stdout, stderr) => {
-      if (err) return cb(err)
-      cb(null, stdout.trim())
+  // Handle pre-parsed commit objects from stdin
+  if (typeof sha === 'object' && sha.id && sha.message) {
+    return process.nextTick(() => {
+      cb(null, sha.message)
     })
   }
+  
+  const parsed = URL.parse(sha);
+  if (parsed != null) {
+    return loadPatch(parsed, cb)
+  }
+  exec(`git show --quiet --format=medium ${sha}`, (err, stdout, stderr) => {
+    if (err) return cb(err)
+    cb(null, stdout.trim())
+  })
 }
 
 function loadPatch (uri, cb) {
@@ -121,33 +127,66 @@ if (parsed.list) {
   process.exit(0)
 }
 
-if (parsed.tap) {
-  const tap = new Tap()
-  tap.pipe(process.stdout)
-  if (parsed.out) tap.pipe(fs.createWriteStream(parsed.out))
-  let count = 0
-  const total = args.length
-
-  v.on('commit', (c) => {
-    count++
-    const test = tap.test(c.commit.sha)
-    formatTap(test, c.commit, c.messages, v)
-    if (count === total) {
-      setImmediate(() => {
-        tap.end()
-        if (tap.status === 'fail') { process.exitCode = 1 }
-      })
+// Don't start processing if reading from stdin (handled in stdin.on('end'))
+if (args.length === 1 && args[0] === '-') {
+  const chunks = []
+  process.stdin.on('data', (chunk) => chunks.push(chunk))
+  process.stdin.on('end', () => {
+    try {
+      const input = Buffer.concat(chunks).toString('utf8')
+      const commits = JSON.parse(input)
+      
+      if (!Array.isArray(commits)) {
+        throw new Error('Input must be an array')
+      }
+      
+      // Replace args with the commit data directly
+      args.splice(0, 1, ...commits.map(commit => {
+        if (!commit.id || !commit.message) {
+          throw new Error('Each commit must have "id" and "message" properties')
+        }
+        return { sha: commit.id, ...commit }
+      }))
+      run()
+    } catch (err) {
+      console.error('Error parsing JSON input:', err.message)
+      process.exit(1)
     }
   })
-
-  tapRun()
+  process.stdin.resume()
 } else {
-  v.on('commit', (c) => {
-    pretty(c.commit, c.messages, v)
-    commitRun()
-  })
+  run()
+}
 
-  commitRun()
+function run () {
+  if (parsed.tap) {
+    const tap = new Tap()
+    tap.pipe(process.stdout)
+    if (parsed.out) tap.pipe(fs.createWriteStream(parsed.out))
+    let count = 0
+    const total = args.length
+
+    v.on('commit', (c) => {
+      count++
+      const test = tap.test(c.commit.sha)
+      formatTap(test, c.commit, c.messages, v)
+      if (count === total) {
+        setImmediate(() => {
+          tap.end()
+          if (tap.status === 'fail') { process.exitCode = 1 }
+        })
+      }
+    })
+
+    tapRun()
+  } else {
+    v.on('commit', (c) => {
+      pretty(c.commit, c.messages, v)
+      commitRun()
+    })
+
+    commitRun()
+  }
 }
 
 function tapRun () {
