@@ -43,6 +43,7 @@ const { values: parsed, positionals: args } = parseArgs({
       type: 'boolean'
     }
   },
+  allowNegative: true,
   allowPositionals: true
 })
 
