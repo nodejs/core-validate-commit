@@ -26,3 +26,8 @@ core-validate-commit - Validate the commit message for a particular commit in no
     Passing a url to a specific sha on github:
 
     $ core-validate-commit https://api.github.com/repos/nodejs/node/git/commits/9e9d499b8be8ffc6050db25129b042507d7b4b02
+
+    Passing a file containing a single commit message:
+
+    $ core-validate-commit file:///tmp/commitmsg.txt
+
