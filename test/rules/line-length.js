@@ -136,14 +136,13 @@ https://${'very-'.repeat(80)}-long-url.org/
       author: {
         name: 'Jacob Smith',
         email: '3012099+JakobJingleheimer@users.noreply.github.com',
-        date: '2025-12-22T09:40:42Z',
+        date: '2025-12-22T09:40:42Z'
       },
       message: `
         fixup!: apply case-insensitive suggestion
         Co-authored-by: Michaël Zasso <37011812+targos@users.noreply.github.com>
-      `,
+      `
     }, v)
-
 
     context.report = (opts) => {
       tt.pass('called report')
