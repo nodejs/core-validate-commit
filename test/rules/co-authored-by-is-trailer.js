@@ -56,6 +56,37 @@ test('rule: co-authored-by-is-trailer', (t) => {
     Rule.validate(context)
   })
 
+  t.test('quoting another commit message', (tt) => {
+    tt.plan(4)
+    const v = new Validator()
+    const context = new Commit({
+      sha: 'e7c077c610afa371430180fbd447bfef60ebc5ea',
+      author: {
+        name: 'Foo',
+        email: 'foo@example.com',
+        date: '2016-04-12T19:42:23Z'
+      },
+      message: 'deps: v8: cherry-pick deadbeef\n' +
+               '\n' +
+               'Original commit message:' +
+               '\n' +
+               '    Some description.\n' +
+               '\n' +
+               '    Co-authored-by: Someone <someone@example.com>\n' +
+               '\n' +
+               'Reviewed-By: Bar <bar@example.com>'
+    }, v)
+
+    context.report = (opts) => {
+      tt.pass('called report')
+      tt.equal(opts.id, 'co-authored-by-is-trailer', 'id')
+      tt.equal(opts.message, 'no Co-authored-by metadata', 'message')
+      tt.equal(opts.level, 'pass', 'level')
+    }
+
+    Rule.validate(context)
+  })
+
   t.test('not trailer', (tt) => {
     tt.plan(7)
     const v = new Validator()
