@@ -143,7 +143,7 @@ https://${'very-'.repeat(80)}-long-url.org/
     const bad = new Commit({
       sha,
       author,
-      message: overlongMessage,
+      message: overlongMessage
     }, v)
 
     bad.report = (opts) => {
