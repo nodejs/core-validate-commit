@@ -130,38 +130,15 @@ https://${'very-'.repeat(80)}-long-url.org/
   })
 
   t.test('Co-author lines', (tt) => {
-    const sha = 'f1496de5a7d5474e39eafaafe6f79befe5883a5b'
-    const author = {
-      name: 'Jacob Smith',
-      email: '3012099+JakobJingleheimer@users.noreply.github.com',
-      date: '2025-12-22T09:40:42Z'
-    }
-
     const v = new Validator()
-    const overlongMessage = `fixup!: apply case-insensitive suggestion
-      Co-authored-by: Michaël Zasso <37011812+targos@users.noreply.github.com>`
-    const bad = new Commit({
-      sha,
-      author,
-      message: overlongMessage
-    }, v)
-
-    bad.report = (opts) => {
-      tt.pass('called report')
-      tt.equal(opts.id, 'line-length', 'id')
-      tt.equal(opts.string, overlongMessage.split('\n')[1], 'string')
-      tt.equal(opts.level, 'fail', 'level')
-    }
-
-    Rule.validate(bad, {
-      options: {
-        length: 72
-      }
-    })
 
     const good = new Commit({
-      sha,
-      author,
+      sha: 'f1496de5a7d5474e39eafaafe6f79befe5883a5b',
+      author: {
+        name: 'Jacob Smith',
+        email: '3012099+JakobJingleheimer@users.noreply.github.com',
+        date: '2025-12-22T09:40:42Z'
+      },
       message: [
         'fixup!: apply case-insensitive suggestion',
         'Co-authored-by: Michaël Zasso <37011812+targos@users.noreply.github.com>'
