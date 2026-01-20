@@ -159,34 +159,34 @@ if (args.length === 1 && args[0] === '-') {
 }
 
 function run () {
-  if (parsed.tap) {
-    const tap = new Tap()
-    tap.pipe(process.stdout)
-    if (parsed.out) tap.pipe(fs.createWriteStream(parsed.out))
-    let count = 0
-    const total = args.length
-
-    v.on('commit', (c) => {
-      count++
-      const test = tap.test(c.commit.sha)
-      formatTap(test, c.commit, c.messages, v)
-      if (count === total) {
-        setImmediate(() => {
-          tap.end()
-          if (tap.status === 'fail') { process.exitCode = 1 }
-        })
-      }
-    })
-
-    tapRun()
-  } else {
+  if (!parsed.tap) {
     v.on('commit', (c) => {
       pretty(c.commit, c.messages, v)
       commitRun()
     })
 
     commitRun()
+    return
   }
+  const tap = new Tap()
+  tap.pipe(process.stdout)
+  if (parsed.out) tap.pipe(fs.createWriteStream(parsed.out))
+  let count = 0
+  const total = args.length
+
+  v.on('commit', (c) => {
+    count++
+    const test = tap.test(c.commit.sha)
+    formatTap(test, c.commit, c.messages, v)
+    if (count === total) {
+      setImmediate(() => {
+        tap.end()
+        if (tap.status === 'fail') { process.exitCode = 1 }
+      })
+    }
+  })
+
+  tapRun()
 }
 
 function tapRun () {
