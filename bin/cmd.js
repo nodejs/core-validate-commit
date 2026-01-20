@@ -65,15 +65,21 @@ if (parsed.version) {
 if (!parsed.help && !args.length) { args.push('HEAD') }
 
 function load (sha, cb) {
-  try {
-    const parsed = new URL(sha)
-    return loadPatch(parsed, cb)
-  } catch (_) {
-    exec(`git show --quiet --format=medium ${sha}`, (err, stdout, stderr) => {
-      if (err) return cb(err)
-      cb(null, stdout.trim())
+  // Handle pre-parsed commit objects from stdin
+  if (typeof sha === 'object') {
+    return process.nextTick(() => {
+      cb(null, sha)
     })
   }
+
+  const parsed = URL.parse(sha)
+  if (parsed != null) {
+    return loadPatch(parsed, cb)
+  }
+  exec(`git show --quiet --format=medium ${sha}`, (err, stdout, stderr) => {
+    if (err) return cb(err)
+    cb(null, stdout.trim())
+  })
 }
 
 function loadPatch (uri, cb) {
@@ -121,7 +127,48 @@ if (parsed.list) {
   process.exit(0)
 }
 
-if (parsed.tap) {
+// Don't start processing if reading from stdin (handled in stdin.on('end'))
+if (args.length === 1 && args[0] === '-') {
+  const chunks = []
+  process.stdin.on('data', (chunk) => chunks.push(chunk))
+  process.stdin.on('end', () => {
+    try {
+      const input = Buffer.concat(chunks).toString('utf8')
+      const commits = JSON.parse(input)
+
+      if (!Array.isArray(commits)) {
+        throw new Error('Input must be an array')
+      }
+
+      // Replace args with the commit data directly
+      for (let i = 0; i < commits.length; i++) {
+        const commit = commits[i]
+        if (!commit.id || !commit.message) {
+          throw new Error('Each commit must have "id" and "message" properties')
+        }
+        args[i] = { sha: commit.id, ...commit }
+      }
+      run()
+    } catch (err) {
+      console.error('Error parsing JSON input:', err.message)
+      process.exit(1)
+    }
+  })
+  process.stdin.resume()
+} else {
+  run()
+}
+
+function run () {
+  if (!parsed.tap) {
+    v.on('commit', (c) => {
+      pretty(c.commit, c.messages, v)
+      commitRun()
+    })
+
+    commitRun()
+    return
+  }
   const tap = new Tap()
   tap.pipe(process.stdout)
   if (parsed.out) tap.pipe(fs.createWriteStream(parsed.out))
@@ -141,13 +188,6 @@ if (parsed.tap) {
   })
 
   tapRun()
-} else {
-  v.on('commit', (c) => {
-    pretty(c.commit, c.messages, v)
-    commitRun()
-  })
-
-  commitRun()
 }
 
 function tapRun () {

@@ -1,6 +1,6 @@
 core-validate-commit - Validate the commit message for a particular commit in node core
 
-  usage: core-validate-commit [options] [sha[, sha]]
+  usage: core-validate-commit [options] [sha[, sha] | -]
 
   options:
     -h, --help                    show help and usage
@@ -26,3 +26,7 @@ core-validate-commit - Validate the commit message for a particular commit in no
     Passing a url to a specific sha on github:
 
     $ core-validate-commit https://api.github.com/repos/nodejs/node/git/commits/9e9d499b8be8ffc6050db25129b042507d7b4b02
+
+    Passing JSON from stdin (no git required):
+
+    $ echo '[{"id":"287bdab","message":"doc: update README"}]' | core-validate-commit -
