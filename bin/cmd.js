@@ -142,6 +142,7 @@ if (args.length === 1 && args[0] === '-') {
 
       // Replace args with the commit data directly
       for (let i = 0; i < commits.length; i++) {
+        const commit = commits[i]
         if (!commit.id || !commit.message) {
           throw new Error('Each commit must have "id" and "message" properties')
         }
