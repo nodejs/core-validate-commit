@@ -21,7 +21,7 @@ test('rule: pr-url', (t) => {
       }
     }
 
-    Rule.validate(context)
+    Rule.validate(context, { options: {} })
   })
 
   t.test('invalid numeric', (tt) => {
@@ -43,7 +43,7 @@ test('rule: pr-url', (t) => {
       }
     }
 
-    Rule.validate(context)
+    Rule.validate(context, { options: {} })
   })
 
   t.test('invalid', (tt) => {
@@ -66,7 +66,7 @@ test('rule: pr-url', (t) => {
       }
     }
 
-    Rule.validate(context)
+    Rule.validate(context, { options: {} })
   })
 
   t.test('valid', (tt) => {
@@ -89,7 +89,7 @@ test('rule: pr-url', (t) => {
       }
     }
 
-    Rule.validate(context)
+    Rule.validate(context, { options: {} })
   })
 
   t.test('valid URL containing hyphen', (tt) => {
@@ -112,7 +112,7 @@ test('rule: pr-url', (t) => {
       }
     }
 
-    Rule.validate(context)
+    Rule.validate(context, { options: {} })
   })
 
   t.test('valid URL with trailing slash', (tt) => {
@@ -135,7 +135,7 @@ test('rule: pr-url', (t) => {
       }
     }
 
-    Rule.validate(context)
+    Rule.validate(context, { options: {} })
   })
 
   t.end()

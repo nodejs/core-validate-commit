@@ -171,6 +171,53 @@ Date:   Sat Oct 22 10:22:43 2022 +0200
     This reverts commit 01bc8e6fd81314e76c7fb0d09e5310f609e48bee.
 `
 
+const str13 = `commit 287d681575bdd2099b0cc892f6a90b0323033101
+Author: Stephen Belanger <admin@stephenbelanger.com>
+Date:   Wed Jul 24 10:00:04 2024 -0700
+
+    deps: V8: backport 7857eb34db42
+    
+    Original commit message:
+    
+        Reland^2 "Add ContinuationPreservedEmbedderData builtins to extras binding"
+    
+        This reverts commit cb1277e97a0ed32fd893be9f4e927f6e8b6c566c.
+    
+        > Original change's description:
+        > > Add ContinuationPreservedEmbedderData builtins to extras binding
+        > >
+        > > Node.js and Deno wish to use CPED for AsyncLocalStorage and APM, which
+        > > needs a high performance implementation. These builtins allow JavaScript
+        > > to handle CPED performantly.
+        > >
+        > > Change-Id: I7577be80818524baa52791dfce57d442d7c0c933
+        > > Reviewed-on: https://chromium-review.googlesource.com/c/v8/v8/+/5638129
+        > > Commit-Queue: snek <snek@chromium.org>
+        > > Reviewed-by: Darius Mercadier <dmercadier@chromium.org>
+        > > Reviewed-by: Leszek Swirski <leszeks@chromium.org>
+        > > Reviewed-by: Nico Hartmann <nicohartmann@chromium.org>
+        > > Cr-Commit-Position: refs/heads/main@{#94607}
+        >
+        > Change-Id: Ief390f0b99891c8de83b4c794180440f91cbaf1f
+        > No-Presubmit: true
+        > No-Tree-Checks: true
+        > No-Try: true
+        > Reviewed-on: https://chromium-review.googlesource.com/c/v8/v8/+/5649024
+        > Auto-Submit: Shu-yu Guo <syg@chromium.org>
+        > Bot-Commit: Rubber Stamper <rubber-stamper@appspot.gserviceaccount.com>
+        > Commit-Queue: Rubber Stamper <rubber-stamper@appspot.gserviceaccount.com>
+        > Cr-Commit-Position: refs/heads/main@{#94608}
+    
+        Change-Id: I4943071ffe192084e83bfe3113cfe9c92ef31465
+        Reviewed-on: https://chromium-review.googlesource.com/c/v8/v8/+/5677045
+        Reviewed-by: Darius Mercadier <dmercadier@chromium.org>
+        Reviewed-by: Leszek Swirski <leszeks@chromium.org>
+        Commit-Queue: snek <snek@chromium.org>
+        Cr-Commit-Position: refs/heads/main@{#94866}
+    
+    Refs: v8/v8@7857eb3
+`
+
 test('Validator - misc', (t) => {
   const v = new Validator()
 
@@ -450,6 +497,37 @@ test('Validator - real commits', (t) => {
       })
       tt.equal(filtered.length, 2, 'messages.length')
       tt.end()
+    })
+  })
+
+  t.test('validate no metadata should report commits for having metadata', (tt) => {
+    const v = new Validator({
+      'validate-no-metadata': true
+    })
+    v.lint(str)
+    v.on('commit', (data) => {
+      const msgs = data.messages
+      const filtered = msgs.filter((item) => {
+        return item.level === 'fail'
+      })
+      tt.equal(filtered.length, 2, 'messages.length')
+      tt.end()
+    })
+  })
+
+  t.test('validate no metadata should not report commits without metadata', (tt) => {
+    const v = new Validator({
+      'validate-no-metadata': true
+    })
+    tt.plan(2)
+    v.lint(str5)
+    v.lint(str13)
+    v.on('commit', (data) => {
+      const msgs = data.messages
+      const filtered = msgs.filter((item) => {
+        return item.level === 'fail'
+      })
+      tt.equal(filtered.length, 0, 'messages.length')
     })
   })
 

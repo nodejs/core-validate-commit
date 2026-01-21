@@ -27,6 +27,9 @@ const { values: parsed, positionals: args } = parseArgs({
       type: 'boolean',
       short: 'V'
     },
+    'validate-no-metadata': {
+      type: 'boolean'
+    },
     tap: {
       type: 'boolean',
       short: 't'
