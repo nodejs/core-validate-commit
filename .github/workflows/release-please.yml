@@ -57,5 +57,5 @@ jobs:
           RELEASE_TAG: ${{ needs.release-please.outputs.release_tag }}
 
       - name: Publish to the npm registry
-        run: npm publish --provenance
+        run: npm publish --access public --provenance
 
