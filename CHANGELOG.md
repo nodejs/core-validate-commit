@@ -1,5 +1,13 @@
 # Changelog
 
+## [5.0.1](https://github.com/nodejs/core-validate-commit/compare/v5.0.0...v5.0.1) (2026-03-18)
+
+
+### Bug Fixes
+
+* **rules:** add `config` subsystem ([#129](https://github.com/nodejs/core-validate-commit/issues/129)) ([0371a3d](https://github.com/nodejs/core-validate-commit/commit/0371a3d2c043d3e17f1d0a91b4a7542b06949a42))
+* **rules:** add `vfs` subsystem ([#139](https://github.com/nodejs/core-validate-commit/issues/139)) ([d4ebfff](https://github.com/nodejs/core-validate-commit/commit/d4ebfff7417f3cc252da892e27762b8211133e6e))
+
 ## [5.0.0](https://github.com/nodejs/core-validate-commit/compare/v4.1.0...v5.0.0) (2026-03-13)
 
 
