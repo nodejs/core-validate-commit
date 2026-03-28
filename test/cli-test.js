@@ -155,7 +155,7 @@ test('Test cli flags', (t) => {
   t.test('test stdin with valid JSON', (tt) => {
     const validCommit = {
       id: '2b98d02b52',
-      message: 'stream: make null an invalid chunk to write in object mode\n\nthis harmonizes behavior between readable, writable, and transform\nstreams so that they all handle nulls in object mode the same way by\nconsidering them invalid chunks.\n\nPR-URL: https://github.com/nodejs/node/pull/6170\nReviewed-By: James M Snell <jasnell@gmail.com>\nReviewed-By: Matteo Collina <matteo.collina@gmail.com>'
+      message: 'stream: make null an invalid chunk to write in object mode\n\nthis harmonizes behavior between readable, writable, and transform\nstreams so that they all handle nulls in object mode the same way by\nconsidering them invalid chunks.\n\nSigned-off-by: Calvin Metcalf <cmetcalf@appgeo.com>\nPR-URL: https://github.com/nodejs/node/pull/6170\nReviewed-By: James M Snell <jasnell@gmail.com>\nReviewed-By: Matteo Collina <matteo.collina@gmail.com>'
     }
     const input = JSON.stringify([validCommit])
 
@@ -211,11 +211,11 @@ test('Test cli flags', (t) => {
     const commits = [
       {
         id: 'commit1',
-        message: 'doc: update README\n\nPR-URL: https://github.com/nodejs/node/pull/1111\nReviewed-By: Someone <someone@example.com>'
+        message: 'doc: update README\n\nSigned-off-by: Someone <someone@example.com>\nPR-URL: https://github.com/nodejs/node/pull/1111\nReviewed-By: Someone <someone@example.com>'
       },
       {
         id: 'commit2',
-        message: 'test: add new test case\n\nPR-URL: https://github.com/nodejs/node/pull/2222\nReviewed-By: Someone <someone@example.com>'
+        message: 'test: add new test case\n\nSigned-off-by: Someone <someone@example.com>\nPR-URL: https://github.com/nodejs/node/pull/2222\nReviewed-By: Someone <someone@example.com>'
       }
     ]
     const input = JSON.stringify(commits)
@@ -337,7 +337,7 @@ test('Test cli flags', (t) => {
   t.test('test stdin with --no-validate-metadata', (tt) => {
     const commit = {
       id: 'novalidate',
-      message: 'doc: update README\n\nThis commit has no PR-URL or reviewers'
+      message: 'doc: update README\n\nThis commit has no PR-URL or reviewers\n\nSigned-off-by: Someone <someone@example.com>'
     }
     const input = JSON.stringify([commit])
 

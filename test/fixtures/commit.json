@@ -16,7 +16,7 @@
     "sha": "d3f20ccfaa7b0919a7c5a472e344b7de8829b30c",
     "url": "https://api.github.com/repos/nodejs/node/git/trees/d3f20ccfaa7b0919a7c5a472e344b7de8829b30c"
   },
-  "message": "stream: make null an invalid chunk to write in object mode\n\nthis harmonizes behavior between readable, writable, and transform\nstreams so that they all handle nulls in object mode the same way by\nconsidering them invalid chunks.\n\nPR-URL: https://github.com/nodejs/node/pull/6170\nReviewed-By: James M Snell <jasnell@gmail.com>\nReviewed-By: Matteo Collina <matteo.collina@gmail.com>",
+  "message": "stream: make null an invalid chunk to write in object mode\n\nthis harmonizes behavior between readable, writable, and transform\nstreams so that they all handle nulls in object mode the same way by\nconsidering them invalid chunks.\n\nSigned-off-by: Calvin Metcalf <cmetcalf@appgeo.com>\nPR-URL: https://github.com/nodejs/node/pull/6170\nReviewed-By: James M Snell <jasnell@gmail.com>\nReviewed-By: Matteo Collina <matteo.collina@gmail.com>",
   "parents": [
     {
       "sha": "ec2822adaad76b126b5cccdeaa1addf2376c9aa6",
