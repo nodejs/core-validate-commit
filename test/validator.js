@@ -15,6 +15,7 @@ CommitDate: Wed Apr 20 13:28:35 2016 -0700
     streams so that they all handle nulls in object mode the same way by
     considering them invalid chunks.
 
+    Signed-off-by: Calvin Metcalf <cmetcalf@appgeo.com>
     PR-URL: https://github.com/nodejs/node/pull/6170
     Reviewed-By: James M Snell <jasnell@gmail.com>
     Reviewed-By: Matteo Collina <matteo.collina@gmail.com>
@@ -31,6 +32,7 @@ Date:   Tue Mar 29 08:09:37 2016 -0500
     The offending commit broke certain usages of piping from stdin.
 
     Fixes: https://github.com/nodejs/node/issues/5927
+    Signed-off-by: Evan Lucas <evanlucas@me.com>
     PR-URL: https://github.com/nodejs/node/pull/5947
     Reviewed-By: Matteo Collina <matteo.collina@gmail.com>
     Reviewed-By: Alexis Campailla <orangemocha@nodejs.org>
@@ -50,6 +52,7 @@ Date:   Fri Apr 15 13:32:36 2016 +0200
     [1] https://github.com/nodejs/node/pull/5172/commits/ae18bbef48d87d9c641df85369f62cfd5ed8c250
 
     Fixes: https://github.com/nodejs/node/issues/6214
+    Signed-off-by: Michaël Zasso <targos@protonmail.com>
     PR-URL: https://github.com/nodejs/node/pull/6215
     Reviewed-By: James M Snell <jasnell@gmail.com>
     Reviewed-By: Brian White <mscdex@mscdex.net>`
@@ -63,6 +66,7 @@ Date:   Thu Mar 3 10:10:46 2016 -0600
     The properties on memoryUsage were not checked before,
     this commit checks them.
 
+    Signed-off-by: Wyatt Preul <wpreul@gmail.com>
     PR-URL: #5546
     Reviewed-By: Colin Ihrig <cjihrig@gmail.com>`
 
@@ -73,7 +77,9 @@ Date:   Thu Mar 3 10:10:46 2016 -0600
     test: check memoryUsage properties
 
     The properties on memoryUsage were not checked before,
-    this commit checks them.`
+    this commit checks them.
+
+    Signed-off-by: Wyatt Preul <wpreul@gmail.com>`
 
 /* eslint-disable */
 const str6 = {
@@ -94,7 +100,7 @@ const str6 = {
     "sha": "b505c0ffa0555730e9f4cdb391d1ebeb48bb2f59",
     "url": "https://api.github.com/repos/nodejs/node/git/trees/b505c0ffa0555730e9f4cdb391d1ebeb48bb2f59"
   },
-  "message": "fs: fix handling of `uv_stat_t` fields\n\n`FChown` and `Chown` test that the `uid` and `gid` parameters\nthey receive are unsigned integers, but `Stat()` and `FStat()`\nwould return the corresponding fields of `uv_stat_t` as signed\nintegers. Applications which pass those these values directly\nto `Chown` may fail\n(e.g. for `nobody` on OS X, who has an `uid` of `-2`, see e.g.\nhttps://github.com/nodejs/node-v0.x-archive/issues/5890).\n\nThis patch changes the `Integer::New()` call for `uid` and `gid`\nto `Integer::NewFromUnsigned()`.\n\nAll other fields are kept as they are, for performance, but\nstrictly speaking the respective sizes of those\nfields aren’t specified, either.\n\nRef: https://github.com/npm/npm/issues/13918\nPR-URL: https://github.com/nodejs/node/pull/8515\nReviewed-By: Ben Noordhuis <info@bnoordhuis.nl>\nReviewed-By: Sakthipriyan Vairamani <thechargingvolcano@gmail.com>\nReviewed-By: James M Snell <jasnell@gmail.com>\n\nundo accidental change to other fields of uv_fs_stat",
+  "message": "fs: fix handling of `uv_stat_t` fields\n\n`FChown` and `Chown` test that the `uid` and `gid` parameters\nthey receive are unsigned integers, but `Stat()` and `FStat()`\nwould return the corresponding fields of `uv_stat_t` as signed\nintegers. Applications which pass those these values directly\nto `Chown` may fail\n(e.g. for `nobody` on OS X, who has an `uid` of `-2`, see e.g.\nhttps://github.com/nodejs/node-v0.x-archive/issues/5890).\n\nThis patch changes the `Integer::New()` call for `uid` and `gid`\nto `Integer::NewFromUnsigned()`.\n\nAll other fields are kept as they are, for performance, but\nstrictly speaking the respective sizes of those\nfields aren’t specified, either.\n\nSigned-off-by: Anna Henningsen <anna@addaleax.net>\nRef: https://github.com/npm/npm/issues/13918\nPR-URL: https://github.com/nodejs/node/pull/8515\nReviewed-By: Ben Noordhuis <info@bnoordhuis.nl>\nReviewed-By: Sakthipriyan Vairamani <thechargingvolcano@gmail.com>\nReviewed-By: James M Snell <jasnell@gmail.com>\n\nundo accidental change to other fields of uv_fs_stat",
   "parents": [
     {
       "sha": "4e76bffc0c7076a5901179e70c7b8a8f9fcd22e4",
@@ -110,6 +116,8 @@ Author: Wyatt Preul <wpreul@gmail.com>
 Date:   Thu Mar 3 10:10:46 2016 -0600
 
     test: check memoryUsage properties.
+
+    Signed-off-by: Wyatt Preul <wpreul@gmail.com>
 `
 
 const str8 = `commit 7d3a7ea0d7df9b6f11df723dec370f49f4f87e99
@@ -117,6 +125,8 @@ Author: Wyatt Preul <wpreul@gmail.com>
 Date:   Thu Mar 3 10:10:46 2016 -0600
 
     test: Check memoryUsage properties
+
+    Signed-off-by: Wyatt Preul <wpreul@gmail.com>
 `
 
 const str9 = `commit 7d3a7ea0d7df9b6f11df723dec370f49f4f87e99
@@ -124,6 +134,8 @@ Author: Wyatt Preul <wpreul@gmail.com>
 Date:   Thu Mar 3 10:10:46 2016 -0600
 
     test: Check memoryUsage properties.
+
+    Signed-off-by: Wyatt Preul <wpreul@gmail.com>
 `
 
 const str10 = `commit b04fe688d5859f707cf1a5e0206967268118bf7a
@@ -169,6 +181,8 @@ Date:   Sat Oct 22 10:22:43 2022 +0200
     Revert "deps: V8: forward declaration of \`Rtl*FunctionTable\`"
 
     This reverts commit 01bc8e6fd81314e76c7fb0d09e5310f609e48bee.
+
+    Signed-off-by: Michaël Zasso <targos@protonmail.com>
 `
 
 test('Validator - misc', (t) => {
@@ -395,7 +409,7 @@ test('Validator - real commits', (t) => {
       const item = filtered[0]
       tt.equal(item.id, 'metadata-end', 'id')
       tt.equal(item.message, 'commit metadata at end of message', 'message')
-      tt.equal(item.line, 22, 'line')
+      tt.equal(item.line, 23, 'line')
       tt.equal(item.column, 0, 'column')
       tt.end()
     })
