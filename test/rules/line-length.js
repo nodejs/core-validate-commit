@@ -161,5 +161,37 @@ https://${'very-'.repeat(80)}-long-url.org/
     tt.end()
   })
 
+  t.test('Signed-off-by and Assisted-by lines', (tt) => {
+    const v = new Validator()
+
+    const good = new Commit({
+      sha: '016b3921626b58d9b595c90141e65c6fbe0c78e2',
+      author: {
+        name: 'John Connor',
+        email: '9092381+JConnor1985@users.noreply.github.com',
+        date: '2026-04-10T16:38:01Z'
+      },
+      message: [
+        'Signed-off-by: John Connor <9092381+JConnor1985@users.noreply.github.com>',
+        'Assisted-by: The Longest-Named Code Agent In The World <agent@example.com>'
+      ].join('\n')
+    }, v)
+
+    good.report = (opts) => {
+      tt.pass('called report')
+      tt.equal(opts.id, 'line-length', 'id')
+      tt.equal(opts.string, '', 'string')
+      tt.equal(opts.level, 'pass', 'level')
+    }
+
+    Rule.validate(good, {
+      options: {
+        length: 72
+      }
+    })
+
+    tt.end()
+  })
+
   t.end()
 })
