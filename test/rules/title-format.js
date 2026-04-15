@@ -1,6 +1,6 @@
 import { test } from 'tap'
 import Rule from '../../lib/rules/title-format.js'
-import Commit from 'gitlint-parser-node'
+import Commit from '../../lib/gitlint-parser.js'
 import Validator from '../../index.js'
 
 function makeCommit (title) {
