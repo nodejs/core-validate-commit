@@ -205,6 +205,7 @@ Trailer: value
   })
 
   t.test('Signed-off-by and Assisted-by non-trailers', (tt) => {
+    tt.plan(8)
     const v = new Validator()
 
     const context = new Commit({
@@ -224,10 +225,14 @@ Trailer: value
       ].join('\n')
     }, v)
 
+    let called = 0
     context.report = (opts) => {
       tt.pass('called report')
       tt.equal(opts.id, 'line-length', 'id')
-      tt.equal(opts.string, 'Assisted-by: The Longest-Named Code Agent In The World <agent@example.com>', 'string')
+      tt.equal(opts.string,
+        called++
+          ? 'Assisted-by: The Longest-Named Code Agent In The World <agent@example.com>'
+          : 'Signed-off-by: John Connor <9092381+JConnor1985@users.noreply.github.com>', 'string')
       tt.equal(opts.level, 'fail', 'level')
     }
 
