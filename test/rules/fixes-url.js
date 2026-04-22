@@ -1,6 +1,6 @@
 import { test } from 'tap'
 import Rule from '../../lib/rules/fixes-url.js'
-import Commit from 'gitlint-parser-node'
+import Commit from '../../lib/gitlint-parser.js'
 import Validator from '../../index.js'
 
 const INVALID_PRURL = 'Pull request URL must reference a comment or discussion.'

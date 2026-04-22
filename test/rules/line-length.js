@@ -1,6 +1,6 @@
 import { test } from 'tap'
 import Rule from '../../lib/rules/line-length.js'
-import Commit from 'gitlint-parser-node'
+import Commit from '../../lib/gitlint-parser.js'
 import Validator from '../../index.js'
 
 test('rule: line-length', (t) => {
@@ -31,7 +31,8 @@ ${'aaa'.repeat(30)}`
 
     Rule.validate(context, {
       options: {
-        length: 72
+        length: 72,
+        trailerLength: 120
       }
     })
   })
@@ -59,7 +60,8 @@ ${'aaa'.repeat(30)}`
 
     Rule.validate(context, {
       options: {
-        length: 72
+        length: 72,
+        trailerLength: 120
       }
     })
     tt.end()
@@ -93,7 +95,8 @@ That was the original code.
 
     Rule.validate(context, {
       options: {
-        length: 72
+        length: 72,
+        trailerLength: 120
       }
     })
     tt.end()
@@ -111,6 +114,8 @@ That was the original code.
       message: `src: make foo mor foo-ey
 
 https://${'very-'.repeat(80)}-long-url.org/
+
+Trailer: value
 `
     }, v)
 
@@ -123,13 +128,14 @@ https://${'very-'.repeat(80)}-long-url.org/
 
     Rule.validate(context, {
       options: {
-        length: 72
+        length: 72,
+        trailerLength: 120
       }
     })
     tt.end()
   })
 
-  t.test('Co-author lines', (tt) => {
+  t.test('Co-author trailers', (tt) => {
     const v = new Validator()
 
     const good = new Commit({
@@ -141,6 +147,7 @@ https://${'very-'.repeat(80)}-long-url.org/
       },
       message: [
         'fixup!: apply case-insensitive suggestion',
+        '',
         'Co-authored-by: Michaël Zasso <37011812+targos@users.noreply.github.com>'
       ].join('\n')
     }, v)
@@ -154,14 +161,81 @@ https://${'very-'.repeat(80)}-long-url.org/
 
     Rule.validate(good, {
       options: {
-        length: 72
+        length: 72,
+        trailerLength: 120
       }
     })
 
     tt.end()
   })
 
-  t.test('Signed-off-by and Assisted-by lines', (tt) => {
+  t.test('Multi-line trailers', (tt) => {
+    const v = new Validator()
+
+    const good = new Commit({
+      sha: 'f1496de5a7d5474e39eafaafe6f79befe5883a5b',
+      author: {
+        name: 'Jacob Smith',
+        email: '3012099+JakobJingleheimer@users.noreply.github.com',
+        date: '2025-12-22T09:40:42Z'
+      },
+      message: [
+        'subsystem: add support for foobar',
+        '',
+        'Lorem-Ipsum: dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna',
+        '  aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
+        '  Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint',
+        '  occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'
+      ].join('\n')
+    }, v)
+    const tooLong = '  Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'
+    const bad = new Commit({
+      sha: 'f1496de5a7d5474e39eafaafe6f79befe5883a5b',
+      author: {
+        name: 'Jacob Smith',
+        email: '3012099+JakobJingleheimer@users.noreply.github.com',
+        date: '2025-12-22T09:40:42Z'
+      },
+      message: [
+        'subsystem: add support for foobar',
+        '',
+        'Lorem-Ipsum: dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna',
+        '  aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
+        tooLong
+      ].join('\n')
+    }, v)
+
+    good.report = (opts) => {
+      tt.pass('called report')
+      tt.equal(opts.id, 'line-length', 'id')
+      tt.equal(opts.string, '', 'string')
+      tt.equal(opts.level, 'pass', 'level')
+    }
+    bad.report = (opts) => {
+      tt.pass('called report')
+      tt.equal(opts.id, 'line-length', 'id')
+      tt.equal(opts.message, 'Trailer should be <= 120 columns.', 'message')
+      tt.equal(opts.string, tooLong, 'string')
+      tt.equal(opts.level, 'fail', 'level')
+    }
+
+    Rule.validate(good, {
+      options: {
+        length: 72,
+        trailerLength: 120
+      }
+    })
+    Rule.validate(bad, {
+      options: {
+        length: 72,
+        trailerLength: 120
+      }
+    })
+
+    tt.end()
+  })
+
+  t.test('Signed-off-by and Assisted-by trailers', (tt) => {
     const v = new Validator()
 
     const good = new Commit({
@@ -172,6 +246,8 @@ https://${'very-'.repeat(80)}-long-url.org/
         date: '2026-04-10T16:38:01Z'
       },
       message: [
+        'subsystem: foobar',
+        '',
         'Signed-off-by: John Connor <9092381+JConnor1985@users.noreply.github.com>',
         'Assisted-by: The Longest-Named Code Agent In The World <agent@example.com>'
       ].join('\n')
@@ -186,7 +262,50 @@ https://${'very-'.repeat(80)}-long-url.org/
 
     Rule.validate(good, {
       options: {
-        length: 72
+        length: 72,
+        trailerLength: 120
+      }
+    })
+
+    tt.end()
+  })
+
+  t.test('Signed-off-by and Assisted-by non-trailers', (tt) => {
+    tt.plan(8)
+    const v = new Validator()
+
+    const context = new Commit({
+      sha: '016b3921626b58d9b595c90141e65c6fbe0c78e2',
+      author: {
+        name: 'John Connor',
+        email: '9092381+JConnor1985@users.noreply.github.com',
+        date: '2026-04-10T16:38:01Z'
+      },
+      message: [
+        'subsystem: foobar',
+        '',
+        'Signed-off-by: John Connor <9092381+JConnor1985@users.noreply.github.com>',
+        'Assisted-by: The Longest-Named Code Agent In The World <agent@example.com>',
+        '',
+        'Actual-trailer: Value'
+      ].join('\n')
+    }, v)
+
+    let called = 0
+    context.report = (opts) => {
+      tt.pass('called report')
+      tt.equal(opts.id, 'line-length', 'id')
+      tt.equal(opts.string,
+        called++
+          ? 'Assisted-by: The Longest-Named Code Agent In The World <agent@example.com>'
+          : 'Signed-off-by: John Connor <9092381+JConnor1985@users.noreply.github.com>', 'string')
+      tt.equal(opts.level, 'fail', 'level')
+    }
+
+    Rule.validate(context, {
+      options: {
+        length: 72,
+        trailerLength: 120
       }
     })
 

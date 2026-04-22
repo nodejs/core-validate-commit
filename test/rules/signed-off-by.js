@@ -1,6 +1,6 @@
 import { test } from 'tap'
 import Rule from '../../lib/rules/signed-off-by.js'
-import Commit from 'gitlint-parser-node'
+import Commit from '../../lib/gitlint-parser.js'
 import Validator from '../../index.js'
 
 test('rule: signed-off-by', (t) => {
