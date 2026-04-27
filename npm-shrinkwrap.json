@@ -1,12 +1,12 @@
 {
   "name": "core-validate-commit",
-  "version": "5.0.1",
+  "version": "6.0.0",
   "lockfileVersion": 3,
   "requires": true,
   "packages": {
     "": {
       "name": "core-validate-commit",
-      "version": "5.0.1",
+      "version": "6.0.0",
       "license": "MIT",
       "dependencies": {
         "gitlint-parser-base": "^2.0.0"

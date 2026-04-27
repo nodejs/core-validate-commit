@@ -1,5 +1,25 @@
 # Changelog
 
+## [6.0.0](https://github.com/nodejs/core-validate-commit/compare/v5.0.1...v6.0.0) (2026-04-27)
+
+
+### ⚠ BREAKING CHANGES
+
+* drop support for Node.js 20.x and 25.x ([#145](https://github.com/nodejs/core-validate-commit/issues/145))
+* parse trailers using `git` if available, allow longer lines ([#144](https://github.com/nodejs/core-validate-commit/issues/144))
+
+### Features
+
+* add Signed-off-by and Assisted-By rules ([3fce4e6](https://github.com/nodejs/core-validate-commit/commit/3fce4e6f6cc4ebb2970406324b28fa6a03369489))
+* drop support for Node.js 20.x and 25.x ([#145](https://github.com/nodejs/core-validate-commit/issues/145)) ([2481226](https://github.com/nodejs/core-validate-commit/commit/2481226956a0e9c6fb4175c6407b0c68ee1605a9))
+* parse trailers using `git` if available, allow longer lines ([#144](https://github.com/nodejs/core-validate-commit/issues/144)) ([cd1a6a8](https://github.com/nodejs/core-validate-commit/commit/cd1a6a88c8b6d8fcdbc20355456934c2be37264f))
+
+
+### Bug Fixes
+
+* **rules:** add `ffi` subsystem ([#146](https://github.com/nodejs/core-validate-commit/issues/146)) ([284263f](https://github.com/nodejs/core-validate-commit/commit/284263ffafaacb1affde9c5abb42986980d3bc16))
+* **rules:** add line-length exemptions for DCO sign-offs ([#142](https://github.com/nodejs/core-validate-commit/issues/142)) ([58c48dc](https://github.com/nodejs/core-validate-commit/commit/58c48dcead19eb9c868a7d67bc42bbc5a418725b))
+
 ## [5.0.1](https://github.com/nodejs/core-validate-commit/compare/v5.0.0...v5.0.1) (2026-03-18)
 
 
