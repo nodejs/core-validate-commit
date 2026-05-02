@@ -1,7 +1,20 @@
 import { test } from 'tap'
-import { readFileSync } from 'node:fs'
-import { spawn } from 'node:child_process'
+import { mkdtempSync, readFileSync, writeFileSync } from 'node:fs'
+import { execFileSync, spawn } from 'node:child_process'
+import { tmpdir } from 'node:os'
+import { join } from 'node:path'
+import { fileURLToPath } from 'node:url'
 import subsystems from '../lib/rules/subsystem.js'
+
+const cmdPath = fileURLToPath(new URL('../bin/cmd.js', import.meta.url))
+
+function git (cwd, args, env = undefined) {
+  return execFileSync('git', args, {
+    cwd,
+    env: env === undefined ? process.env : { ...process.env, ...env },
+    encoding: 'utf8'
+  })
+}
 
 test('Test cli flags', (t) => {
   t.test('test list-subsystems', (tt) => {
@@ -355,6 +368,68 @@ test('Test cli flags', (t) => {
       tt.equal(code, 0, 'CLI exits with zero code when metadata validation is disabled')
       tt.match(compiledData, /novalidate/, 'output contains commit id')
       tt.end()
+    })
+  })
+
+  t.test('test sha ignores mailmap when validating sign-off', (tt) => {
+    tt.plan(6)
+
+    const repoDir = mkdtempSync(join(tmpdir(), 'core-validate-commit-'))
+    const env = {
+      GIT_AUTHOR_NAME: 'Matteo Collina',
+      GIT_AUTHOR_EMAIL: 'hello@matteocollina.com',
+      GIT_COMMITTER_NAME: 'Matteo Collina',
+      GIT_COMMITTER_EMAIL: 'hello@matteocollina.com'
+    }
+
+    git(repoDir, ['init', '-b', 'main'])
+    git(repoDir, ['config', 'user.name', 'Test User'])
+    git(repoDir, ['config', 'user.email', 'test@example.com'])
+
+    writeFileSync(join(repoDir, '.mailmap'),
+      'Matteo Collina <matteo.collina@gmail.com> <hello@matteocollina.com>\n')
+    writeFileSync(join(repoDir, 'README.md'), 'test\n')
+
+    git(repoDir, ['add', '.mailmap', 'README.md'])
+    git(repoDir, ['commit', '-m',
+      'doc: add mailmap sign-off fixture\n\n' +
+      'Signed-off-by: Matteo Collina <hello@matteocollina.com>\n' +
+      'PR-URL: https://github.com/nodejs/node/pull/1234\n' +
+      'Reviewed-By: Rich Trott <rtrott@gmail.com>'
+    ], env)
+
+    const defaultShow = git(repoDir, ['show', '--quiet', '--format=medium', 'HEAD'])
+    const rawShow = git(repoDir, ['show', '--no-mailmap', '--quiet', '--format=medium', 'HEAD'])
+
+    tt.match(defaultShow,
+      /Author:\s+Matteo Collina <matteo\.collina@gmail\.com>/,
+      'git show applies mailmap by default')
+    tt.match(rawShow,
+      /Author:\s+Matteo Collina <hello@matteocollina\.com>/,
+      'git show --no-mailmap preserves the raw author email')
+
+    const ls = spawn(process.execPath, [cmdPath, '--no-validate-metadata', 'HEAD'], {
+      cwd: repoDir,
+      env: { ...process.env, FORCE_COLOR: 0 }
+    })
+    let compiledData = ''
+    let errorData = ''
+
+    ls.stdout.on('data', (data) => {
+      compiledData += data
+    })
+
+    ls.stderr.on('data', (data) => {
+      errorData += data
+    })
+
+    ls.on('close', (code) => {
+      tt.equal(code, 0, 'CLI exits with zero code on success')
+      tt.equal(errorData, '', 'no error output')
+      tt.match(compiledData, /has valid Signed-off-by/, 'sign-off remains valid')
+      tt.notMatch(compiledData,
+        /email does not match the commit author email/,
+        'mailmap does not trigger a false mismatch warning')
     })
   })
 
