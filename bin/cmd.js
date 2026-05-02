@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-import { exec } from 'node:child_process'
+import { execFile } from 'node:child_process'
 import fs from 'node:fs'
 import http from 'node:http'
 import https from 'node:https'
@@ -76,10 +76,11 @@ function load (sha, cb) {
   if (parsed != null) {
     return loadPatch(parsed, cb)
   }
-  exec(`git show --quiet --format=medium ${sha}`, (err, stdout, stderr) => {
-    if (err) return cb(err)
-    cb(null, stdout.trim())
-  })
+  execFile('git', ['show', '--no-mailmap', '--quiet', '--format=medium', sha],
+    (err, stdout, stderr) => {
+      if (err) return cb(err)
+      cb(null, stdout.trim())
+    })
 }
 
 function loadPatch (uri, cb) {
