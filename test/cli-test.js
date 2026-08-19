@@ -1,10 +1,24 @@
-import { test } from 'tap'
+import { describe, test } from 'node:test'
 import { readFileSync } from 'node:fs'
 import { spawn } from 'node:child_process'
 import subsystems from '../lib/rules/subsystem.js'
 
-test('Test cli flags', (t) => {
-  t.test('test list-subsystems', (tt) => {
+function waitForClose (child, callback) {
+  return new Promise((resolve, reject) => {
+    child.on('error', reject)
+    child.on('close', async (code) => {
+      try {
+        await callback(code)
+        resolve()
+      } catch (error) {
+        reject(error)
+      }
+    })
+  })
+}
+
+describe('Test cli flags', () => {
+  test('test list-subsystems', async (t) => {
     const ls = spawn('./bin/cmd.js', ['--list-subsystems'], {
       env: { ...process.env, FORCE_COLOR: 0 }
     })
@@ -14,16 +28,16 @@ test('Test cli flags', (t) => {
     })
 
     ls.stderr.on('data', (data) => {
-      tt.fail('This should not happen')
+      t.assert.fail('This should not happen')
     })
 
-    ls.on('close', (code) => {
+    await waitForClose(ls, (code) => {
       // Get the list of subsytems as an Array.
       // Need to match words that also have the "-" in them
       const subsystemsFromOutput = compiledData.match(/[\w'-]+/g)
       const defaultSubsystems = subsystems.defaults.subsystems
 
-      tt.equal(subsystemsFromOutput.length,
+      t.assert.strictEqual(subsystemsFromOutput.length,
         defaultSubsystems.length,
         'Should have the same length')
 
@@ -36,12 +50,11 @@ test('Test cli flags', (t) => {
         }
       })
 
-      tt.equal(missing.length, 0, 'Should have no missing subsystems')
-      tt.end()
+      t.assert.strictEqual(missing.length, 0, 'Should have no missing subsystems')
     })
   })
 
-  t.test('test help output', (tt) => {
+  test('test help output', async (t) => {
     const usage = readFileSync('bin/usage.txt', { encoding: 'utf8' })
     const ls = spawn('./bin/cmd.js', ['--help'])
     let compiledData = ''
@@ -50,18 +63,17 @@ test('Test cli flags', (t) => {
     })
 
     ls.stderr.on('data', (data) => {
-      tt.fail('This should not happen')
+      t.assert.fail('This should not happen')
     })
 
-    ls.on('close', (code) => {
-      tt.equal(compiledData.trim(),
+    await waitForClose(ls, (code) => {
+      t.assert.strictEqual(compiledData.trim(),
         usage.trim(),
         '--help output is as expected')
-      tt.end()
     })
   })
 
-  t.test('test sha', (tt) => {
+  test('test sha', async (t) => {
     const ls = spawn('./bin/cmd.js', ['--no-validate-metadata', '2b98d02b52'])
     let compiledData = ''
     ls.stdout.on('data', (data) => {
@@ -69,18 +81,17 @@ test('Test cli flags', (t) => {
     })
 
     ls.stderr.on('data', (data) => {
-      tt.fail('This should not happen')
+      t.assert.fail('This should not happen')
     })
 
-    ls.on('close', (code) => {
-      tt.match(compiledData.trim(),
+    await waitForClose(ls, (code) => {
+      t.assert.match(compiledData.trim(),
         /2b98d02b52/,
         'output is as expected')
-      tt.end()
     })
   })
 
-  t.test('test tap output', (tt) => {
+  test('test tap output', async (t) => {
     // Use a commit from this repository that does not follow the guidelines.
     const ls = spawn('./bin/cmd.js', ['--no-validate-metadata', '--tap', '69435db261'])
     let compiledData = ''
@@ -89,29 +100,28 @@ test('Test cli flags', (t) => {
     })
 
     ls.stderr.on('data', (data) => {
-      tt.fail(`Unexpected stderr output ${data.toString()}`)
+      t.assert.fail(`Unexpected stderr output ${data.toString()}`)
     })
 
-    ls.on('close', (code) => {
+    await waitForClose(ls, (code) => {
       const output = compiledData.trim()
-      tt.match(output,
+      t.assert.match(output,
         /# 69435db261/,
         'TAP output contains the sha of the commit being linted')
-      tt.match(output,
+      t.assert.match(output,
         /not ok \d+ subsystem: Invalid subsystem: "chore" \(chore: update tested node release lines \(#94\)\)/,
         'TAP output contains failure for subsystem')
-      tt.match(output,
+      t.assert.match(output,
         /# fail\s+\d+/,
         'TAP output contains total failures')
-      tt.match(output,
+      t.assert.match(output,
         /# Please review the commit message guidelines:\s# https:\/\/github.com\/nodejs\/node\/blob\/HEAD\/doc\/contributing\/pull-requests.md#commit-message-guidelines/,
         'TAP output contains pointer to commit message guidelines')
-      tt.equal(code, 1, 'CLI exits with non-zero code on failure')
-      tt.end()
+      t.assert.strictEqual(code, 1, 'CLI exits with non-zero code on failure')
     })
   })
 
-  t.test('test url', (tt) => {
+  test('test url', async (t) => {
     const ls = spawn('./bin/cmd.js', ['--no-validate-metadata', 'https://api.github.com/repos/nodejs/core-validate-commit/commits/2b98d02b52'])
     let compiledData = ''
     ls.stdout.on('data', (data) => {
@@ -119,18 +129,17 @@ test('Test cli flags', (t) => {
     })
 
     ls.stderr.on('data', (data) => {
-      tt.fail('This should not happen')
+      t.assert.fail('This should not happen')
     })
 
-    ls.on('close', (code) => {
-      tt.match(compiledData.trim(),
+    await waitForClose(ls, (code) => {
+      t.assert.match(compiledData.trim(),
         /2b98d02b52/,
         'output is as expected')
-      tt.end()
     })
   })
 
-  t.test('test version flag', (tt) => {
+  test('test version flag', async (t) => {
     const ls = spawn('./bin/cmd.js', ['--version'])
     let compiledData = ''
     ls.stdout.on('data', (data) => {
@@ -138,21 +147,20 @@ test('Test cli flags', (t) => {
     })
 
     ls.stderr.on('data', (data) => {
-      tt.fail('This should not happen')
+      t.assert.fail('This should not happen')
     })
 
-    ls.on('close', async (code) => {
+    await waitForClose(ls, async (code) => {
       const pkgJsonPath = new URL('../package.json', import.meta.url)
       const pkgJson = readFileSync(pkgJsonPath, { encoding: 'utf8' })
       const { version } = JSON.parse(pkgJson)
-      tt.equal(compiledData.trim(),
+      t.assert.strictEqual(compiledData.trim(),
         `core-validate-commit v${version}`,
         'output is equal')
-      tt.end()
     })
   })
 
-  t.test('test stdin with valid JSON', (tt) => {
+  test('test stdin with valid JSON', async (t) => {
     const validCommit = {
       id: '2b98d02b52',
       message: 'stream: make null an invalid chunk to write in object mode\n\nthis harmonizes behavior between readable, writable, and transform\nstreams so that they all handle nulls in object mode the same way by\nconsidering them invalid chunks.\n\nSigned-off-by: Calvin Metcalf <cmetcalf@appgeo.com>\nPR-URL: https://github.com/nodejs/node/pull/6170\nReviewed-By: James M Snell <jasnell@gmail.com>\nReviewed-By: Matteo Collina <matteo.collina@gmail.com>'
@@ -174,15 +182,14 @@ test('Test cli flags', (t) => {
     ls.stdin.write(input)
     ls.stdin.end()
 
-    ls.on('close', (code) => {
-      tt.equal(code, 0, 'CLI exits with zero code on success')
-      tt.match(compiledData, /[^0-9a-f]2b98d02b52[^0-9a-f]/, 'output contains commit id')
-      tt.equal(errorData, '', 'no error output')
-      tt.end()
+    await waitForClose(ls, (code) => {
+      t.assert.strictEqual(code, 0, 'CLI exits with zero code on success')
+      t.assert.match(compiledData, /[^0-9a-f]2b98d02b52[^0-9a-f]/, 'output contains commit id')
+      t.assert.strictEqual(errorData, '', 'no error output')
     })
   })
 
-  t.test('test stdin with invalid commit (missing subsystem)', (tt) => {
+  test('test stdin with invalid commit (missing subsystem)', async (t) => {
     const invalidCommit = {
       id: 'def456',
       message: 'this is a bad commit message without subsystem\n\nPR-URL: https://github.com/nodejs/node/pull/1234\nReviewed-By: Someone <someone@example.com>'
@@ -199,15 +206,14 @@ test('Test cli flags', (t) => {
     ls.stdin.write(input)
     ls.stdin.end()
 
-    ls.on('close', (code) => {
-      tt.notEqual(code, 0, 'CLI exits with non-zero code on failure')
-      tt.match(compiledData, /def456/, 'output contains commit id')
-      tt.match(compiledData, /title-format/, 'output mentions the rule violation')
-      tt.end()
+    await waitForClose(ls, (code) => {
+      t.assert.notStrictEqual(code, 0, 'CLI exits with non-zero code on failure')
+      t.assert.match(compiledData, /def456/, 'output contains commit id')
+      t.assert.match(compiledData, /title-format/, 'output mentions the rule violation')
     })
   })
 
-  t.test('test stdin with multiple commits', (tt) => {
+  test('test stdin with multiple commits', async (t) => {
     const commits = [
       {
         id: 'commit1',
@@ -230,15 +236,14 @@ test('Test cli flags', (t) => {
     ls.stdin.write(input)
     ls.stdin.end()
 
-    ls.on('close', (code) => {
-      tt.equal(code, 0, 'CLI exits with zero code on success')
-      tt.match(compiledData, /commit1/, 'output contains first commit id')
-      tt.match(compiledData, /commit2/, 'output contains second commit id')
-      tt.end()
+    await waitForClose(ls, (code) => {
+      t.assert.strictEqual(code, 0, 'CLI exits with zero code on success')
+      t.assert.match(compiledData, /commit1/, 'output contains first commit id')
+      t.assert.match(compiledData, /commit2/, 'output contains second commit id')
     })
   })
 
-  t.test('test stdin with TAP output', (tt) => {
+  test('test stdin with TAP output', async (t) => {
     const validCommit = {
       id: '69435db261',
       message: 'chore: update tested node release lines (#94)'
@@ -255,26 +260,25 @@ test('Test cli flags', (t) => {
     ls.stdin.write(input)
     ls.stdin.end()
 
-    ls.on('close', (code) => {
+    await waitForClose(ls, (code) => {
       const output = compiledData.trim()
-      tt.match(output,
+      t.assert.match(output,
         /# 69435db261/,
         'TAP output contains the sha of the commit being linted')
-      tt.match(output,
+      t.assert.match(output,
         /not ok \d+ subsystem: Invalid subsystem: "chore" \(chore: update tested node release lines \(#94\)\)/,
         'TAP output contains failure for subsystem')
-      tt.match(output,
+      t.assert.match(output,
         /# fail\s+\d+/,
         'TAP output contains total failures')
-      tt.match(output,
+      t.assert.match(output,
         /# Please review the commit message guidelines:\s# https:\/\/github.com\/nodejs\/node\/blob\/HEAD\/doc\/contributing\/pull-requests.md#commit-message-guidelines/,
         'TAP output contains pointer to commit message guidelines')
-      tt.equal(code, 1, 'CLI exits with non-zero code on failure')
-      tt.end()
+      t.assert.strictEqual(code, 1, 'CLI exits with non-zero code on failure')
     })
   })
 
-  t.test('test stdin with invalid JSON', (tt) => {
+  test('test stdin with invalid JSON', async (t) => {
     const input = 'this is not valid JSON'
 
     const ls = spawn('./bin/cmd.js', ['-'])
@@ -287,14 +291,13 @@ test('Test cli flags', (t) => {
     ls.stdin.write(input)
     ls.stdin.end()
 
-    ls.on('close', (code) => {
-      tt.equal(code, 1, 'CLI exits with non-zero code on error')
-      tt.match(errorData, /Error parsing JSON input/, 'error message is shown')
-      tt.end()
+    await waitForClose(ls, (code) => {
+      t.assert.strictEqual(code, 1, 'CLI exits with non-zero code on error')
+      t.assert.match(errorData, /Error parsing JSON input/, 'error message is shown')
     })
   })
 
-  t.test('test stdin with non-array JSON', (tt) => {
+  test('test stdin with non-array JSON', async (t) => {
     const input = JSON.stringify({ id: 'test', message: 'test' })
 
     const ls = spawn('./bin/cmd.js', ['-'])
@@ -307,14 +310,13 @@ test('Test cli flags', (t) => {
     ls.stdin.write(input)
     ls.stdin.end()
 
-    ls.on('close', (code) => {
-      tt.equal(code, 1, 'CLI exits with non-zero code on error')
-      tt.match(errorData, /Input must be an array/, 'error message is shown')
-      tt.end()
+    await waitForClose(ls, (code) => {
+      t.assert.strictEqual(code, 1, 'CLI exits with non-zero code on error')
+      t.assert.match(errorData, /Input must be an array/, 'error message is shown')
     })
   })
 
-  t.test('test stdin with missing properties', (tt) => {
+  test('test stdin with missing properties', async (t) => {
     const input = JSON.stringify([{ id: 'test' }]) // missing 'message'
 
     const ls = spawn('./bin/cmd.js', ['-'])
@@ -327,14 +329,13 @@ test('Test cli flags', (t) => {
     ls.stdin.write(input)
     ls.stdin.end()
 
-    ls.on('close', (code) => {
-      tt.equal(code, 1, 'CLI exits with non-zero code on error')
-      tt.match(errorData, /must have "id" and "message" properties/, 'error message is shown')
-      tt.end()
+    await waitForClose(ls, (code) => {
+      t.assert.strictEqual(code, 1, 'CLI exits with non-zero code on error')
+      t.assert.match(errorData, /must have "id" and "message" properties/, 'error message is shown')
     })
   })
 
-  t.test('test stdin with --no-validate-metadata', (tt) => {
+  test('test stdin with --no-validate-metadata', async (t) => {
     const commit = {
       id: 'novalidate',
       message: 'doc: update README\n\nThis commit has no PR-URL or reviewers\n\nSigned-off-by: Someone <someone@example.com>'
@@ -351,12 +352,9 @@ test('Test cli flags', (t) => {
     ls.stdin.write(input)
     ls.stdin.end()
 
-    ls.on('close', (code) => {
-      tt.equal(code, 0, 'CLI exits with zero code when metadata validation is disabled')
-      tt.match(compiledData, /novalidate/, 'output contains commit id')
-      tt.end()
+    await waitForClose(ls, (code) => {
+      t.assert.strictEqual(code, 0, 'CLI exits with zero code when metadata validation is disabled')
+      t.assert.match(compiledData, /novalidate/, 'output contains commit id')
     })
   })
-
-  t.end()
 })

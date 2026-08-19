@@ -1,4 +1,4 @@
-import { test } from 'tap'
+import { describe, test } from 'node:test'
 import * as utils from '../lib/utils.js'
 
 // We aren't testing the chalk library, so strip off the colors/styles it adds
@@ -7,77 +7,65 @@ const stripAnsiRegex =
 
 const originalConsoleLog = console.log
 
-test('test utility functions', (t) => {
-  t.test('test rightPad function - with padding', (tt) => {
+describe('test utility functions', () => {
+  test('test rightPad function - with padding', (t) => {
     const padded = utils.rightPad('string', 10)
-    tt.equal(padded.length, 11, 'should have extra padding')
-    tt.equal(padded, 'string     ', 'should have padding on the right')
-
-    tt.end()
+    t.assert.strictEqual(padded.length, 11, 'should have extra padding')
+    t.assert.strictEqual(padded, 'string     ', 'should have padding on the right')
   })
 
-  t.test('test rightPad function - withou padding', (tt) => {
+  test('test rightPad function - withou padding', (t) => {
     const padded = utils.rightPad('string', 5)
-    tt.equal(padded.length, 6, 'should have the same length')
-    tt.equal(padded, 'string', 'should have no padding on the right')
-
-    tt.end()
+    t.assert.strictEqual(padded.length, 6, 'should have the same length')
+    t.assert.strictEqual(padded, 'string', 'should have no padding on the right')
   })
 
-  t.test('test leftPad function - with padding', (tt) => {
+  test('test leftPad function - with padding', (t) => {
     const padded = utils.leftPad('string', 10)
-    tt.equal(padded.length, 11, 'should have extra padding')
-    tt.equal(padded, '     string', 'should have padding on the left')
-
-    tt.end()
+    t.assert.strictEqual(padded.length, 11, 'should have extra padding')
+    t.assert.strictEqual(padded, '     string', 'should have padding on the left')
   })
 
-  t.test('test leftPad function - withou padding', (tt) => {
+  test('test leftPad function - withou padding', (t) => {
     const padded = utils.leftPad('string', 5)
-    tt.equal(padded.length, 6, 'should have the same length')
-    tt.equal(padded, 'string', 'should have no padding on the left')
-
-    tt.end()
+    t.assert.strictEqual(padded.length, 6, 'should have the same length')
+    t.assert.strictEqual(padded, 'string', 'should have no padding on the left')
   })
 
-  t.test('test headers function - skip', (tt) => {
+  test('test headers function - skip', (t) => {
     const header = utils.header('abc123', 'skip')
-    tt.equal(header.replace(stripAnsiRegex, ''),
+    t.assert.strictEqual(header.replace(stripAnsiRegex, ''),
       '✔  abc123 # SKIPPED',
       'should be equal')
-    tt.end()
   })
 
-  t.test('test headers function - pass', (tt) => {
+  test('test headers function - pass', (t) => {
     const header = utils.header('abc123', 'pass')
-    tt.equal(header.replace(stripAnsiRegex, ''),
+    t.assert.strictEqual(header.replace(stripAnsiRegex, ''),
       '✔  abc123',
       'should be equal')
-    tt.end()
   })
 
-  t.test('test headers function - pass', (tt) => {
+  test('test headers function - pass', (t) => {
     const header = utils.header('abc123', 'pass')
-    tt.equal(header.replace(stripAnsiRegex, ''),
+    t.assert.strictEqual(header.replace(stripAnsiRegex, ''),
       '✔  abc123',
       'should be equal')
-    tt.end()
   })
 
-  t.test('test headers function - fail', (tt) => {
+  test('test headers function - fail', (t) => {
     const header = utils.header('abc123', 'fail')
-    tt.equal(header.replace(stripAnsiRegex, ''),
+    t.assert.strictEqual(header.replace(stripAnsiRegex, ''),
       '✖  abc123',
       'should be equal')
-    tt.end()
   })
 
-  t.test('test describeRule function', (tt) => {
+  test('test describeRule function', (t) => {
     function logger () {
       const args = [...arguments]
-      tt.equal(args[1].replace(stripAnsiRegex, ''),
+      t.assert.strictEqual(args[1].replace(stripAnsiRegex, ''),
         '              rule-id', 'has a title with padding')
-      tt.equal(args[2].replace(stripAnsiRegex, ''),
+      t.assert.strictEqual(args[2].replace(stripAnsiRegex, ''),
         'a description', 'has a description')
     }
 
@@ -86,37 +74,32 @@ test('test utility functions', (t) => {
     utils.describeRule({ id: 'rule-id', meta: { description: 'a description' } })
     // put it back
     console.log = originalConsoleLog
-    tt.end()
   })
 
-  t.test('test describeRule function - no meta data description', (tt) => {
+  test('test describeRule function - no meta data description', (t) => {
     function logger () {
-      tt.fails('should not reach here')
+      t.assert.fail('should not reach here')
     }
 
     // overrite the console.log
     console.log = logger
     utils.describeRule({ id: 'rule-id', meta: {} })
-    tt.pass('no return value')
+    t.assert.ok(true, 'no return value')
 
     // put it back
     console.log = originalConsoleLog
-    tt.end()
   })
 
-  t.test('test describeSubsystem function - no subsystems', (tt) => {
+  test('test describeSubsystem function - no subsystems', (t) => {
     function logger () {
-      tt.fails('should not reach here')
+      t.assert.fail('should not reach here')
     }
 
     // overrite the console.log
     console.log = logger
     utils.describeSubsystem()
-    tt.pass('no return value')
+    t.assert.ok(true, 'no return value')
     // put it back
     console.log = originalConsoleLog
-    tt.end()
   })
-
-  t.end()
 })

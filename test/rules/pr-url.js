@@ -1,31 +1,31 @@
-import { test } from 'tap'
+import { describe, test } from 'node:test'
 import Rule from '../../lib/rules/pr-url.js'
 const MISSING_PR_URL = 'Commit must have a PR-URL.'
 const INVALID_PR_URL = 'PR-URL must be a GitHub pull request URL.'
 const NUMERIC_PR_URL = 'PR-URL must be a URL, not a pull request number.'
 const VALID_PR_URL = 'PR-URL is valid.'
 
-test('rule: pr-url', (t) => {
-  t.test('missing', (tt) => {
-    tt.plan(7)
+describe('rule: pr-url', () => {
+  test('missing', (t) => {
+    t.plan(7)
     const context = {
       prUrl: null,
       report: (opts) => {
-        tt.pass('called report')
-        tt.equal(opts.id, 'pr-url', 'id')
-        tt.equal(opts.message, MISSING_PR_URL, 'message')
-        tt.equal(opts.string, null, 'string')
-        tt.equal(opts.line, 0, 'line')
-        tt.equal(opts.column, 0, 'column')
-        tt.equal(opts.level, 'fail', 'level')
+        t.assert.ok(true, 'called report')
+        t.assert.strictEqual(opts.id, 'pr-url', 'id')
+        t.assert.strictEqual(opts.message, MISSING_PR_URL, 'message')
+        t.assert.strictEqual(opts.string, null, 'string')
+        t.assert.strictEqual(opts.line, 0, 'line')
+        t.assert.strictEqual(opts.column, 0, 'column')
+        t.assert.strictEqual(opts.level, 'fail', 'level')
       }
     }
 
     Rule.validate(context)
   })
 
-  t.test('invalid numeric', (tt) => {
-    tt.plan(7)
+  test('invalid numeric', (t) => {
+    t.plan(7)
     const context = {
       prUrl: '#1234',
       body: [
@@ -33,21 +33,21 @@ test('rule: pr-url', (t) => {
         'PR-URL: #1234'
       ],
       report: (opts) => {
-        tt.pass('called report')
-        tt.equal(opts.id, 'pr-url', 'id')
-        tt.equal(opts.message, NUMERIC_PR_URL, 'message')
-        tt.equal(opts.string, '#1234', 'string')
-        tt.equal(opts.line, 1, 'line')
-        tt.equal(opts.column, 8, 'column')
-        tt.equal(opts.level, 'fail', 'level')
+        t.assert.ok(true, 'called report')
+        t.assert.strictEqual(opts.id, 'pr-url', 'id')
+        t.assert.strictEqual(opts.message, NUMERIC_PR_URL, 'message')
+        t.assert.strictEqual(opts.string, '#1234', 'string')
+        t.assert.strictEqual(opts.line, 1, 'line')
+        t.assert.strictEqual(opts.column, 8, 'column')
+        t.assert.strictEqual(opts.level, 'fail', 'level')
       }
     }
 
     Rule.validate(context)
   })
 
-  t.test('invalid', (tt) => {
-    tt.plan(7)
+  test('invalid', (t) => {
+    t.plan(7)
     const url = 'https://github.com/nodejs/node/issues/1234'
     const context = {
       prUrl: url,
@@ -56,21 +56,21 @@ test('rule: pr-url', (t) => {
         `PR-URL: ${url}`
       ],
       report: (opts) => {
-        tt.pass('called report')
-        tt.equal(opts.id, 'pr-url', 'id')
-        tt.equal(opts.message, INVALID_PR_URL, 'message')
-        tt.equal(opts.string, url, 'string')
-        tt.equal(opts.line, 1, 'line')
-        tt.equal(opts.column, 8, 'column')
-        tt.equal(opts.level, 'fail', 'level')
+        t.assert.ok(true, 'called report')
+        t.assert.strictEqual(opts.id, 'pr-url', 'id')
+        t.assert.strictEqual(opts.message, INVALID_PR_URL, 'message')
+        t.assert.strictEqual(opts.string, url, 'string')
+        t.assert.strictEqual(opts.line, 1, 'line')
+        t.assert.strictEqual(opts.column, 8, 'column')
+        t.assert.strictEqual(opts.level, 'fail', 'level')
       }
     }
 
     Rule.validate(context)
   })
 
-  t.test('valid', (tt) => {
-    tt.plan(7)
+  test('valid', (t) => {
+    t.plan(7)
     const url = 'https://github.com/nodejs/node/pull/1234'
     const context = {
       prUrl: url,
@@ -79,21 +79,21 @@ test('rule: pr-url', (t) => {
         `PR-URL: ${url}`
       ],
       report: (opts) => {
-        tt.pass('called report')
-        tt.equal(opts.id, 'pr-url', 'id')
-        tt.equal(opts.message, VALID_PR_URL, 'message')
-        tt.equal(opts.string, url, 'string')
-        tt.equal(opts.line, 1, 'line')
-        tt.equal(opts.column, 8, 'column')
-        tt.equal(opts.level, 'pass', 'level')
+        t.assert.ok(true, 'called report')
+        t.assert.strictEqual(opts.id, 'pr-url', 'id')
+        t.assert.strictEqual(opts.message, VALID_PR_URL, 'message')
+        t.assert.strictEqual(opts.string, url, 'string')
+        t.assert.strictEqual(opts.line, 1, 'line')
+        t.assert.strictEqual(opts.column, 8, 'column')
+        t.assert.strictEqual(opts.level, 'pass', 'level')
       }
     }
 
     Rule.validate(context)
   })
 
-  t.test('valid URL containing hyphen', (tt) => {
-    tt.plan(7)
+  test('valid URL containing hyphen', (t) => {
+    t.plan(7)
     const url = 'https://github.com/nodejs/node-report/pull/1234'
     const context = {
       prUrl: url,
@@ -102,21 +102,21 @@ test('rule: pr-url', (t) => {
         `PR-URL: ${url}`
       ],
       report: (opts) => {
-        tt.pass('called report')
-        tt.equal(opts.id, 'pr-url', 'id')
-        tt.equal(opts.message, VALID_PR_URL, 'message')
-        tt.equal(opts.string, url, 'string')
-        tt.equal(opts.line, 1, 'line')
-        tt.equal(opts.column, 8, 'column')
-        tt.equal(opts.level, 'pass', 'level')
+        t.assert.ok(true, 'called report')
+        t.assert.strictEqual(opts.id, 'pr-url', 'id')
+        t.assert.strictEqual(opts.message, VALID_PR_URL, 'message')
+        t.assert.strictEqual(opts.string, url, 'string')
+        t.assert.strictEqual(opts.line, 1, 'line')
+        t.assert.strictEqual(opts.column, 8, 'column')
+        t.assert.strictEqual(opts.level, 'pass', 'level')
       }
     }
 
     Rule.validate(context)
   })
 
-  t.test('valid URL with trailing slash', (tt) => {
-    tt.plan(7)
+  test('valid URL with trailing slash', (t) => {
+    t.plan(7)
     const url = 'https://github.com/nodejs/node-report/pull/1234/'
     const context = {
       prUrl: url,
@@ -125,18 +125,16 @@ test('rule: pr-url', (t) => {
         `PR-URL: ${url}`
       ],
       report: (opts) => {
-        tt.pass('called report')
-        tt.equal(opts.id, 'pr-url', 'id')
-        tt.equal(opts.message, VALID_PR_URL, 'message')
-        tt.equal(opts.string, url, 'string')
-        tt.equal(opts.line, 1, 'line')
-        tt.equal(opts.column, 8, 'column')
-        tt.equal(opts.level, 'pass', 'level')
+        t.assert.ok(true, 'called report')
+        t.assert.strictEqual(opts.id, 'pr-url', 'id')
+        t.assert.strictEqual(opts.message, VALID_PR_URL, 'message')
+        t.assert.strictEqual(opts.string, url, 'string')
+        t.assert.strictEqual(opts.line, 1, 'line')
+        t.assert.strictEqual(opts.column, 8, 'column')
+        t.assert.strictEqual(opts.level, 'pass', 'level')
       }
     }
 
     Rule.validate(context)
   })
-
-  t.end()
 })

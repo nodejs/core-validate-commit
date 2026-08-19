@@ -1,4 +1,4 @@
-import { test } from 'tap'
+import { describe, test } from 'node:test'
 import Rule from '../../lib/rules/fixes-url.js'
 import Commit from '../../lib/gitlint-parser.js'
 import Validator from '../../index.js'
@@ -20,7 +20,7 @@ const makeCommit = (msg) => {
   }, new Validator())
 }
 
-test('rule: fixes-url', (t) => {
+describe('rule: fixes-url', () => {
   const valid = [
     ['GitHub issue URL',
       'https://github.com/nodejs/node/issues/1234'],
@@ -43,21 +43,21 @@ test('rule: fixes-url', (t) => {
   ]
 
   for (const [name, url] of valid) {
-    t.test(name, (tt) => {
-      tt.plan(7)
+    test(name, (t) => {
+      t.plan(7)
       const context = makeCommit(`test: fix something
 
 Fixes: ${url}`
       )
 
       context.report = (opts) => {
-        tt.pass('called report')
-        tt.equal(opts.id, 'fixes-url', 'id')
-        tt.equal(opts.message, VALID_FIXES_URL, 'message')
-        tt.equal(opts.string, url, 'string')
-        tt.equal(opts.line, 1, 'line')
-        tt.equal(opts.column, 7, 'column')
-        tt.equal(opts.level, 'pass', 'level')
+        t.assert.ok(true, 'called report')
+        t.assert.strictEqual(opts.id, 'fixes-url', 'id')
+        t.assert.strictEqual(opts.message, VALID_FIXES_URL, 'message')
+        t.assert.strictEqual(opts.string, url, 'string')
+        t.assert.strictEqual(opts.line, 1, 'line')
+        t.assert.strictEqual(opts.column, 7, 'column')
+        t.assert.strictEqual(opts.level, 'pass', 'level')
       }
 
       Rule.validate(context)
@@ -77,26 +77,24 @@ Fixes: ${url}`
       'fhqwhgads']
   ]
   for (const [name, expected, url] of invalid) {
-    t.test(name, (tt) => {
-      tt.plan(7)
+    test(name, (t) => {
+      t.plan(7)
       const context = makeCommit(`test: fix something
 
 Fixes: ${url}`
       )
 
       context.report = (opts) => {
-        tt.pass('called report')
-        tt.equal(opts.id, 'fixes-url', 'id')
-        tt.equal(opts.message, expected, 'message')
-        tt.equal(opts.string, url, 'string')
-        tt.equal(opts.line, 1, 'line')
-        tt.equal(opts.column, 7, 'column')
-        tt.equal(opts.level, 'fail', 'level')
+        t.assert.ok(true, 'called report')
+        t.assert.strictEqual(opts.id, 'fixes-url', 'id')
+        t.assert.strictEqual(opts.message, expected, 'message')
+        t.assert.strictEqual(opts.string, url, 'string')
+        t.assert.strictEqual(opts.line, 1, 'line')
+        t.assert.strictEqual(opts.column, 7, 'column')
+        t.assert.strictEqual(opts.level, 'fail', 'level')
       }
 
       Rule.validate(context)
     })
   }
-
-  t.end()
 })
