@@ -1,24 +1,18 @@
-import { test } from 'tap'
+import { describe, test } from 'node:test'
 import BaseRule from '../lib/rule.js'
 
-test('Base Rule Test', (t) => {
-  t.test('No id param', (tt) => {
-    tt.throws(() => {
+describe('Base Rule Test', () => {
+  test('No id param', (t) => {
+    t.assert.throws(() => {
       const Rule = new BaseRule()
       Rule()
-    }, 'Rule must have an id')
-
-    tt.end()
+    }, { message: 'Rule must have an id' })
   })
 
-  t.test('No validate function', (tt) => {
-    tt.throws(() => {
+  test('No validate function', (t) => {
+    t.assert.throws(() => {
       const Rule = new BaseRule({ id: 'test-rule' })
       Rule()
-    }, 'Rule must have validate function')
-
-    tt.end()
+    }, { message: 'Rule must have validate function' })
   })
-
-  t.end()
 })

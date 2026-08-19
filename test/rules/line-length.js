@@ -1,11 +1,11 @@
-import { test } from 'tap'
+import { describe, test } from 'node:test'
 import Rule from '../../lib/rules/line-length.js'
 import Commit from '../../lib/gitlint-parser.js'
 import Validator from '../../index.js'
 
-test('rule: line-length', (t) => {
-  t.test('line too long', (tt) => {
-    tt.plan(7)
+describe('rule: line-length', () => {
+  test('line too long', (t) => {
+    t.plan(7)
     const v = new Validator()
     const context = new Commit({
       sha: 'e7c077c610afa371430180fbd447bfef60ebc5ea',
@@ -20,13 +20,13 @@ ${'aaa'.repeat(30)}`
     }, v)
 
     context.report = (opts) => {
-      tt.pass('called report')
-      tt.equal(opts.id, 'line-length', 'id')
-      tt.equal(opts.message, 'Line should be <= 72 columns.', 'message')
-      tt.equal(opts.string, 'aaa'.repeat(30), 'string')
-      tt.equal(opts.line, 1, 'line')
-      tt.equal(opts.column, 72, 'column')
-      tt.equal(opts.level, 'fail', 'level')
+      t.assert.ok(true, 'called report')
+      t.assert.strictEqual(opts.id, 'line-length', 'id')
+      t.assert.strictEqual(opts.message, 'Line should be <= 72 columns.', 'message')
+      t.assert.strictEqual(opts.string, 'aaa'.repeat(30), 'string')
+      t.assert.strictEqual(opts.line, 1, 'line')
+      t.assert.strictEqual(opts.column, 72, 'column')
+      t.assert.strictEqual(opts.level, 'fail', 'level')
     }
 
     Rule.validate(context, {
@@ -37,7 +37,7 @@ ${'aaa'.repeat(30)}`
     })
   })
 
-  t.test('release commit', (tt) => {
+  test('release commit', (t) => {
     const v = new Validator()
     const context = new Commit({
       sha: 'e7c077c610afa371430180fbd447bfef60ebc5ea',
@@ -52,10 +52,10 @@ ${'aaa'.repeat(30)}`
     }, v)
 
     context.report = (opts) => {
-      tt.pass('called report')
-      tt.equal(opts.id, 'line-length', 'id')
-      tt.equal(opts.string, '', 'string')
-      tt.equal(opts.level, 'skip', 'level')
+      t.assert.ok(true, 'called report')
+      t.assert.strictEqual(opts.id, 'line-length', 'id')
+      t.assert.strictEqual(opts.string, '', 'string')
+      t.assert.strictEqual(opts.level, 'skip', 'level')
     }
 
     Rule.validate(context, {
@@ -64,10 +64,9 @@ ${'aaa'.repeat(30)}`
         trailerLength: 120
       }
     })
-    tt.end()
   })
 
-  t.test('quoted lines', (tt) => {
+  test('quoted lines', (t) => {
     const v = new Validator()
     const context = new Commit({
       sha: 'e7c077c610afa371430180fbd447bfef60ebc5ea',
@@ -87,10 +86,10 @@ That was the original code.
     }, v)
 
     context.report = (opts) => {
-      tt.pass('called report')
-      tt.equal(opts.id, 'line-length', 'id')
-      tt.equal(opts.string, '', 'string')
-      tt.equal(opts.level, 'pass', 'level')
+      t.assert.ok(true, 'called report')
+      t.assert.strictEqual(opts.id, 'line-length', 'id')
+      t.assert.strictEqual(opts.string, '', 'string')
+      t.assert.strictEqual(opts.level, 'pass', 'level')
     }
 
     Rule.validate(context, {
@@ -99,10 +98,9 @@ That was the original code.
         trailerLength: 120
       }
     })
-    tt.end()
   })
 
-  t.test('URLs', (tt) => {
+  test('URLs', (t) => {
     const v = new Validator()
     const context = new Commit({
       sha: 'e7c077c610afa371430180fbd447bfef60ebc5ea',
@@ -120,10 +118,10 @@ Trailer: value
     }, v)
 
     context.report = (opts) => {
-      tt.pass('called report')
-      tt.equal(opts.id, 'line-length', 'id')
-      tt.equal(opts.string, '', 'string')
-      tt.equal(opts.level, 'pass', 'level')
+      t.assert.ok(true, 'called report')
+      t.assert.strictEqual(opts.id, 'line-length', 'id')
+      t.assert.strictEqual(opts.string, '', 'string')
+      t.assert.strictEqual(opts.level, 'pass', 'level')
     }
 
     Rule.validate(context, {
@@ -132,10 +130,9 @@ Trailer: value
         trailerLength: 120
       }
     })
-    tt.end()
   })
 
-  t.test('Co-author trailers', (tt) => {
+  test('Co-author trailers', (t) => {
     const v = new Validator()
 
     const good = new Commit({
@@ -153,10 +150,10 @@ Trailer: value
     }, v)
 
     good.report = (opts) => {
-      tt.pass('called report')
-      tt.equal(opts.id, 'line-length', 'id')
-      tt.equal(opts.string, '', 'string')
-      tt.equal(opts.level, 'pass', 'level')
+      t.assert.ok(true, 'called report')
+      t.assert.strictEqual(opts.id, 'line-length', 'id')
+      t.assert.strictEqual(opts.string, '', 'string')
+      t.assert.strictEqual(opts.level, 'pass', 'level')
     }
 
     Rule.validate(good, {
@@ -165,11 +162,9 @@ Trailer: value
         trailerLength: 120
       }
     })
-
-    tt.end()
   })
 
-  t.test('Multi-line trailers', (tt) => {
+  test('Multi-line trailers', (t) => {
     const v = new Validator()
 
     const good = new Commit({
@@ -206,17 +201,17 @@ Trailer: value
     }, v)
 
     good.report = (opts) => {
-      tt.pass('called report')
-      tt.equal(opts.id, 'line-length', 'id')
-      tt.equal(opts.string, '', 'string')
-      tt.equal(opts.level, 'pass', 'level')
+      t.assert.ok(true, 'called report')
+      t.assert.strictEqual(opts.id, 'line-length', 'id')
+      t.assert.strictEqual(opts.string, '', 'string')
+      t.assert.strictEqual(opts.level, 'pass', 'level')
     }
     bad.report = (opts) => {
-      tt.pass('called report')
-      tt.equal(opts.id, 'line-length', 'id')
-      tt.equal(opts.message, 'Trailer should be <= 120 columns.', 'message')
-      tt.equal(opts.string, tooLong, 'string')
-      tt.equal(opts.level, 'fail', 'level')
+      t.assert.ok(true, 'called report')
+      t.assert.strictEqual(opts.id, 'line-length', 'id')
+      t.assert.strictEqual(opts.message, 'Trailer should be <= 120 columns.', 'message')
+      t.assert.strictEqual(opts.string, tooLong, 'string')
+      t.assert.strictEqual(opts.level, 'fail', 'level')
     }
 
     Rule.validate(good, {
@@ -231,11 +226,9 @@ Trailer: value
         trailerLength: 120
       }
     })
-
-    tt.end()
   })
 
-  t.test('Signed-off-by and Assisted-by trailers', (tt) => {
+  test('Signed-off-by and Assisted-by trailers', (t) => {
     const v = new Validator()
 
     const good = new Commit({
@@ -254,10 +247,10 @@ Trailer: value
     }, v)
 
     good.report = (opts) => {
-      tt.pass('called report')
-      tt.equal(opts.id, 'line-length', 'id')
-      tt.equal(opts.string, '', 'string')
-      tt.equal(opts.level, 'pass', 'level')
+      t.assert.ok(true, 'called report')
+      t.assert.strictEqual(opts.id, 'line-length', 'id')
+      t.assert.strictEqual(opts.string, '', 'string')
+      t.assert.strictEqual(opts.level, 'pass', 'level')
     }
 
     Rule.validate(good, {
@@ -266,12 +259,10 @@ Trailer: value
         trailerLength: 120
       }
     })
-
-    tt.end()
   })
 
-  t.test('Signed-off-by and Assisted-by non-trailers', (tt) => {
-    tt.plan(8)
+  test('Signed-off-by and Assisted-by non-trailers', (t) => {
+    t.plan(8)
     const v = new Validator()
 
     const context = new Commit({
@@ -293,13 +284,13 @@ Trailer: value
 
     let called = 0
     context.report = (opts) => {
-      tt.pass('called report')
-      tt.equal(opts.id, 'line-length', 'id')
-      tt.equal(opts.string,
+      t.assert.ok(true, 'called report')
+      t.assert.strictEqual(opts.id, 'line-length', 'id')
+      t.assert.strictEqual(opts.string,
         called++
           ? 'Assisted-by: The Longest-Named Code Agent In The World <agent@example.com>'
           : 'Signed-off-by: John Connor <9092381+JConnor1985@users.noreply.github.com>', 'string')
-      tt.equal(opts.level, 'fail', 'level')
+      t.assert.strictEqual(opts.level, 'fail', 'level')
     }
 
     Rule.validate(context, {
@@ -308,9 +299,5 @@ Trailer: value
         trailerLength: 120
       }
     })
-
-    tt.end()
   })
-
-  t.end()
 })

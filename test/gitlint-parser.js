@@ -1,9 +1,9 @@
-import { test } from 'tap'
+import { describe, test } from 'node:test'
 import Parser from '../lib/gitlint-parser.js'
 
-test('Parser', (t) => {
-  t.test('basic commit with PR-URL and reviewers', (tt) => {
-    tt.plan(10)
+describe('Parser', () => {
+  test('basic commit with PR-URL and reviewers', (t) => {
+    t.plan(10)
     const input = `commit e7c077c610afa371430180fbd447bfef60ebc5ea
 Author: Calvin Metcalf <cmetcalf@appgeo.com>
 Date:   Tue Apr 12 15:42:23 2016 -0400
@@ -22,31 +22,31 @@ Date:   Tue Apr 12 15:42:23 2016 -0400
 
     const v = {
       report: (obj) => {
-        tt.pass('called report')
-        tt.equal(obj.data, data, 'obj')
+        t.assert.ok(true, 'called report')
+        t.assert.strictEqual(obj.data, data, 'obj')
       }
     }
     const p = new Parser(input, v)
     const c = p.toJSON()
-    tt.equal(c.sha, 'e7c077c610afa371430180fbd447bfef60ebc5ea', 'sha')
-    tt.equal(c.author, 'Calvin Metcalf <cmetcalf@appgeo.com>', 'author')
-    tt.equal(c.date, 'Tue Apr 12 15:42:23 2016 -0400', 'date')
-    tt.deepEqual(c.subsystems, ['stream'], 'subsystems')
-    tt.deepEqual(c.fixes, [], 'fixes')
-    tt.equal(c.prUrl, 'https://github.com/nodejs/node/pull/6170', 'prUrl')
-    tt.deepEqual(c.reviewers, [
+    t.assert.strictEqual(c.sha, 'e7c077c610afa371430180fbd447bfef60ebc5ea', 'sha')
+    t.assert.strictEqual(c.author, 'Calvin Metcalf <cmetcalf@appgeo.com>', 'author')
+    t.assert.strictEqual(c.date, 'Tue Apr 12 15:42:23 2016 -0400', 'date')
+    t.assert.deepStrictEqual(c.subsystems, ['stream'], 'subsystems')
+    t.assert.deepStrictEqual(c.fixes, [], 'fixes')
+    t.assert.strictEqual(c.prUrl, 'https://github.com/nodejs/node/pull/6170', 'prUrl')
+    t.assert.deepStrictEqual(c.reviewers, [
       'James M Snell <jasnell@gmail.com>',
       'Matteo Collina <matteo.collina@gmail.com>'
     ], 'reviewers')
-    tt.deepEqual(c.metadata, {
+    t.assert.deepStrictEqual(c.metadata, {
       start: 5,
       end: 7
     }, 'metadata')
     p.report(data)
   })
 
-  t.test('basic commit using format=fuller', (tt) => {
-    tt.plan(9)
+  test('basic commit using format=fuller', (t) => {
+    t.plan(9)
     const input = `commit e7c077c610afa371430180fbd447bfef60ebc5ea
 Author:     Calvin Metcalf <cmetcalf@appgeo.com>
 AuthorDate: Tue Apr 12 15:42:23 2016 -0400
@@ -67,27 +67,27 @@ CommitDate: Tue Apr 12 15:42:23 2016 -0400
 
     const v = {
       report: (obj) => {
-        tt.pass('called report')
-        tt.equal(obj.data, data, 'obj')
+        t.assert.ok(true, 'called report')
+        t.assert.strictEqual(obj.data, data, 'obj')
       }
     }
     const p = new Parser(input, v)
     const c = p.toJSON()
-    tt.equal(c.sha, 'e7c077c610afa371430180fbd447bfef60ebc5ea', 'sha')
-    tt.equal(c.author, 'Calvin Metcalf <cmetcalf@appgeo.com>', 'author')
-    tt.equal(c.date, 'Tue Apr 12 15:42:23 2016 -0400', 'date')
-    tt.deepEqual(c.subsystems, ['stream'], 'subsystems')
-    tt.deepEqual(c.fixes, [], 'fixes')
-    tt.equal(c.prUrl, 'https://github.com/nodejs/node/pull/6170', 'prUrl')
-    tt.deepEqual(c.reviewers, [
+    t.assert.strictEqual(c.sha, 'e7c077c610afa371430180fbd447bfef60ebc5ea', 'sha')
+    t.assert.strictEqual(c.author, 'Calvin Metcalf <cmetcalf@appgeo.com>', 'author')
+    t.assert.strictEqual(c.date, 'Tue Apr 12 15:42:23 2016 -0400', 'date')
+    t.assert.deepStrictEqual(c.subsystems, ['stream'], 'subsystems')
+    t.assert.deepStrictEqual(c.fixes, [], 'fixes')
+    t.assert.strictEqual(c.prUrl, 'https://github.com/nodejs/node/pull/6170', 'prUrl')
+    t.assert.deepStrictEqual(c.reviewers, [
       'James M Snell <jasnell@gmail.com>',
       'Matteo Collina <matteo.collina@gmail.com>'
     ], 'reviewers')
     p.report(data)
   })
 
-  t.test('revert commit', (tt) => {
-    tt.plan(13)
+  test('revert commit', (t) => {
+    t.plan(13)
     const input = `commit 1d4c7993a9c6dcacaca5074a80b1043e977c43fb
 Author: Rod Vagg <rod@vagg.org>
 Date:   Wed Jun 8 16:32:10 2016 +1000
@@ -105,36 +105,36 @@ Date:   Wed Jun 8 16:32:10 2016 +1000
 
     const v = {
       report: (obj) => {
-        tt.pass('called report')
-        tt.equal(obj.data, data, 'obj')
+        t.assert.ok(true, 'called report')
+        t.assert.strictEqual(obj.data, data, 'obj')
       }
     }
     const p = new Parser(input, v)
     const c = p.toJSON()
-    tt.equal(c.sha, '1d4c7993a9c6dcacaca5074a80b1043e977c43fb', 'sha')
-    tt.equal(c.author, 'Rod Vagg <rod@vagg.org>', 'author')
-    tt.equal(c.date, 'Wed Jun 8 16:32:10 2016 +1000', 'date')
-    tt.deepEqual(c.subsystems, ['test'], 'subsystems')
-    tt.deepEqual(c.fixes, [], 'fixes')
-    tt.equal(c.prUrl, 'https://github.com/nodejs/node/pull/7216', 'prUrl')
-    tt.deepEqual(c.reviewers, [
+    t.assert.strictEqual(c.sha, '1d4c7993a9c6dcacaca5074a80b1043e977c43fb', 'sha')
+    t.assert.strictEqual(c.author, 'Rod Vagg <rod@vagg.org>', 'author')
+    t.assert.strictEqual(c.date, 'Wed Jun 8 16:32:10 2016 +1000', 'date')
+    t.assert.deepStrictEqual(c.subsystems, ['test'], 'subsystems')
+    t.assert.deepStrictEqual(c.fixes, [], 'fixes')
+    t.assert.strictEqual(c.prUrl, 'https://github.com/nodejs/node/pull/7216', 'prUrl')
+    t.assert.deepStrictEqual(c.reviewers, [
       'Colin Ihrig <cjihrig@gmail.com>',
       'James M Snell <jasnell@gmail.com>',
       'Michaël Zasso <mic.besace@gmail.com>',
       'Johan Bergström <bugs@bergstroem.nu>'
     ], 'reviewers')
 
-    tt.equal(c.revert, true, 'revert')
-    tt.equal(c.release, false, 'release')
-    tt.equal(c.working, false, 'working')
-    tt.deepEqual(c.metadata, {
+    t.assert.strictEqual(c.revert, true, 'revert')
+    t.assert.strictEqual(c.release, false, 'release')
+    t.assert.strictEqual(c.working, false, 'working')
+    t.assert.deepStrictEqual(c.metadata, {
       start: 3,
       end: 7
     }, 'metadata')
     p.report(data)
   })
 
-  t.test('backport commit', (tt) => {
+  test('backport commit', (t) => {
     const input = `commit 5cdbbdf94d6f656230293ddd2a71dedf11cab17d
 Author: Ben Noordhuis <info@bnoordhuis.nl>
 Date:   Thu Jul 7 14:29:32 2016 -0700
@@ -161,37 +161,36 @@ Date:   Thu Jul 7 14:29:32 2016 -0700
 
     const v = {
       report: (obj) => {
-        tt.pass('called report')
-        tt.equal(obj.data, data, 'obj')
+        t.assert.ok(true, 'called report')
+        t.assert.strictEqual(obj.data, data, 'obj')
       }
     }
     const p = new Parser(input, v)
     const c = p.toJSON()
-    tt.equal(c.sha, '5cdbbdf94d6f656230293ddd2a71dedf11cab17d', 'sha')
-    tt.equal(c.author, 'Ben Noordhuis <info@bnoordhuis.nl>', 'author')
-    tt.equal(c.date, 'Thu Jul 7 14:29:32 2016 -0700', 'date')
-    tt.deepEqual(c.subsystems, ['deps'], 'subsystems')
-    tt.deepEqual(c.fixes, [
+    t.assert.strictEqual(c.sha, '5cdbbdf94d6f656230293ddd2a71dedf11cab17d', 'sha')
+    t.assert.strictEqual(c.author, 'Ben Noordhuis <info@bnoordhuis.nl>', 'author')
+    t.assert.strictEqual(c.date, 'Thu Jul 7 14:29:32 2016 -0700', 'date')
+    t.assert.deepStrictEqual(c.subsystems, ['deps'], 'subsystems')
+    t.assert.deepStrictEqual(c.fixes, [
       'https://github.com/nodejs/node/issues/7536'
     ], 'fixes')
-    tt.equal(c.prUrl, 'https://github.com/nodejs/node/pull/7612', 'prUrl')
-    tt.deepEqual(c.reviewers, [
+    t.assert.strictEqual(c.prUrl, 'https://github.com/nodejs/node/pull/7612', 'prUrl')
+    t.assert.deepStrictEqual(c.reviewers, [
       'Colin Ihrig <cjihrig@gmail.com>',
       'Michaël Zasso <mic.besace@gmail.com>'
     ], 'reviewers')
 
-    tt.equal(c.revert, false, 'revert')
-    tt.equal(c.release, false, 'release')
-    tt.equal(c.working, false, 'working')
-    tt.deepEqual(c.metadata, {
+    t.assert.strictEqual(c.revert, false, 'revert')
+    t.assert.strictEqual(c.release, false, 'release')
+    t.assert.strictEqual(c.working, false, 'working')
+    t.assert.deepStrictEqual(c.metadata, {
       start: 13,
       end: 16
     }, 'metadata')
     p.report(data)
-    tt.end()
   })
 
-  t.test('release commit', (tt) => {
+  test('release commit', (t) => {
     /* eslint-disable */
     const input = `commit 6a9438343bb63e2c1fc028f2e9387e6ae41b9fc8
 Author: Evan Lucas <evanlucas@me.com>
@@ -219,25 +218,24 @@ Date:   Thu Jun 23 07:27:44 2016 -0500
     }
     const p = new Parser(input, v)
     const c = p.toJSON()
-    tt.equal(c.sha, '6a9438343bb63e2c1fc028f2e9387e6ae41b9fc8', 'sha')
-    tt.equal(c.author, 'Evan Lucas <evanlucas@me.com>', 'author')
-    tt.equal(c.date, 'Thu Jun 23 07:27:44 2016 -0500', 'date')
-    tt.deepEqual(c.subsystems, [], 'subsystems')
-    tt.deepEqual(c.fixes, [], 'fixes')
-    tt.equal(c.prUrl, 'https://github.com/nodejs/node-private/pull/51', 'prUrl')
-    tt.deepEqual(c.reviewers, [], 'reviewers')
-    tt.deepEqual(c.metadata, {
+    t.assert.strictEqual(c.sha, '6a9438343bb63e2c1fc028f2e9387e6ae41b9fc8', 'sha')
+    t.assert.strictEqual(c.author, 'Evan Lucas <evanlucas@me.com>', 'author')
+    t.assert.strictEqual(c.date, 'Thu Jun 23 07:27:44 2016 -0500', 'date')
+    t.assert.deepStrictEqual(c.subsystems, [], 'subsystems')
+    t.assert.deepStrictEqual(c.fixes, [], 'fixes')
+    t.assert.strictEqual(c.prUrl, 'https://github.com/nodejs/node-private/pull/51', 'prUrl')
+    t.assert.deepStrictEqual(c.reviewers, [], 'reviewers')
+    t.assert.deepStrictEqual(c.metadata, {
       start: 14,
       end: 14
     }, 'metadata')
 
-    tt.equal(c.revert, false, 'revert')
-    tt.equal(c.release, true, 'release')
-    tt.equal(c.working, false, 'working')
-    tt.end()
+    t.assert.strictEqual(c.revert, false, 'revert')
+    t.assert.strictEqual(c.release, true, 'release')
+    t.assert.strictEqual(c.working, false, 'working')
   })
 
-  t.test('extra meta', (tt) => {
+  test('extra meta', (t) => {
     /* eslint-disable */
     const input = {
       "sha": "c5545f2c63fe30b0cfcdafab18c26df8286881d0",
@@ -272,29 +270,29 @@ Date:   Thu Jun 23 07:27:44 2016 -0500
     }
     const p = new Parser(input, v)
     const c = p.toJSON()
-    tt.equal(c.sha, 'c5545f2c63fe30b0cfcdafab18c26df8286881d0', 'sha')
-    tt.equal(c.author, 'Anna Henningsen <anna@addaleax.net>', 'author')
-    tt.equal(c.date, '2016-09-13T10:57:49Z', 'date')
-    tt.deepEqual(c.subsystems, ['fs'], 'subsystems')
-    tt.deepEqual(c.fixes, [], 'fixes')
-    tt.equal(c.prUrl, 'https://github.com/nodejs/node/pull/8515', 'prUrl')
-    tt.deepEqual(c.reviewers, [
+    t.assert.strictEqual(c.sha, 'c5545f2c63fe30b0cfcdafab18c26df8286881d0', 'sha')
+    t.assert.strictEqual(c.author, 'Anna Henningsen <anna@addaleax.net>', 'author')
+    t.assert.strictEqual(c.date, '2016-09-13T10:57:49Z', 'date')
+    t.assert.deepStrictEqual(c.subsystems, ['fs'], 'subsystems')
+    t.assert.deepStrictEqual(c.fixes, [], 'fixes')
+    t.assert.strictEqual(c.prUrl, 'https://github.com/nodejs/node/pull/8515', 'prUrl')
+    t.assert.deepStrictEqual(c.reviewers, [
       'Ben Noordhuis <info@bnoordhuis.nl>',
       'Sakthipriyan Vairamani <thechargingvolcano@gmail.com>',
       'James M Snell <jasnell@gmail.com>'
     ], 'reviewers')
-    tt.deepEqual(c.metadata, {
+    t.assert.deepStrictEqual(c.metadata, {
       start: 16,
       end: 20
     }, 'metadata')
-    tt.deepEqual(c.trailers, [
+    t.assert.deepStrictEqual(c.trailers, [
       'Ref: https://github.com/npm/npm/issues/13918',
       'PR-URL: https://github.com/nodejs/node/pull/8515',
       'Reviewed-By: Ben Noordhuis <info@bnoordhuis.nl>',
       'Reviewed-By: Sakthipriyan Vairamani <thechargingvolcano@gmail.com>',
       'Reviewed-By: James M Snell <jasnell@gmail.com>'
     ], 'c.trailers')
-    tt.deepEqual(c.trailerFreeBody, [
+    t.assert.deepStrictEqual(c.trailerFreeBody, [
       '`FChown` and `Chown` test that the `uid` and `gid` parameters',
       'they receive are unsigned integers, but `Stat()` and `FStat()`',
       'would return the corresponding fields of `uv_stat_t` as signed',
@@ -311,11 +309,8 @@ Date:   Thu Jun 23 07:27:44 2016 -0500
       'fields aren’t specified, either.'
     ], 'c.trailerFreeBody')
 
-    tt.equal(c.revert, false, 'revert')
-    tt.equal(c.release, false, 'release')
-    tt.equal(c.working, false, 'working')
-    tt.end()
+    t.assert.strictEqual(c.revert, false, 'revert')
+    t.assert.strictEqual(c.release, false, 'release')
+    t.assert.strictEqual(c.working, false, 'working')
   })
-
-  t.end()
 })

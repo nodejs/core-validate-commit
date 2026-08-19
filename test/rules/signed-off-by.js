@@ -1,11 +1,11 @@
-import { test } from 'tap'
+import { describe, test } from 'node:test'
 import Rule from '../../lib/rules/signed-off-by.js'
 import Commit from '../../lib/gitlint-parser.js'
 import Validator from '../../index.js'
 
-test('rule: signed-off-by', (t) => {
-  t.test('valid sign-off', (tt) => {
-    tt.plan(4)
+describe('rule: signed-off-by', () => {
+  test('valid sign-off', (t) => {
+    t.plan(4)
     const v = new Validator()
     const context = new Commit({
       sha: 'e7c077c610afa371430180fbd447bfef60ebc5ea',
@@ -24,17 +24,17 @@ test('rule: signed-off-by', (t) => {
     }, v)
 
     context.report = (opts) => {
-      tt.pass('called report')
-      tt.equal(opts.id, 'signed-off-by', 'id')
-      tt.equal(opts.message, 'has valid Signed-off-by', 'message')
-      tt.equal(opts.level, 'pass', 'level')
+      t.assert.ok(true, 'called report')
+      t.assert.strictEqual(opts.id, 'signed-off-by', 'id')
+      t.assert.strictEqual(opts.message, 'has valid Signed-off-by', 'message')
+      t.assert.strictEqual(opts.level, 'pass', 'level')
     }
 
     Rule.validate(context)
   })
 
-  t.test('missing sign-off', (tt) => {
-    tt.plan(4)
+  test('missing sign-off', (t) => {
+    t.plan(4)
     const v = new Validator()
     const context = new Commit({
       sha: 'e7c077c610afa371430180fbd447bfef60ebc5ea',
@@ -52,18 +52,18 @@ test('rule: signed-off-by', (t) => {
     }, v)
 
     context.report = (opts) => {
-      tt.pass('called report')
-      tt.equal(opts.id, 'signed-off-by', 'id')
-      tt.equal(opts.message,
+      t.assert.ok(true, 'called report')
+      t.assert.strictEqual(opts.id, 'signed-off-by', 'id')
+      t.assert.strictEqual(opts.message,
         'Commit must have a "Signed-off-by" trailer', 'message')
-      tt.equal(opts.level, 'fail', 'level')
+      t.assert.strictEqual(opts.level, 'fail', 'level')
     }
 
     Rule.validate(context)
   })
 
-  t.test('invalid email - no angle brackets', (tt) => {
-    tt.plan(7)
+  test('invalid email - no angle brackets', (t) => {
+    t.plan(7)
     const v = new Validator()
     const context = new Commit({
       sha: 'e7c077c610afa371430180fbd447bfef60ebc5ea',
@@ -82,22 +82,22 @@ test('rule: signed-off-by', (t) => {
     }, v)
 
     context.report = (opts) => {
-      tt.pass('called report')
-      tt.equal(opts.id, 'signed-off-by', 'id')
-      tt.equal(opts.message,
+      t.assert.ok(true, 'called report')
+      t.assert.strictEqual(opts.id, 'signed-off-by', 'id')
+      t.assert.strictEqual(opts.message,
         '"Signed-off-by" trailer has invalid email', 'message')
-      tt.equal(opts.string,
+      t.assert.strictEqual(opts.string,
         'Signed-off-by: Foo foo@example.com', 'string')
-      tt.equal(opts.line, 3, 'line')
-      tt.equal(opts.column, 0, 'column')
-      tt.equal(opts.level, 'fail', 'level')
+      t.assert.strictEqual(opts.line, 3, 'line')
+      t.assert.strictEqual(opts.column, 0, 'column')
+      t.assert.strictEqual(opts.level, 'fail', 'level')
     }
 
     Rule.validate(context)
   })
 
-  t.test('invalid email - no domain', (tt) => {
-    tt.plan(7)
+  test('invalid email - no domain', (t) => {
+    t.plan(7)
     const v = new Validator()
     const context = new Commit({
       sha: 'e7c077c610afa371430180fbd447bfef60ebc5ea',
@@ -116,22 +116,22 @@ test('rule: signed-off-by', (t) => {
     }, v)
 
     context.report = (opts) => {
-      tt.pass('called report')
-      tt.equal(opts.id, 'signed-off-by', 'id')
-      tt.equal(opts.message,
+      t.assert.ok(true, 'called report')
+      t.assert.strictEqual(opts.id, 'signed-off-by', 'id')
+      t.assert.strictEqual(opts.message,
         '"Signed-off-by" trailer has invalid email', 'message')
-      tt.equal(opts.string,
+      t.assert.strictEqual(opts.string,
         'Signed-off-by: Foo <foo@>', 'string')
-      tt.equal(opts.line, 3, 'line')
-      tt.equal(opts.column, 0, 'column')
-      tt.equal(opts.level, 'fail', 'level')
+      t.assert.strictEqual(opts.line, 3, 'line')
+      t.assert.strictEqual(opts.column, 0, 'column')
+      t.assert.strictEqual(opts.level, 'fail', 'level')
     }
 
     Rule.validate(context)
   })
 
-  t.test('missing name', (tt) => {
-    tt.plan(7)
+  test('missing name', (t) => {
+    t.plan(7)
     const v = new Validator()
     const context = new Commit({
       sha: 'e7c077c610afa371430180fbd447bfef60ebc5ea',
@@ -150,22 +150,22 @@ test('rule: signed-off-by', (t) => {
     }, v)
 
     context.report = (opts) => {
-      tt.pass('called report')
-      tt.equal(opts.id, 'signed-off-by', 'id')
-      tt.equal(opts.message,
+      t.assert.ok(true, 'called report')
+      t.assert.strictEqual(opts.id, 'signed-off-by', 'id')
+      t.assert.strictEqual(opts.message,
         '"Signed-off-by" trailer has invalid email', 'message')
-      tt.equal(opts.string,
+      t.assert.strictEqual(opts.string,
         'Signed-off-by: <foo@example.com>', 'string')
-      tt.equal(opts.line, 3, 'line')
-      tt.equal(opts.column, 0, 'column')
-      tt.equal(opts.level, 'fail', 'level')
+      t.assert.strictEqual(opts.line, 3, 'line')
+      t.assert.strictEqual(opts.column, 0, 'column')
+      t.assert.strictEqual(opts.level, 'fail', 'level')
     }
 
     Rule.validate(context)
   })
 
-  t.test('release commit', (tt) => {
-    tt.plan(4)
+  test('release commit', (t) => {
+    t.plan(4)
     const v = new Validator()
     const context = new Commit({
       sha: 'e7c077c610afa371430180fbd447bfef60ebc5ea',
@@ -182,18 +182,18 @@ test('rule: signed-off-by', (t) => {
     }, v)
 
     context.report = (opts) => {
-      tt.pass('called report')
-      tt.equal(opts.id, 'signed-off-by', 'id')
-      tt.equal(opts.message,
+      t.assert.ok(true, 'called report')
+      t.assert.strictEqual(opts.id, 'signed-off-by', 'id')
+      t.assert.strictEqual(opts.message,
         'skipping sign-off for release commit', 'message')
-      tt.equal(opts.level, 'skip', 'level')
+      t.assert.strictEqual(opts.level, 'skip', 'level')
     }
 
     Rule.validate(context)
   })
 
-  t.test('deps commit without sign-off', (tt) => {
-    tt.plan(4)
+  test('deps commit without sign-off', (t) => {
+    t.plan(4)
     const v = new Validator()
     const context = new Commit({
       sha: 'e7c077c610afa371430180fbd447bfef60ebc5ea',
@@ -214,18 +214,18 @@ test('rule: signed-off-by', (t) => {
     }, v)
 
     context.report = (opts) => {
-      tt.pass('called report')
-      tt.equal(opts.id, 'signed-off-by', 'id')
-      tt.equal(opts.message,
+      t.assert.ok(true, 'called report')
+      t.assert.strictEqual(opts.id, 'signed-off-by', 'id')
+      t.assert.strictEqual(opts.message,
         'skipping sign-off for deps commit', 'message')
-      tt.equal(opts.level, 'skip', 'level')
+      t.assert.strictEqual(opts.level, 'skip', 'level')
     }
 
     Rule.validate(context)
   })
 
-  t.test('deps commit with sign-off', (tt) => {
-    tt.plan(4)
+  test('deps commit with sign-off', (t) => {
+    t.plan(4)
     const v = new Validator()
     const context = new Commit({
       sha: 'e7c077c610afa371430180fbd447bfef60ebc5ea',
@@ -247,18 +247,18 @@ test('rule: signed-off-by', (t) => {
     }, v)
 
     context.report = (opts) => {
-      tt.pass('called report')
-      tt.equal(opts.id, 'signed-off-by', 'id')
-      tt.equal(opts.message,
+      t.assert.ok(true, 'called report')
+      t.assert.strictEqual(opts.id, 'signed-off-by', 'id')
+      t.assert.strictEqual(opts.message,
         'skipping sign-off for deps commit', 'message')
-      tt.equal(opts.level, 'skip', 'level')
+      t.assert.strictEqual(opts.level, 'skip', 'level')
     }
 
     Rule.validate(context)
   })
 
-  t.test('mixed deps commit without sign-off', (tt) => {
-    tt.plan(4)
+  test('mixed deps commit without sign-off', (t) => {
+    t.plan(4)
     const v = new Validator()
     const context = new Commit({
       sha: 'e7c077c610afa371430180fbd447bfef60ebc5ea',
@@ -276,19 +276,19 @@ test('rule: signed-off-by', (t) => {
     }, v)
 
     context.report = (opts) => {
-      tt.pass('called report')
-      tt.equal(opts.id, 'signed-off-by', 'id')
-      tt.equal(opts.message,
+      t.assert.ok(true, 'called report')
+      t.assert.strictEqual(opts.id, 'signed-off-by', 'id')
+      t.assert.strictEqual(opts.message,
         'Commit with non-deps changes should have a ' +
         '"Signed-off-by" trailer', 'message')
-      tt.equal(opts.level, 'warn', 'level')
+      t.assert.strictEqual(opts.level, 'warn', 'level')
     }
 
     Rule.validate(context)
   })
 
-  t.test('mixed deps commit with valid sign-off', (tt) => {
-    tt.plan(4)
+  test('mixed deps commit with valid sign-off', (t) => {
+    t.plan(4)
     const v = new Validator()
     const context = new Commit({
       sha: 'e7c077c610afa371430180fbd447bfef60ebc5ea',
@@ -307,17 +307,17 @@ test('rule: signed-off-by', (t) => {
     }, v)
 
     context.report = (opts) => {
-      tt.pass('called report')
-      tt.equal(opts.id, 'signed-off-by', 'id')
-      tt.equal(opts.message, 'has valid Signed-off-by', 'message')
-      tt.equal(opts.level, 'pass', 'level')
+      t.assert.ok(true, 'called report')
+      t.assert.strictEqual(opts.id, 'signed-off-by', 'id')
+      t.assert.strictEqual(opts.message, 'has valid Signed-off-by', 'message')
+      t.assert.strictEqual(opts.level, 'pass', 'level')
     }
 
     Rule.validate(context)
   })
 
-  t.test('backport commit without sign-off', (tt) => {
-    tt.plan(4)
+  test('backport commit without sign-off', (t) => {
+    t.plan(4)
     const v = new Validator()
     const context = new Commit({
       sha: 'e7c077c610afa371430180fbd447bfef60ebc5ea',
@@ -336,18 +336,18 @@ test('rule: signed-off-by', (t) => {
     }, v)
 
     context.report = (opts) => {
-      tt.pass('called report')
-      tt.equal(opts.id, 'signed-off-by', 'id')
-      tt.equal(opts.message,
+      t.assert.ok(true, 'called report')
+      t.assert.strictEqual(opts.id, 'signed-off-by', 'id')
+      t.assert.strictEqual(opts.message,
         'skipping sign-off for backport commit', 'message')
-      tt.equal(opts.level, 'skip', 'level')
+      t.assert.strictEqual(opts.level, 'skip', 'level')
     }
 
     Rule.validate(context)
   })
 
-  t.test('backport commit with sign-off', (tt) => {
-    tt.plan(4)
+  test('backport commit with sign-off', (t) => {
+    t.plan(4)
     const v = new Validator()
     const context = new Commit({
       sha: 'e7c077c610afa371430180fbd447bfef60ebc5ea',
@@ -367,18 +367,18 @@ test('rule: signed-off-by', (t) => {
     }, v)
 
     context.report = (opts) => {
-      tt.pass('called report')
-      tt.equal(opts.id, 'signed-off-by', 'id')
-      tt.equal(opts.message,
+      t.assert.ok(true, 'called report')
+      t.assert.strictEqual(opts.id, 'signed-off-by', 'id')
+      t.assert.strictEqual(opts.message,
         'skipping sign-off for backport commit', 'message')
-      tt.equal(opts.level, 'skip', 'level')
+      t.assert.strictEqual(opts.level, 'skip', 'level')
     }
 
     Rule.validate(context)
   })
 
-  t.test('multiple valid sign-offs', (tt) => {
-    tt.plan(4)
+  test('multiple valid sign-offs', (t) => {
+    t.plan(4)
     const v = new Validator()
     const context = new Commit({
       sha: 'e7c077c610afa371430180fbd447bfef60ebc5ea',
@@ -398,17 +398,17 @@ test('rule: signed-off-by', (t) => {
     }, v)
 
     context.report = (opts) => {
-      tt.pass('called report')
-      tt.equal(opts.id, 'signed-off-by', 'id')
-      tt.equal(opts.message, 'has valid Signed-off-by', 'message')
-      tt.equal(opts.level, 'pass', 'level')
+      t.assert.ok(true, 'called report')
+      t.assert.strictEqual(opts.id, 'signed-off-by', 'id')
+      t.assert.strictEqual(opts.message, 'has valid Signed-off-by', 'message')
+      t.assert.strictEqual(opts.level, 'pass', 'level')
     }
 
     Rule.validate(context)
   })
 
-  t.test('bot author with sign-off - name with [bot] suffix', (tt) => {
-    tt.plan(7)
+  test('bot author with sign-off - name with [bot] suffix', (t) => {
+    t.plan(7)
     const v = new Validator()
     const context = new Commit({
       sha: 'e7c077c610afa371430180fbd447bfef60ebc5ea',
@@ -428,21 +428,21 @@ test('rule: signed-off-by', (t) => {
     }, v)
 
     context.report = (opts) => {
-      tt.pass('called report')
-      tt.equal(opts.id, 'signed-off-by', 'id')
-      tt.equal(opts.message,
+      t.assert.ok(true, 'called report')
+      t.assert.strictEqual(opts.id, 'signed-off-by', 'id')
+      t.assert.strictEqual(opts.message,
         'bot commit should not have a "Signed-off-by" trailer', 'message')
-      tt.match(opts.string, /dependabot\[bot\]/, 'string')
-      tt.equal(opts.line, 3, 'line')
-      tt.equal(opts.column, 0, 'column')
-      tt.equal(opts.level, 'warn', 'level')
+      t.assert.match(opts.string, /dependabot\[bot\]/, 'string')
+      t.assert.strictEqual(opts.line, 3, 'line')
+      t.assert.strictEqual(opts.column, 0, 'column')
+      t.assert.strictEqual(opts.level, 'warn', 'level')
     }
 
     Rule.validate(context)
   })
 
-  t.test('bot author with sign-off - GitHub bot noreply email', (tt) => {
-    tt.plan(7)
+  test('bot author with sign-off - GitHub bot noreply email', (t) => {
+    t.plan(7)
     const v = new Validator()
     const context = new Commit({
       sha: 'e7c077c610afa371430180fbd447bfef60ebc5ea',
@@ -462,21 +462,21 @@ test('rule: signed-off-by', (t) => {
     }, v)
 
     context.report = (opts) => {
-      tt.pass('called report')
-      tt.equal(opts.id, 'signed-off-by', 'id')
-      tt.equal(opts.message,
+      t.assert.ok(true, 'called report')
+      t.assert.strictEqual(opts.id, 'signed-off-by', 'id')
+      t.assert.strictEqual(opts.message,
         'bot commit should not have a "Signed-off-by" trailer', 'message')
-      tt.match(opts.string, /some-tool\[bot\]/, 'string')
-      tt.equal(opts.line, 3, 'line')
-      tt.equal(opts.column, 0, 'column')
-      tt.equal(opts.level, 'warn', 'level')
+      t.assert.match(opts.string, /some-tool\[bot\]/, 'string')
+      t.assert.strictEqual(opts.line, 3, 'line')
+      t.assert.strictEqual(opts.column, 0, 'column')
+      t.assert.strictEqual(opts.level, 'warn', 'level')
     }
 
     Rule.validate(context)
   })
 
-  t.test('bot author without sign-off', (tt) => {
-    tt.plan(4)
+  test('bot author without sign-off', (t) => {
+    t.plan(4)
     const v = new Validator()
     const context = new Commit({
       sha: 'e7c077c610afa371430180fbd447bfef60ebc5ea',
@@ -494,18 +494,18 @@ test('rule: signed-off-by', (t) => {
     }, v)
 
     context.report = (opts) => {
-      tt.pass('called report')
-      tt.equal(opts.id, 'signed-off-by', 'id')
-      tt.equal(opts.message,
+      t.assert.ok(true, 'called report')
+      t.assert.strictEqual(opts.id, 'signed-off-by', 'id')
+      t.assert.strictEqual(opts.message,
         'skipping sign-off for bot commit', 'message')
-      tt.equal(opts.level, 'pass', 'level')
+      t.assert.strictEqual(opts.level, 'pass', 'level')
     }
 
     Rule.validate(context)
   })
 
-  t.test('bot author - Node.js GitHub Bot', (tt) => {
-    tt.plan(4)
+  test('bot author - Node.js GitHub Bot', (t) => {
+    t.plan(4)
     const v = new Validator()
     const context = new Commit({
       sha: 'e7c077c610afa371430180fbd447bfef60ebc5ea',
@@ -521,18 +521,18 @@ test('rule: signed-off-by', (t) => {
     }, v)
 
     context.report = (opts) => {
-      tt.pass('called report')
-      tt.equal(opts.id, 'signed-off-by', 'id')
-      tt.equal(opts.message,
+      t.assert.ok(true, 'called report')
+      t.assert.strictEqual(opts.id, 'signed-off-by', 'id')
+      t.assert.strictEqual(opts.message,
         'skipping sign-off for bot commit', 'message')
-      tt.equal(opts.level, 'pass', 'level')
+      t.assert.strictEqual(opts.level, 'pass', 'level')
     }
 
     Rule.validate(context)
   })
 
-  t.test('bot author with human sign-off', (tt) => {
-    tt.plan(7)
+  test('bot author with human sign-off', (t) => {
+    t.plan(7)
     const v = new Validator()
     const context = new Commit({
       sha: 'e7c077c610afa371430180fbd447bfef60ebc5ea',
@@ -551,22 +551,22 @@ test('rule: signed-off-by', (t) => {
     }, v)
 
     context.report = (opts) => {
-      tt.pass('called report')
-      tt.equal(opts.id, 'signed-off-by', 'id')
-      tt.equal(opts.message,
+      t.assert.ok(true, 'called report')
+      t.assert.strictEqual(opts.id, 'signed-off-by', 'id')
+      t.assert.strictEqual(opts.message,
         'bot commit should not have a "Signed-off-by" trailer', 'message')
-      tt.equal(opts.string,
+      t.assert.strictEqual(opts.string,
         'Signed-off-by: Human <human@example.com>', 'string')
-      tt.equal(opts.line, 3, 'line')
-      tt.equal(opts.column, 0, 'column')
-      tt.equal(opts.level, 'warn', 'level')
+      t.assert.strictEqual(opts.line, 3, 'line')
+      t.assert.strictEqual(opts.column, 0, 'column')
+      t.assert.strictEqual(opts.level, 'warn', 'level')
     }
 
     Rule.validate(context)
   })
 
-  t.test('author email mismatch', (tt) => {
-    tt.plan(7)
+  test('author email mismatch', (t) => {
+    t.plan(7)
     const v = new Validator()
     const context = new Commit({
       sha: 'e7c077c610afa371430180fbd447bfef60ebc5ea',
@@ -585,23 +585,23 @@ test('rule: signed-off-by', (t) => {
     }, v)
 
     context.report = (opts) => {
-      tt.pass('called report')
-      tt.equal(opts.id, 'signed-off-by', 'id')
-      tt.equal(opts.message,
+      t.assert.ok(true, 'called report')
+      t.assert.strictEqual(opts.id, 'signed-off-by', 'id')
+      t.assert.strictEqual(opts.message,
         '"Signed-off-by" email does not match the ' +
         'commit author email', 'message')
-      tt.equal(opts.string,
+      t.assert.strictEqual(opts.string,
         'Signed-off-by: Bob <bob@example.com>', 'string')
-      tt.equal(opts.line, 3, 'line')
-      tt.equal(opts.column, 0, 'column')
-      tt.equal(opts.level, 'warn', 'level')
+      t.assert.strictEqual(opts.line, 3, 'line')
+      t.assert.strictEqual(opts.column, 0, 'column')
+      t.assert.strictEqual(opts.level, 'warn', 'level')
     }
 
     Rule.validate(context)
   })
 
-  t.test('author email matches one of multiple sign-offs', (tt) => {
-    tt.plan(4)
+  test('author email matches one of multiple sign-offs', (t) => {
+    t.plan(4)
     const v = new Validator()
     const context = new Commit({
       sha: 'e7c077c610afa371430180fbd447bfef60ebc5ea',
@@ -621,17 +621,17 @@ test('rule: signed-off-by', (t) => {
     }, v)
 
     context.report = (opts) => {
-      tt.pass('called report')
-      tt.equal(opts.id, 'signed-off-by', 'id')
-      tt.equal(opts.message, 'has valid Signed-off-by', 'message')
-      tt.equal(opts.level, 'pass', 'level')
+      t.assert.ok(true, 'called report')
+      t.assert.strictEqual(opts.id, 'signed-off-by', 'id')
+      t.assert.strictEqual(opts.message, 'has valid Signed-off-by', 'message')
+      t.assert.strictEqual(opts.level, 'pass', 'level')
     }
 
     Rule.validate(context)
   })
 
-  t.test('no author info available - skips mismatch check', (tt) => {
-    tt.plan(4)
+  test('no author info available - skips mismatch check', (t) => {
+    t.plan(4)
     const v = new Validator()
     // Simulate stdin JSON input which has no author info.
     // Use a plain object context with no author field.
@@ -647,17 +647,17 @@ test('rule: signed-off-by', (t) => {
     }, v)
 
     context.report = (opts) => {
-      tt.pass('called report')
-      tt.equal(opts.id, 'signed-off-by', 'id')
-      tt.equal(opts.message, 'has valid Signed-off-by', 'message')
-      tt.equal(opts.level, 'pass', 'level')
+      t.assert.ok(true, 'called report')
+      t.assert.strictEqual(opts.id, 'signed-off-by', 'id')
+      t.assert.strictEqual(opts.message, 'has valid Signed-off-by', 'message')
+      t.assert.strictEqual(opts.level, 'pass', 'level')
     }
 
     Rule.validate(context)
   })
 
-  t.test('author email mismatch is case-insensitive', (tt) => {
-    tt.plan(4)
+  test('author email mismatch is case-insensitive', (t) => {
+    t.plan(4)
     const v = new Validator()
     const context = new Commit({
       sha: 'e7c077c610afa371430180fbd447bfef60ebc5ea',
@@ -676,17 +676,17 @@ test('rule: signed-off-by', (t) => {
     }, v)
 
     context.report = (opts) => {
-      tt.pass('called report')
-      tt.equal(opts.id, 'signed-off-by', 'id')
-      tt.equal(opts.message, 'has valid Signed-off-by', 'message')
-      tt.equal(opts.level, 'pass', 'level')
+      t.assert.ok(true, 'called report')
+      t.assert.strictEqual(opts.id, 'signed-off-by', 'id')
+      t.assert.strictEqual(opts.message, 'has valid Signed-off-by', 'message')
+      t.assert.strictEqual(opts.level, 'pass', 'level')
     }
 
     Rule.validate(context)
   })
 
-  t.test('multiple sign-offs with some invalid emails', (tt) => {
-    tt.plan(9)
+  test('multiple sign-offs with some invalid emails', (t) => {
+    t.plan(9)
     const v = new Validator()
     const context = new Commit({
       sha: 'e7c077c610afa371430180fbd447bfef60ebc5ea',
@@ -714,27 +714,27 @@ test('rule: signed-off-by', (t) => {
     Rule.validate(context)
 
     // Should get 3 reports: 2 fails for invalid emails + 1 pass
-    tt.equal(reports.length, 3, 'total reports')
+    t.assert.strictEqual(reports.length, 3, 'total reports')
 
-    tt.equal(reports[0].level, 'fail', 'first invalid is fail')
-    tt.equal(reports[0].message,
+    t.assert.strictEqual(reports[0].level, 'fail', 'first invalid is fail')
+    t.assert.strictEqual(reports[0].message,
       '"Signed-off-by" trailer has invalid email', 'first message')
-    tt.equal(reports[0].string,
+    t.assert.strictEqual(reports[0].string,
       'Signed-off-by: Bad One bad@', 'first string')
 
-    tt.equal(reports[1].level, 'fail', 'second invalid is fail')
-    tt.equal(reports[1].message,
+    t.assert.strictEqual(reports[1].level, 'fail', 'second invalid is fail')
+    t.assert.strictEqual(reports[1].message,
       '"Signed-off-by" trailer has invalid email', 'second message')
-    tt.equal(reports[1].string,
+    t.assert.strictEqual(reports[1].string,
       'Signed-off-by: Bad Two noangles@example.com', 'second string')
 
-    tt.equal(reports[2].level, 'pass', 'valid one passes')
-    tt.equal(reports[2].message,
+    t.assert.strictEqual(reports[2].level, 'pass', 'valid one passes')
+    t.assert.strictEqual(reports[2].message,
       'has valid Signed-off-by', 'pass message')
   })
 
-  t.test('human author with only bot sign-offs', (tt) => {
-    tt.plan(5)
+  test('human author with only bot sign-offs', (t) => {
+    t.plan(5)
     const v = new Validator()
     const context = new Commit({
       sha: 'e7c077c610afa371430180fbd447bfef60ebc5ea',
@@ -761,19 +761,19 @@ test('rule: signed-off-by', (t) => {
     Rule.validate(context)
 
     // Should get 2 reports: warn for bot sign-off + fail for no human sign-off
-    tt.equal(reports.length, 2, 'total reports')
+    t.assert.strictEqual(reports.length, 2, 'total reports')
 
-    tt.equal(reports[0].level, 'warn', 'bot sign-off is warn')
-    tt.match(reports[0].string, /dependabot\[bot\]/, 'bot string')
+    t.assert.strictEqual(reports[0].level, 'warn', 'bot sign-off is warn')
+    t.assert.match(reports[0].string, /dependabot\[bot\]/, 'bot string')
 
-    tt.equal(reports[1].level, 'fail', 'no human sign-off is fail')
-    tt.equal(reports[1].message,
+    t.assert.strictEqual(reports[1].level, 'fail', 'no human sign-off is fail')
+    t.assert.strictEqual(reports[1].message,
       'Commit must have a "Signed-off-by" trailer from a human author',
       'fail message')
   })
 
-  t.test('multiple sign-offs with human and bot', (tt) => {
-    tt.plan(7)
+  test('multiple sign-offs with human and bot', (t) => {
+    t.plan(7)
     const v = new Validator()
     const context = new Commit({
       sha: 'e7c077c610afa371430180fbd447bfef60ebc5ea',
@@ -800,20 +800,18 @@ test('rule: signed-off-by', (t) => {
     Rule.validate(context)
 
     // Should get 2 reports: warn for bot + pass for human
-    tt.equal(reports.length, 2, 'total reports')
+    t.assert.strictEqual(reports.length, 2, 'total reports')
 
-    tt.equal(reports[0].level, 'warn', 'bot is warn')
-    tt.equal(reports[0].message,
+    t.assert.strictEqual(reports[0].level, 'warn', 'bot is warn')
+    t.assert.strictEqual(reports[0].message,
       '"Signed-off-by" must be from a human author, ' +
       'not a bot or AI agent', 'bot message')
-    tt.match(reports[0].string,
+    t.assert.match(reports[0].string,
       /dependabot\[bot\]/, 'bot string')
 
-    tt.equal(reports[1].level, 'pass', 'human passes')
-    tt.equal(reports[1].message,
+    t.assert.strictEqual(reports[1].level, 'pass', 'human passes')
+    t.assert.strictEqual(reports[1].message,
       'has valid Signed-off-by', 'pass message')
-    tt.equal(reports[1].string, '', 'pass string')
+    t.assert.strictEqual(reports[1].string, '', 'pass string')
   })
-
-  t.end()
 })

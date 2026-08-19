@@ -1,11 +1,11 @@
-import { test } from 'tap'
+import { describe, test } from 'node:test'
 import Rule from '../../lib/rules/line-after-title.js'
 import Commit from '../../lib/gitlint-parser.js'
 import Validator from '../../index.js'
 
-test('rule: line-after-title', (t) => {
-  t.test('no blank line', (tt) => {
-    tt.plan(7)
+describe('rule: line-after-title', () => {
+  test('no blank line', (t) => {
+    t.plan(7)
     const v = new Validator()
     const context = new Commit({
       sha: 'e7c077c610afa371430180fbd447bfef60ebc5ea',
@@ -18,20 +18,20 @@ test('rule: line-after-title', (t) => {
     }, v)
 
     context.report = (opts) => {
-      tt.pass('called report')
-      tt.equal(opts.id, 'line-after-title', 'id')
-      tt.equal(opts.message, 'blank line expected after title', 'message')
-      tt.equal(opts.string, 'fhqwhgads', 'string')
-      tt.equal(opts.line, 1, 'line')
-      tt.equal(opts.column, 0, 'column')
-      tt.equal(opts.level, 'fail', 'level')
+      t.assert.ok(true, 'called report')
+      t.assert.strictEqual(opts.id, 'line-after-title', 'id')
+      t.assert.strictEqual(opts.message, 'blank line expected after title', 'message')
+      t.assert.strictEqual(opts.string, 'fhqwhgads', 'string')
+      t.assert.strictEqual(opts.line, 1, 'line')
+      t.assert.strictEqual(opts.column, 0, 'column')
+      t.assert.strictEqual(opts.level, 'fail', 'level')
     }
 
     Rule.validate(context)
   })
 
-  t.test('blank line', (tt) => {
-    tt.plan(4)
+  test('blank line', (t) => {
+    t.plan(4)
     const v = new Validator()
     const context = new Commit({
       sha: 'e7c077c610afa371430180fbd447bfef60ebc5ea',
@@ -44,17 +44,17 @@ test('rule: line-after-title', (t) => {
     }, v)
 
     context.report = (opts) => {
-      tt.pass('called report')
-      tt.equal(opts.id, 'line-after-title', 'id')
-      tt.equal(opts.message, 'blank line after title', 'message')
-      tt.equal(opts.level, 'pass', 'level')
+      t.assert.ok(true, 'called report')
+      t.assert.strictEqual(opts.id, 'line-after-title', 'id')
+      t.assert.strictEqual(opts.message, 'blank line after title', 'message')
+      t.assert.strictEqual(opts.level, 'pass', 'level')
     }
 
     Rule.validate(context)
   })
 
-  t.test('just one line', (tt) => {
-    tt.plan(4)
+  test('just one line', (t) => {
+    t.plan(4)
     const v = new Validator()
     const context = new Commit({
       sha: 'e7c077c610afa371430180fbd447bfef60ebc5ea',
@@ -67,14 +67,12 @@ test('rule: line-after-title', (t) => {
     }, v)
 
     context.report = (opts) => {
-      tt.pass('called report')
-      tt.equal(opts.id, 'line-after-title', 'id')
-      tt.equal(opts.message, 'blank line after title', 'message')
-      tt.equal(opts.level, 'pass', 'level')
+      t.assert.ok(true, 'called report')
+      t.assert.strictEqual(opts.id, 'line-after-title', 'id')
+      t.assert.strictEqual(opts.message, 'blank line after title', 'message')
+      t.assert.strictEqual(opts.level, 'pass', 'level')
     }
 
     Rule.validate(context)
   })
-
-  t.end()
 })

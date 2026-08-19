@@ -1,4 +1,4 @@
-import { test } from 'tap'
+import { describe, test } from 'node:test'
 import Validator from '../lib/validator.js'
 import { readFileSync } from 'node:fs'
 
@@ -157,25 +157,42 @@ Date:   Sat Oct 22 10:22:43 2022 +0200
     Signed-off-by: Michaël Zasso <targos@protonmail.com>
 `
 
+function waitForCommits (validator, count, callback) {
+  return new Promise((resolve, reject) => {
+    const onCommit = (data) => {
+      try {
+        callback(data)
+        if (--count === 0) {
+          validator.removeListener('commit', onCommit)
+          resolve()
+        }
+      } catch (error) {
+        validator.removeListener('commit', onCommit)
+        reject(error)
+      }
+    }
+
+    validator.on('commit', onCommit)
+  })
+}
+
 test('Validator - misc', (t) => {
   const v = new Validator()
 
-  t.throws(() => {
+  t.assert.throws(() => {
     v.disableRule('biscuits')
   }, /Invalid rule: "biscuits"/)
 
   v.disableRule('line-length')
-  t.equal(v.rules.get('line-length').disabled, true, 'disabled')
+  t.assert.strictEqual(v.rules.get('line-length').disabled, true, 'disabled')
   v.rules.get('line-length').disabled = false
-
-  t.end()
 })
 
-test('Validator - real commits', (t) => {
-  t.test('basic', (tt) => {
+describe('Validator - real commits', () => {
+  test('basic', async (t) => {
     const commit = JSON.parse(readFileSync(new URL('fixtures/commit.json', import.meta.url), { encoding: 'utf8' }))
     const pr = JSON.parse(readFileSync(new URL('fixtures/pr.json', import.meta.url), { encoding: 'utf8' }))
-    tt.plan(21)
+    t.plan(21)
     const v = new Validator()
     // run against the output of git show --quiet
     // run against the output of github's get commit api request
@@ -183,143 +200,138 @@ test('Validator - real commits', (t) => {
     v.lint(str)
     v.lint(commit)
     v.lint(pr)
-    v.on('commit', (data) => {
+    await waitForCommits(v, 3, (data) => {
       const c = data.commit
-      tt.equal(c.sha, 'e7c077c610afa371430180fbd447bfef60ebc5ea', 'sha')
-      tt.same(c.subsystems, ['stream'], 'subsystems')
-      tt.equal(c.prUrl, 'https://github.com/nodejs/node/pull/6170', 'pr')
+      t.assert.strictEqual(c.sha, 'e7c077c610afa371430180fbd447bfef60ebc5ea', 'sha')
+      t.assert.deepStrictEqual(c.subsystems, ['stream'], 'subsystems')
+      t.assert.strictEqual(c.prUrl, 'https://github.com/nodejs/node/pull/6170', 'pr')
       const msgs = data.messages
       const failed = msgs.filter((item) => {
         return item.level === 'fail'
       })
-      tt.equal(failed.length, 0, 'failed.length')
+      t.assert.strictEqual(failed.length, 0, 'failed.length')
       const warned = msgs.filter((item) => {
         return item.level === 'warn'
       })
-      tt.equal(warned.length, 3, 'warned.length')
-      tt.equal(warned[0].level, 'warn')
-      tt.equal(warned[0].id, 'title-length')
+      t.assert.strictEqual(warned.length, 3, 'warned.length')
+      t.assert.strictEqual(warned[0].level, 'warn')
+      t.assert.strictEqual(warned[0].id, 'title-length')
     })
   })
 
-  t.test('basic revert', (tt) => {
+  test('basic revert', async (t) => {
     const v = new Validator()
     v.lint(str2)
-    v.on('commit', (data) => {
+    await waitForCommits(v, 1, (data) => {
       const c = data.commit.toJSON()
-      tt.equal(c.sha, 'b6475b9a9d0da0971eec7eb5559dff4d18a0e721', 'sha')
-      tt.equal(c.date, 'Tue Mar 29 08:09:37 2016 -0500', 'date')
-      tt.same(c.subsystems, ['tty'], 'subsystems')
-      tt.equal(c.prUrl, 'https://github.com/nodejs/node/pull/5947', 'pr')
-      tt.equal(c.revert, true, 'revert')
+      t.assert.strictEqual(c.sha, 'b6475b9a9d0da0971eec7eb5559dff4d18a0e721', 'sha')
+      t.assert.strictEqual(c.date, 'Tue Mar 29 08:09:37 2016 -0500', 'date')
+      t.assert.deepStrictEqual(c.subsystems, ['tty'], 'subsystems')
+      t.assert.strictEqual(c.prUrl, 'https://github.com/nodejs/node/pull/5947', 'pr')
+      t.assert.strictEqual(c.revert, true, 'revert')
       const msgs = data.messages
       const filtered = msgs.filter((item) => {
         return item.level === 'warn'
       })
-      tt.equal(filtered.length, 1, 'messages.length')
-      tt.equal(filtered[0].level, 'warn')
-      tt.equal(filtered[0].id, 'title-length')
-      tt.end()
+      t.assert.strictEqual(filtered.length, 1, 'messages.length')
+      t.assert.strictEqual(filtered[0].level, 'warn')
+      t.assert.strictEqual(filtered[0].id, 'title-length')
     })
   })
 
-  t.test('more basic', (tt) => {
+  test('more basic', async (t) => {
     const v = new Validator()
     v.lint(str3)
-    v.on('commit', (data) => {
+    await waitForCommits(v, 1, (data) => {
       const c = data.commit.toJSON()
-      tt.equal(c.sha, '75487f0db80e70a3e27fabfe323a33258dfbbea8', 'sha')
-      tt.equal(c.date, 'Fri Apr 15 13:32:36 2016 +0200', 'date')
-      tt.same(c.subsystems, ['module'], 'subsystems')
-      tt.equal(c.prUrl, 'https://github.com/nodejs/node/pull/6215', 'pr')
-      tt.equal(c.revert, false, 'revert')
+      t.assert.strictEqual(c.sha, '75487f0db80e70a3e27fabfe323a33258dfbbea8', 'sha')
+      t.assert.strictEqual(c.date, 'Fri Apr 15 13:32:36 2016 +0200', 'date')
+      t.assert.deepStrictEqual(c.subsystems, ['module'], 'subsystems')
+      t.assert.strictEqual(c.prUrl, 'https://github.com/nodejs/node/pull/6215', 'pr')
+      t.assert.strictEqual(c.revert, false, 'revert')
       const msgs = data.messages
       const filtered = msgs.filter((item) => {
         return item.level === 'fail'
       })
-      tt.equal(filtered.length, 2, 'messages.length')
+      t.assert.strictEqual(filtered.length, 2, 'messages.length')
       const ids = filtered.map((item) => {
         return item.id
       })
       const exp = ['line-length', 'title-length']
-      tt.same(ids.sort(), exp.sort(), 'message ids')
-      tt.end()
+      t.assert.deepStrictEqual(ids.sort(), exp.sort(), 'message ids')
     })
   })
 
-  t.test('accept revert commit titles that are elongated by git', (tt) => {
+  test('accept revert commit titles that are elongated by git', async (t) => {
     const v = new Validator()
     v.lint(str10)
-    v.on('commit', (data) => {
+    await waitForCommits(v, 1, (data) => {
       const c = data.commit.toJSON()
-      tt.equal(c.sha, 'b04fe688d5859f707cf1a5e0206967268118bf7a', 'sha')
-      tt.equal(c.date, 'Sun May 1 21:10:21 2022 +0530', 'date')
-      tt.same(c.subsystems, ['bootstrap'], 'subsystems')
-      tt.equal(c.prUrl, 'https://github.com/nodejs/node/pull/42934', 'pr')
-      tt.equal(c.revert, true, 'revert')
+      t.assert.strictEqual(c.sha, 'b04fe688d5859f707cf1a5e0206967268118bf7a', 'sha')
+      t.assert.strictEqual(c.date, 'Sun May 1 21:10:21 2022 +0530', 'date')
+      t.assert.deepStrictEqual(c.subsystems, ['bootstrap'], 'subsystems')
+      t.assert.strictEqual(c.prUrl, 'https://github.com/nodejs/node/pull/42934', 'pr')
+      t.assert.strictEqual(c.revert, true, 'revert')
       const msgs = data.messages
       const filtered = msgs.filter((item) => {
         return item.level === 'fail'
       })
-      tt.same(filtered, [], 'messages.length')
-      tt.end()
+      t.assert.deepStrictEqual(filtered, [], 'messages.length')
     })
   })
 
-  t.test('reject revert commit titles whose original titles are really long', (tt) => {
+  test('reject revert commit titles whose original titles are really long', async (t) => {
     const v = new Validator()
     v.lint(str11)
-    v.on('commit', (data) => {
+    await waitForCommits(v, 1, (data) => {
       const c = data.commit.toJSON()
-      tt.equal(c.sha, 'b04fe688d5859f707cf1a5e0206967268118bf7a', 'sha')
-      tt.equal(c.date, 'Sun May 1 21:10:21 2022 +0530', 'date')
-      tt.same(c.subsystems, ['bootstrap'], 'subsystems')
-      tt.equal(c.prUrl, 'https://github.com/nodejs/node/pull/42934', 'pr')
-      tt.equal(c.revert, true, 'revert')
+      t.assert.strictEqual(c.sha, 'b04fe688d5859f707cf1a5e0206967268118bf7a', 'sha')
+      t.assert.strictEqual(c.date, 'Sun May 1 21:10:21 2022 +0530', 'date')
+      t.assert.deepStrictEqual(c.subsystems, ['bootstrap'], 'subsystems')
+      t.assert.strictEqual(c.prUrl, 'https://github.com/nodejs/node/pull/42934', 'pr')
+      t.assert.strictEqual(c.revert, true, 'revert')
       const msgs = data.messages
       const filtered = msgs.filter((item) => {
         return item.level === 'fail'
       })
-      tt.equal(filtered.length, 1, 'messages.length')
+      t.assert.strictEqual(filtered.length, 1, 'messages.length')
       const ids = filtered.map((item) => {
         return item.id
       })
       const exp = ['title-length']
-      tt.same(ids.sort(), exp.sort(), 'message ids')
-      tt.end()
+      t.assert.deepStrictEqual(ids.sort(), exp.sort(), 'message ids')
     })
   })
 
-  t.test('accept deps: V8 as the subsystem for revert commits', (tt) => {
+  test('accept deps: V8 as the subsystem for revert commits', async (t) => {
     const v = new Validator({
       'validate-metadata': false
     })
     v.lint(str12)
-    v.on('commit', (data) => {
+    await waitForCommits(v, 1, (data) => {
       const c = data.commit.toJSON()
-      tt.equal(c.sha, 'cbb404503c9df13aaeb3dd8b345cb3f34c8c07e4', 'sha')
-      tt.equal(c.date, 'Sat Oct 22 10:22:43 2022 +0200', 'date')
-      tt.same(c.subsystems, ['deps'], 'subsystems')
-      tt.equal(c.revert, true, 'revert')
+      t.assert.strictEqual(c.sha, 'cbb404503c9df13aaeb3dd8b345cb3f34c8c07e4', 'sha')
+      t.assert.strictEqual(c.date, 'Sat Oct 22 10:22:43 2022 +0200', 'date')
+      t.assert.deepStrictEqual(c.subsystems, ['deps'], 'subsystems')
+      t.assert.strictEqual(c.revert, true, 'revert')
       const msgs = data.messages
       const filtered = msgs.filter((item) => {
         return item.level === 'fail'
       })
-      tt.equal(filtered.length, 0, 'messages.length')
-      tt.end()
+      t.assert.strictEqual(filtered.length, 0, 'messages.length')
     })
   })
 
-  t.test('invalid pr-url, missing subsystem', (tt) => {
+  test('invalid pr-url, missing subsystem', async (t) => {
     const v = new Validator()
     v.lint(str4)
-    v.on('commit', (data) => {
+    await waitForCommits(v, 1, (data) => {
       const c = data.commit.toJSON()
-      tt.equal(c.sha, '7d3a7ea0d7df9b6f11df723dec370f49f4f87e99', 'sha')
-      tt.equal(c.date, 'Thu Mar 3 10:10:46 2016 -0600', 'date')
-      tt.same(c.subsystems, [], 'subsystems')
-      tt.equal(c.prUrl, '#5546', 'pr')
-      tt.equal(c.revert, false, 'revert')
+      t.assert.strictEqual(c.sha, '7d3a7ea0d7df9b6f11df723dec370f49f4f87e99', 'sha')
+      t.assert.strictEqual(c.date, 'Thu Mar 3 10:10:46 2016 -0600', 'date')
+      t.assert.deepStrictEqual(c.subsystems, [], 'subsystems')
+      t.assert.strictEqual(c.prUrl, '#5546', 'pr')
+      t.assert.strictEqual(c.revert, false, 'revert')
       const msgs = data.messages
       msgs.sort((a, b) => {
         return a.id < b.id
@@ -331,89 +343,82 @@ test('Validator - real commits', (t) => {
       const filtered = msgs.filter((item) => {
         return item.level === 'fail'
       })
-      tt.equal(filtered.length, 3, 'messages.length')
-      tt.equal(filtered[0].id, 'line-after-title', 'message id')
-      tt.equal(filtered[1].id, 'pr-url', 'message id')
-      tt.equal(filtered[1].string, '#5546', 'message string')
-      tt.equal(filtered[2].id, 'subsystem', 'message id')
-      tt.equal(filtered[2].line, 0, 'line')
-      tt.equal(filtered[2].column, 0, 'column')
-      tt.end()
+      t.assert.strictEqual(filtered.length, 3, 'messages.length')
+      t.assert.strictEqual(filtered[0].id, 'line-after-title', 'message id')
+      t.assert.strictEqual(filtered[1].id, 'pr-url', 'message id')
+      t.assert.strictEqual(filtered[1].string, '#5546', 'message string')
+      t.assert.strictEqual(filtered[2].id, 'subsystem', 'message id')
+      t.assert.strictEqual(filtered[2].line, 0, 'line')
+      t.assert.strictEqual(filtered[2].column, 0, 'column')
     })
   })
 
-  t.test('invalid pr-url, missing subsystem no meta', (tt) => {
+  test('invalid pr-url, missing subsystem no meta', async (t) => {
     const v = new Validator({
       'validate-metadata': false
     })
     v.lint(str5)
-    v.on('commit', (data) => {
+    await waitForCommits(v, 1, (data) => {
       const c = data.commit.toJSON()
-      tt.equal(c.sha, '7d3a7ea0d7df9b6f11df723dec370f49f4f87e99', 'sha')
-      tt.equal(c.date, 'Thu Mar 3 10:10:46 2016 -0600', 'date')
-      tt.same(c.subsystems, ['test'], 'subsystems')
-      tt.equal(c.prUrl, null, 'pr')
-      tt.equal(c.revert, false, 'revert')
+      t.assert.strictEqual(c.sha, '7d3a7ea0d7df9b6f11df723dec370f49f4f87e99', 'sha')
+      t.assert.strictEqual(c.date, 'Thu Mar 3 10:10:46 2016 -0600', 'date')
+      t.assert.deepStrictEqual(c.subsystems, ['test'], 'subsystems')
+      t.assert.strictEqual(c.prUrl, null, 'pr')
+      t.assert.strictEqual(c.revert, false, 'revert')
       const msgs = data.messages
       const filtered = msgs.filter((item) => {
         return item.level === 'fail'
       })
-      tt.equal(filtered.length, 0, 'messages.length')
-      tt.end()
+      t.assert.strictEqual(filtered.length, 0, 'messages.length')
     })
   })
 
-  t.test('trailing punctuation in title line', (tt) => {
+  test('trailing punctuation in title line', async (t) => {
     const v = new Validator({
       'validate-metadata': false
     })
     v.lint(str7)
-    v.on('commit', (data) => {
+    await waitForCommits(v, 1, (data) => {
       const msgs = data.messages
       const filtered = msgs.filter((item) => {
         return item.level === 'fail'
       })
-      tt.equal(filtered.length, 1, 'messages.length')
-      tt.equal(filtered[0].message,
+      t.assert.strictEqual(filtered.length, 1, 'messages.length')
+      t.assert.strictEqual(filtered[0].message,
         'Do not use punctuation at end of title.',
         'message')
-      tt.end()
     })
   })
 
-  t.test('first word is lowercase in title line', (tt) => {
+  test('first word is lowercase in title line', async (t) => {
     const v = new Validator({
       'validate-metadata': false
     })
     v.lint(str8)
-    v.on('commit', (data) => {
+    await waitForCommits(v, 1, (data) => {
       const msgs = data.messages
       const filtered = msgs.filter((item) => {
         return item.level === 'fail'
       })
-      tt.equal(filtered.length, 1, 'messages.length')
-      tt.equal(filtered[0].message,
+      t.assert.strictEqual(filtered.length, 1, 'messages.length')
+      t.assert.strictEqual(filtered[0].message,
         'First word after subsystem(s) in title should be lowercase.',
         'message')
-      tt.equal(filtered[0].column, 7, 'column')
-      tt.end()
+      t.assert.strictEqual(filtered[0].column, 7, 'column')
     })
   })
 
-  t.test('more than one formatting error in title line', (tt) => {
+  test('more than one formatting error in title line', async (t) => {
     const v = new Validator({
       'validate-metadata': false
     })
     v.lint(str9)
-    v.on('commit', (data) => {
+    await waitForCommits(v, 1, (data) => {
       const msgs = data.messages
       const filtered = msgs.filter((item) => {
         return item.level === 'fail'
       })
-      tt.equal(filtered.length, 2, 'messages.length')
-      tt.end()
+      t.assert.strictEqual(filtered.length, 2, 'messages.length')
     })
   })
-
-  t.end()
 })

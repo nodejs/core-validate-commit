@@ -1,11 +1,11 @@
-import { test } from 'tap'
+import { describe, test } from 'node:test'
 import Rule from '../../lib/rules/co-authored-by-is-trailer.js'
 import Commit from '../../lib/gitlint-parser.js'
 import Validator from '../../index.js'
 
-test('rule: co-authored-by-is-trailer', (t) => {
-  t.test('no co-authors', (tt) => {
-    tt.plan(4)
+describe('rule: co-authored-by-is-trailer', () => {
+  test('no co-authors', (t) => {
+    t.plan(4)
     const v = new Validator()
     const context = new Commit({
       sha: 'e7c077c610afa371430180fbd447bfef60ebc5ea',
@@ -20,17 +20,17 @@ test('rule: co-authored-by-is-trailer', (t) => {
     }, v)
 
     context.report = (opts) => {
-      tt.pass('called report')
-      tt.equal(opts.id, 'co-authored-by-is-trailer', 'id')
-      tt.equal(opts.message, 'no Co-authored-by metadata', 'message')
-      tt.equal(opts.level, 'pass', 'level')
+      t.assert.ok(true, 'called report')
+      t.assert.strictEqual(opts.id, 'co-authored-by-is-trailer', 'id')
+      t.assert.strictEqual(opts.message, 'no Co-authored-by metadata', 'message')
+      t.assert.strictEqual(opts.level, 'pass', 'level')
     }
 
     Rule.validate(context)
   })
 
-  t.test('no empty lines above', (tt) => {
-    tt.plan(7)
+  test('no empty lines above', (t) => {
+    t.plan(7)
     const v = new Validator()
     const context = new Commit({
       sha: 'e7c077c610afa371430180fbd447bfef60ebc5ea',
@@ -44,20 +44,20 @@ test('rule: co-authored-by-is-trailer', (t) => {
     }, v)
 
     context.report = (opts) => {
-      tt.pass('called report')
-      tt.equal(opts.id, 'co-authored-by-is-trailer', 'id')
-      tt.equal(opts.message, 'Co-authored-by must be a trailer', 'message')
-      tt.equal(opts.string, 'Co-authored-by: Someone <someone@example.com>', 'string')
-      tt.equal(opts.line, 0, 'line')
-      tt.equal(opts.column, 0, 'column')
-      tt.equal(opts.level, 'fail', 'level')
+      t.assert.ok(true, 'called report')
+      t.assert.strictEqual(opts.id, 'co-authored-by-is-trailer', 'id')
+      t.assert.strictEqual(opts.message, 'Co-authored-by must be a trailer', 'message')
+      t.assert.strictEqual(opts.string, 'Co-authored-by: Someone <someone@example.com>', 'string')
+      t.assert.strictEqual(opts.line, 0, 'line')
+      t.assert.strictEqual(opts.column, 0, 'column')
+      t.assert.strictEqual(opts.level, 'fail', 'level')
     }
 
     Rule.validate(context)
   })
 
-  t.test('quoting another commit message', (tt) => {
-    tt.plan(4)
+  test('quoting another commit message', (t) => {
+    t.plan(4)
     const v = new Validator()
     const context = new Commit({
       sha: 'e7c077c610afa371430180fbd447bfef60ebc5ea',
@@ -78,17 +78,17 @@ test('rule: co-authored-by-is-trailer', (t) => {
     }, v)
 
     context.report = (opts) => {
-      tt.pass('called report')
-      tt.equal(opts.id, 'co-authored-by-is-trailer', 'id')
-      tt.equal(opts.message, 'no Co-authored-by metadata', 'message')
-      tt.equal(opts.level, 'pass', 'level')
+      t.assert.ok(true, 'called report')
+      t.assert.strictEqual(opts.id, 'co-authored-by-is-trailer', 'id')
+      t.assert.strictEqual(opts.message, 'no Co-authored-by metadata', 'message')
+      t.assert.strictEqual(opts.level, 'pass', 'level')
     }
 
     Rule.validate(context)
   })
 
-  t.test('not trailer', (tt) => {
-    tt.plan(7)
+  test('not trailer', (t) => {
+    t.plan(7)
     const v = new Validator()
     const context = new Commit({
       sha: 'e7c077c610afa371430180fbd447bfef60ebc5ea',
@@ -107,20 +107,20 @@ test('rule: co-authored-by-is-trailer', (t) => {
     }, v)
 
     context.report = (opts) => {
-      tt.pass('called report')
-      tt.equal(opts.id, 'co-authored-by-is-trailer', 'id')
-      tt.equal(opts.message, 'Co-authored-by must be a trailer', 'message')
-      tt.equal(opts.string, 'Co-authored-by: Someone <someone@example.com>', 'string')
-      tt.equal(opts.line, 3, 'line')
-      tt.equal(opts.column, 0, 'column')
-      tt.equal(opts.level, 'fail', 'level')
+      t.assert.ok(true, 'called report')
+      t.assert.strictEqual(opts.id, 'co-authored-by-is-trailer', 'id')
+      t.assert.strictEqual(opts.message, 'Co-authored-by must be a trailer', 'message')
+      t.assert.strictEqual(opts.string, 'Co-authored-by: Someone <someone@example.com>', 'string')
+      t.assert.strictEqual(opts.line, 3, 'line')
+      t.assert.strictEqual(opts.column, 0, 'column')
+      t.assert.strictEqual(opts.level, 'fail', 'level')
     }
 
     Rule.validate(context)
   })
 
-  t.test('not all are trailers', (tt) => {
-    tt.plan(7)
+  test('not all are trailers', (t) => {
+    t.plan(7)
     const v = new Validator()
     const context = new Commit({
       sha: 'e7c077c610afa371430180fbd447bfef60ebc5ea',
@@ -140,20 +140,20 @@ test('rule: co-authored-by-is-trailer', (t) => {
     }, v)
 
     context.report = (opts) => {
-      tt.pass('called report')
-      tt.equal(opts.id, 'co-authored-by-is-trailer', 'id')
-      tt.equal(opts.message, 'Co-authored-by must be a trailer', 'message')
-      tt.equal(opts.string, 'Co-authored-by: Someone <someone@example.com>', 'string')
-      tt.equal(opts.line, 3, 'line')
-      tt.equal(opts.column, 0, 'column')
-      tt.equal(opts.level, 'fail', 'level')
+      t.assert.ok(true, 'called report')
+      t.assert.strictEqual(opts.id, 'co-authored-by-is-trailer', 'id')
+      t.assert.strictEqual(opts.message, 'Co-authored-by must be a trailer', 'message')
+      t.assert.strictEqual(opts.string, 'Co-authored-by: Someone <someone@example.com>', 'string')
+      t.assert.strictEqual(opts.line, 3, 'line')
+      t.assert.strictEqual(opts.column, 0, 'column')
+      t.assert.strictEqual(opts.level, 'fail', 'level')
     }
 
     Rule.validate(context)
   })
 
-  t.test('is trailer', (tt) => {
-    tt.plan(4)
+  test('is trailer', (t) => {
+    t.plan(4)
     const v = new Validator()
     const context = new Commit({
       sha: 'e7c077c610afa371430180fbd447bfef60ebc5ea',
@@ -173,14 +173,12 @@ test('rule: co-authored-by-is-trailer', (t) => {
     }, v)
 
     context.report = (opts) => {
-      tt.pass('called report')
-      tt.equal(opts.id, 'co-authored-by-is-trailer', 'id')
-      tt.equal(opts.message, 'Co-authored-by is a trailer', 'message')
-      tt.equal(opts.level, 'pass', 'level')
+      t.assert.ok(true, 'called report')
+      t.assert.strictEqual(opts.id, 'co-authored-by-is-trailer', 'id')
+      t.assert.strictEqual(opts.message, 'Co-authored-by is a trailer', 'message')
+      t.assert.strictEqual(opts.level, 'pass', 'level')
     }
 
     Rule.validate(context)
   })
-
-  t.end()
 })

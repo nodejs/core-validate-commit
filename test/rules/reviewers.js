@@ -1,12 +1,12 @@
-import { test } from 'tap'
+import { describe, test } from 'node:test'
 import Rule from '../../lib/rules/reviewers.js'
 import Commit from '../../lib/gitlint-parser.js'
 import Validator from '../../index.js'
 const MSG = 'Commit must have at least 1 reviewer.'
 
-test('rule: reviewers', (t) => {
-  t.test('missing', (tt) => {
-    tt.plan(7)
+describe('rule: reviewers', () => {
+  test('missing', (t) => {
+    t.plan(7)
     const v = new Validator()
     const context = new Commit({
       sha: 'e7c077c610afa371430180fbd447bfef60ebc5ea',
@@ -21,20 +21,20 @@ This is a test`
     }, v)
 
     context.report = (opts) => {
-      tt.pass('called report')
-      tt.equal(opts.id, 'reviewers', 'id')
-      tt.equal(opts.message, MSG, 'message')
-      tt.equal(opts.string, null, 'string')
-      tt.equal(opts.line, 0, 'line')
-      tt.equal(opts.column, 0, 'column')
-      tt.equal(opts.level, 'fail', 'level')
+      t.assert.ok(true, 'called report')
+      t.assert.strictEqual(opts.id, 'reviewers', 'id')
+      t.assert.strictEqual(opts.message, MSG, 'message')
+      t.assert.strictEqual(opts.string, null, 'string')
+      t.assert.strictEqual(opts.line, 0, 'line')
+      t.assert.strictEqual(opts.column, 0, 'column')
+      t.assert.strictEqual(opts.level, 'fail', 'level')
     }
 
     Rule.validate(context)
   })
 
-  t.test('skip for release commit', (tt) => {
-    tt.plan(2)
+  test('skip for release commit', (t) => {
+    t.plan(2)
     const v = new Validator()
     const context = new Commit({
       sha: 'e7c077c610afa371430180fbd447bfef60ebc5ea',
@@ -49,8 +49,8 @@ This is a test`
     }, v)
 
     context.report = (opts) => {
-      tt.pass('called report')
-      tt.strictSame(opts, {
+      t.assert.ok(true, 'called report')
+      t.assert.deepStrictEqual(opts, {
         id: 'reviewers',
         message: 'skipping reviewers for release commit',
         string: '',
@@ -60,6 +60,4 @@ This is a test`
 
     Rule.validate(context)
   })
-
-  t.end()
 })
