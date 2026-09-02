@@ -10,13 +10,13 @@
     "test-ci": "npm test -- --experimental-test-coverage --test-reporter=spec --test-reporter-destination=stdout --test-reporter=lcov --test-reporter-destination=lcov.info"
   },
   "dependencies": {
-    "gitlint-parser-base": "2.0.0"
+    "gitlint-parser-base": "^2.0.0"
   },
-  "bundleDependencies": true,
   "devDependencies": {
     "check-pkg": "^2.1.1",
     "standard": "^17.0.0"
   },
+  "bundleDependencies": true,
   "files": [
     "lib/",
     "bin/",
