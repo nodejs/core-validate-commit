@@ -4,7 +4,6 @@ import { exec } from 'node:child_process'
 import fs from 'node:fs'
 import http from 'node:http'
 import https from 'node:https'
-import path from 'node:path'
 import { parseArgs } from 'node:util'
 import pretty from '../lib/format-pretty.js'
 import formatTap from '../lib/format-tap.js'
@@ -48,14 +47,14 @@ const { values: parsed, positionals: args } = parseArgs({
 })
 
 if (parsed.help) {
-  const usagePath = path.join(new URL(import.meta.url).pathname, '../usage.txt')
+  const usagePath = new URL('usage.txt', import.meta.url)
   const help = await fs.promises.readFile(usagePath, 'utf8')
   console.log(help)
   process.exit(0)
 }
 
 if (parsed.version) {
-  const pkgJsonPath = path.join(new URL(import.meta.url).pathname, '../../package.json')
+  const pkgJsonPath = new URL('../package.json', import.meta.url)
   const pkgJson = await fs.promises.readFile(pkgJsonPath, 'utf8')
   const { version } = JSON.parse(pkgJson)
   console.log(`core-validate-commit v${version}`)
