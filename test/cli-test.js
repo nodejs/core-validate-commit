@@ -1,5 +1,7 @@
 import { describe, test } from 'node:test'
-import { readFileSync } from 'node:fs'
+import { cpSync, mkdtempSync, readFileSync, rmSync } from 'node:fs'
+import path from 'node:path'
+import { fileURLToPath } from 'node:url'
 import { spawn } from 'node:child_process'
 import subsystems from '../lib/rules/subsystem.js'
 
@@ -158,6 +160,46 @@ describe('Test cli flags', () => {
         `core-validate-commit v${version}`,
         'output is equal')
     })
+  })
+
+  test('test version flag when the install path needs decoding', async (t) => {
+    // `new URL(import.meta.url).pathname` keeps percent-encoding, and on
+    // Windows it also keeps the leading `/` in front of the drive letter.
+    // Run the CLI from a directory whose name contains a space so that
+    // decoding is not a no-op on POSIX either.
+    const repoRoot = fileURLToPath(new URL('..', import.meta.url))
+    // Kept inside the repository so `node_modules` still resolves.
+    const scratch = mkdtempSync(path.join(repoRoot, 'tmp cli '))
+
+    try {
+      cpSync(new URL('../bin', import.meta.url), path.join(scratch, 'bin'), { recursive: true })
+      cpSync(new URL('../lib', import.meta.url), path.join(scratch, 'lib'), { recursive: true })
+      cpSync(new URL('../package.json', import.meta.url), path.join(scratch, 'package.json'))
+
+      const ls = spawn(process.execPath, [path.join(scratch, 'bin', 'cmd.js'), '--version'])
+      let compiledData = ''
+      let errorData = ''
+
+      ls.stdout.on('data', (data) => {
+        compiledData += data
+      })
+
+      ls.stderr.on('data', (data) => {
+        errorData += data
+      })
+
+      await waitForClose(ls, (code) => {
+        const pkgJson = readFileSync(new URL('../package.json', import.meta.url), { encoding: 'utf8' })
+        const { version } = JSON.parse(pkgJson)
+        t.assert.strictEqual(errorData, '', 'no error output')
+        t.assert.strictEqual(code, 0, 'CLI exits with zero code')
+        t.assert.strictEqual(compiledData.trim(),
+          `core-validate-commit v${version}`,
+          'output is equal')
+      })
+    } finally {
+      rmSync(scratch, { recursive: true, force: true })
+    }
   })
 
   test('test stdin with valid JSON', async (t) => {
